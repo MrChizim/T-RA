@@ -53,56 +53,20 @@ These exist and are wired in. Do not regenerate.
 | `rectangle man.png` | body.html — rectangle (men) archetype |
 | `large man.png` | body.html — fuller / stocky archetype |
 | `lean man.png` | body.html — lean / slim archetype |
+| `head_round.png` | hair.html — round head shape card |
+| `head_flattop.png` | hair.html — flat back head shape card |
+| `head_narrow.png` | hair.html — long/narrow head shape card |
+| `head_wide.png` | hair.html — wide/broad head shape card |
+| `acc_facecap.png` | hair.html — face cap accessory card |
+| `acc_headwrap.png` | hair.html — head wrap accessory card |
+| `acc_durag.png` | hair.html — durag accessory card |
+| `acc_bonnet.png` | hair.html — satin bonnet accessory card |
+| `acc_locjewellery.png` | hair.html — loc jewellery accessory card |
+| `acc_hairpins.png` | hair.html — hair pins accessory card |
 
 ---
 
-## SECTION 2 — STILL MISSING
-
-These are wired into the HTML but no file exists yet. Generate and drop into `images/`.
-
-### hair.html › Head Shapes section (`#head-shapes`)
-
-Head shape is subtle visually — side-profile silhouettes (dark shape on white ground) work best, or real photographs with hair very short or slicked to reveal the skull shape clearly.
-
-The women's panel and men's panel share the same 4 images.
-
-#### `head_round.png`
-Side-profile silhouette or portrait of a round head — evenly curved from all angles, no flat spots. Clear 3D shape visible. Black and white.
-
-#### `head_flattop.png`
-Side-profile silhouette or portrait showing a flat occipital region — back of skull flat rather than rounded. The flatness at the back is the key feature. Black and white.
-
-#### `head_narrow.png`
-Side-profile silhouette or portrait of a long / narrow head — noticeably longer front-to-back than wide side-to-side. Black and white.
-
-#### `head_wide.png`
-Rear or three-quarter silhouette or portrait of a wide / broad head — wider side-to-side than front-to-back. Black and white.
-
----
-
-### hair.html › Accessories section (`#accessories`)
-
-#### `acc_headwrap.png`
-Black woman wearing a tall or draped head wrap, boldly styled. Mid-shot or portrait. Head wrap is the clear subject. Black and white.
-
-#### `acc_durag.png`
-Black man wearing a velvet or silk durag, neatly tied at the back. Close portrait. Black and white.
-
-#### `acc_bonnet.png`
-Black woman in a satin sleep bonnet — casual, authentic, not styled for glamour. Hair partially visible at the edges. Black and white.
-
-#### `acc_locjewellery.png`
-Detail / close-up: Black person's locs adorned with metal cuffs, gold or silver loc rings, small decorative beads. Locs and jewellery clearly visible. Black and white.
-
-#### `acc_hairpins.png`
-Black woman with 4c or 4b natural hair in a twist-out or updo, with decorative hair pins or jewelled clips placed intentionally throughout. Portrait or hair detail. Black and white.
-
-#### `acc_facecap.png`
-Black man wearing a fitted face cap / snapback — clean side or three-quarter portrait, cap is the clear focus. Short fade or low cut visible. Black and white.
-
----
-
-## SECTION 3 — OPTIONAL
+## SECTION 2 — OPTIONAL
 
 Not wired in yet. Add if you want to improve these pages visually.
 
@@ -137,8 +101,7 @@ Black woman, bold fabric print — cropped at the torso, not a full outfit shot.
 
 | Status | Count |
 |--------|-------|
-| Already have | 41 |
-| Still need to generate | 10 |
+| Already have | 51 |
+| Still need to generate | 0 |
 | Optional (scent + hero) | 7 |
-| **Minimum needed** | **10** |
-| **Everything including optional** | **17** |
+| **Everything including optional** | **7** |

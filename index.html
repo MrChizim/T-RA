@@ -80,8 +80,33 @@
     .hamburger.open span:nth-child(2) { opacity: 0; }
     .hamburger.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
 
-    /* Logo — fixed top left */
+    /* ── Sticky nav bar (post-hero) ── */
+    .nav-bar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 72px;
+      background: var(--white);
+      border-bottom: 1px solid var(--grey-light);
+      z-index: 490;
+      display: flex; align-items: center;
+      padding: 0 36px;
+      transform: translateY(-100%);
+      opacity: 0;
+      transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), opacity 0.3s ease;
+      pointer-events: none;
+    }
+    .nav-bar.visible {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .nav-bar.hidden {
+      transform: translateY(-100%);
+      opacity: 0;
+      pointer-events: none;
+    }
 
+    /* Logo — fixed top left */
     .site-logo {
       position: fixed;
       top: 28px; left: 36px;
@@ -92,9 +117,10 @@
       text-transform: uppercase;
       color: var(--white);
       text-decoration: none;
-      transition: color 0.3s ease;
+      transition: color 0.3s ease, top 0.3s cubic-bezier(0.16,1,0.3,1);
     }
     .site-logo.dark { color: var(--black); }
+    .site-logo.raised { top: 22px; }
 
     /* ══════════════════════════════
        FULL-SCREEN DRAWER
@@ -845,6 +871,9 @@
 </head>
 <body>
 
+<!-- Sticky nav bar — appears after hero -->
+<div class="nav-bar" id="navBar"></div>
+
 <!-- Fixed logo -->
 <a href="#" class="site-logo" id="siteLogo">TÓRA</a>
 
@@ -1185,17 +1214,47 @@
 </footer>
 
 <script>
-  /* ── Logo + hamburger colour state ── */
+  /* ── Nav bar + logo + hamburger state ── */
   const logo      = document.getElementById('siteLogo');
   const hamburger = document.getElementById('hamburger');
+  const navBar    = document.getElementById('navBar');
   const hero      = document.getElementById('hero');
 
+  let lastScrollY = 0;
+  let scrollTimer = null;
+  let isScrolling = false;
+
   function updateState() {
-    const pastHero = window.scrollY > hero.offsetHeight - 60;
+    const scrollY   = window.scrollY;
+    const pastHero  = scrollY > hero.offsetHeight - 60;
+    const scrolling = isScrolling && pastHero;
+
+    // Logo and hamburger colour
     logo.classList.toggle('dark', pastHero);
     hamburger.classList.toggle('dark', pastHero && !hamburger.classList.contains('open'));
+
+    // Nav bar: only show when past hero, hidden while actively scrolling
+    if (!pastHero) {
+      navBar.classList.remove('visible', 'hidden');
+    } else if (scrolling) {
+      navBar.classList.add('hidden');
+      navBar.classList.remove('visible');
+    } else {
+      navBar.classList.add('visible');
+      navBar.classList.remove('hidden');
+    }
   }
-  window.addEventListener('scroll', updateState, { passive: true });
+
+  window.addEventListener('scroll', () => {
+    isScrolling = true;
+    updateState();
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(() => {
+      isScrolling = false;
+      updateState();
+    }, 150);
+  }, { passive: true });
+
   updateState();
 
   /* ── Hamburger / Drawer ── */
@@ -1205,7 +1264,6 @@
     hamburger.classList.toggle('open', open);
     drawer.classList.toggle('open', open);
     document.body.style.overflow = open ? 'hidden' : '';
-    // When drawer open, logo and hamburger always dark
     logo.classList.toggle('dark', open || window.scrollY > hero.offsetHeight - 60);
   }
 

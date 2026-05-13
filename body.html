@@ -3,7 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Body — TÓRA</title>
+  <title>Body Types & Outfit Guide for Black People | TÓRA</title>
+  <meta name="description" content="Body type guide for Black and African people. 6 women's archetypes and 6 men's archetypes — hourglass, pear, apple, rectangle, athletic, lean, short, tall. What to wear for your shape." />
+  <meta name="keywords" content="body types Black women, body types African men, what to wear pear shape, hourglass body type, apple body type, TÓRA body guide" />
+  <meta name="author" content="TÓRA" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://mrchizim.github.io/T-RA/body.html" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://mrchizim.github.io/T-RA/body.html" />
+  <meta property="og:title" content="Body Types & Outfit Guide for Black People | TÓRA" />
+  <meta property="og:description" content="6 women's and 6 men's body archetypes — what to wear and what to avoid. Built for African and Black body proportions." />
+  <meta property="og:image" content="https://mrchizim.github.io/T-RA/images/body hero.png" />
+  <meta property="og:site_name" content="TÓRA" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Body Types & Outfit Guide for Black People | TÓRA" />
+  <meta name="twitter:description" content="6 women's and 6 men's body archetypes — what to wear and what to avoid." />
+  <meta name="twitter:image" content="https://mrchizim.github.io/T-RA/images/body hero.png" />
+
+  <link rel="icon" type="image/png" href="images/favicon.png" />
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;0,9..40,900;1,9..40,300&display=swap" rel="stylesheet" />
@@ -20,12 +40,15 @@
     .gbar-btn.active { background: var(--black); color: var(--white); }
 
     /* ── NAV (same pattern) ── */
-    .site-logo { position: fixed; top: 28px; left: 36px; z-index: 500; font-size: 18px; font-weight: 900; letter-spacing: 6px; text-transform: uppercase; color: var(--black); text-decoration: none; }
+    .site-logo { position: fixed; top: 28px; left: 36px; z-index: 500; font-size: 18px; font-weight: 900; letter-spacing: 6px; text-transform: uppercase; color: var(--black); text-decoration: none; transition: color 0.3s ease; }
+    .site-logo.light { color: var(--white); }
     .hamburger { position: fixed; top: 28px; right: 28px; z-index: 500; display: flex; flex-direction: column; gap: 6px; background: none; border: none; cursor: pointer; padding: 6px; }
-    .hamburger span { display: block; width: 28px; height: 1.5px; background: var(--black); transition: transform 0.3s ease, opacity 0.3s ease; }
+    .hamburger span { display: block; width: 28px; height: 1.5px; background: var(--black); transition: transform 0.3s ease, opacity 0.3s ease, background 0.3s ease; }
     .hamburger.open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
     .hamburger.open span:nth-child(2) { opacity: 0; }
     .hamburger.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+    .hamburger.light span { background: var(--white); }
+    .hamburger.open span { background: var(--black) !important; }
     .drawer { position: fixed; inset: 0; background: var(--white); z-index: 400; display: flex; flex-direction: column; justify-content: center; padding: 0 48px; transform: translateY(-100%); transition: transform 0.5s cubic-bezier(0.76,0,0.24,1); }
     .drawer.open { transform: translateY(0); }
     .drawer-nav { list-style: none; border-top: 1px solid var(--grey-light); }
@@ -161,7 +184,7 @@
   <div class="drawer-footer">Hair · Body · Scent</div>
 </div>
 
-<div class="page-hero">
+<div class="page-hero" data-nav="dark">
   <div class="page-hero-inner">
     <p class="breadcrumb"><a href="index.html">TÓRA</a> / Body</p>
     <h1 class="page-title">BODY</h1>
@@ -182,7 +205,7 @@
 </section>
 
 <!-- WOMEN'S ARCHETYPES -->
-<section class="arch-section dark" id="women" data-gender="w">
+<section class="arch-section dark" id="women" data-gender="w" data-nav="dark">
   <div class="wrap">
     <div class="arch-header r">
       <p class="sec-label" style="color:rgba(255,255,255,0.3)">Women's Archetypes</p>
@@ -497,13 +520,24 @@
 <script>
   const hamburger = document.getElementById('hamburger');
   const drawer    = document.getElementById('drawer');
-  function setDrawer(open) { hamburger.classList.toggle('open', open); drawer.classList.toggle('open', open); document.body.style.overflow = open ? 'hidden' : ''; }
+  function setDrawer(open) { hamburger.classList.toggle('open', open); if (open) hamburger.classList.remove('light'); drawer.classList.toggle('open', open); document.body.style.overflow = open ? 'hidden' : ''; }
   hamburger.addEventListener('click', e => { e.stopPropagation(); setDrawer(!drawer.classList.contains('open')); });
   drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setDrawer(false)));
   document.addEventListener('click', e => { if (!hamburger.contains(e.target) && !drawer.contains(e.target)) setDrawer(false); });
   const rEls = document.querySelectorAll('.r');
   const obs  = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }}); }, { threshold: 0.08 });
   rEls.forEach(el => obs.observe(el));
+
+  // ── Nav colour switching ──
+  const siteLogo = document.querySelector('.site-logo');
+  let darkCount = 0;
+  const navObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { darkCount += e.isIntersecting ? 1 : -1; });
+    const isDark = darkCount > 0;
+    siteLogo.classList.toggle('light', isDark);
+    if (!hamburger.classList.contains('open')) hamburger.classList.toggle('light', isDark);
+  }, { rootMargin: '-28px 0px -90% 0px' });
+  document.querySelectorAll('[data-nav="dark"]').forEach(el => navObs.observe(el));
 
   // ── Global gender bar ──
   const GKEY = 'tora_gender';

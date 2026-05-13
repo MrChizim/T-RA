@@ -3,7 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hair — TÓRA</title>
+  <title>Hair Guide — Curl Types, Beard Types, Face Shapes | TÓRA</title>
+  <meta name="description" content="Complete hair guide for Black and African people. Curl typing 3a to 4c, beard types, face shapes, head shapes, hair accessories — all explained clearly." />
+  <meta name="keywords" content="4c hair, 4b hair, curl typing Black hair, beard types African men, face shapes Black women, natural hair guide, TÓRA hair" />
+  <meta name="author" content="TÓRA" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://mrchizim.github.io/T-RA/hair.html" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://mrchizim.github.io/T-RA/hair.html" />
+  <meta property="og:title" content="Hair Guide — Curl Types, Beard Types, Face Shapes | TÓRA" />
+  <meta property="og:description" content="Curl typing 3a to 4c, beard types, face shapes, and accessories — built for Black and African hair. Not adapted from European guides." />
+  <meta property="og:image" content="https://mrchizim.github.io/T-RA/images/Hair hero.png" />
+  <meta property="og:site_name" content="TÓRA" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Hair Guide — Curl Types, Beard Types, Face Shapes | TÓRA" />
+  <meta name="twitter:description" content="Curl typing 3a to 4c, beard types, face shapes — built for Black and African hair." />
+  <meta name="twitter:image" content="https://mrchizim.github.io/T-RA/images/Hair hero.png" />
+
+  <link rel="icon" type="image/png" href="images/favicon.png" />
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;0,9..40,900;1,9..40,300&display=swap" rel="stylesheet" />
@@ -50,11 +70,15 @@
     }
     .hamburger span {
       display: block; width: 28px; height: 1.5px; background: var(--black);
-      transition: transform 0.3s ease, opacity 0.3s ease;
+      transition: transform 0.3s ease, opacity 0.3s ease, background 0.3s ease;
     }
     .hamburger.open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
     .hamburger.open span:nth-child(2) { opacity: 0; }
     .hamburger.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+    .site-logo.light { color: var(--white); }
+    .hamburger.light span { background: var(--white); }
+    .hamburger.open span { background: var(--black) !important; }
+    .site-logo { transition: color 0.3s ease; }
 
     .drawer {
       position: fixed; inset: 0; background: var(--white); z-index: 400;
@@ -149,7 +173,8 @@
       transition: background 0.2s;
       overflow: hidden;
     }
-    .curl-card:hover { background: #fafafa; }
+    .curl-card:not(.curl-highlight):hover { background: #fafafa; }
+    .curl-highlight:hover { background: #111; }
     .curl-type-label {
       font-size: 32px; font-weight: 900; color: var(--black);
       letter-spacing: -1px; line-height: 1; margin-bottom: 10px;
@@ -428,7 +453,7 @@
 </div>
 
 <!-- PAGE HERO -->
-<div class="page-hero">
+<div class="page-hero" data-nav="dark">
   <div class="page-hero-inner">
     <p class="breadcrumb"><a href="index.html">TÓRA</a> / Hair</p>
     <h1 class="page-title">HAIR</h1>
@@ -518,7 +543,7 @@
 </section>
 
 <!-- POROSITY -->
-<section id="porosity" data-gender="w">
+<section id="porosity" data-gender="w" data-nav="dark">
   <div class="wrap">
     <div class="por-header r">
       <p class="sec-label" style="color:rgba(255,255,255,0.3)">Porosity</p>
@@ -644,7 +669,7 @@
 </section>
 
 <!-- MEN'S HAIR -->
-<section id="mens" data-gender="m">
+<section id="mens" data-gender="m" data-nav="dark">
   <div class="wrap">
     <div class="mens-header r">
       <p class="sec-label" style="color:rgba(255,255,255,0.3)">Men's Hair</p>
@@ -750,7 +775,7 @@
 </section>
 
 <!-- FACE SHAPES -->
-<section id="face-shapes" data-gender="w">
+<section id="face-shapes" data-gender="w" data-nav="dark">
   <div class="wrap">
     <div class="face-header r">
       <p class="sec-label" style="color:rgba(255,255,255,0.3)">Face Shapes</p>
@@ -943,7 +968,7 @@
 </section>
 
 <!-- ACCESSORIES -->
-<section id="accessories">
+<section id="accessories" data-nav="dark">
   <div class="wrap">
     <div class="acc-header r">
       <p class="sec-label" style="color:rgba(255,255,255,0.3)">Accessories</p>
@@ -1052,7 +1077,7 @@
 </section>
 
 <!-- QUIZ CTA -->
-<div class="quiz-cta-block">
+<div class="quiz-cta-block" data-nav="dark">
   <h2>Get your personalised hair regimen</h2>
   <p>Take the quiz to build a complete, saved hair profile — your curl type, porosity, damage status, and a full routine built around how your hair actually works.</p>
   <a href="index.html#quiz" class="cta-btn">
@@ -1065,6 +1090,7 @@
   const drawer    = document.getElementById('drawer');
   function setDrawer(open) {
     hamburger.classList.toggle('open', open);
+    if (open) hamburger.classList.remove('light');
     drawer.classList.toggle('open', open);
     document.body.style.overflow = open ? 'hidden' : '';
   }
@@ -1077,6 +1103,18 @@
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }});
   }, { threshold: 0.08 });
   rEls.forEach(el => obs.observe(el));
+
+  // ── Nav colour switching ──
+  const siteLogo  = document.querySelector('.site-logo');
+  const hamburgerEl = document.getElementById('hamburger');
+  let darkCount = 0;
+  const navObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { darkCount += e.isIntersecting ? 1 : -1; });
+    const isDark = darkCount > 0;
+    siteLogo.classList.toggle('light', isDark);
+    if (!hamburgerEl.classList.contains('open')) hamburgerEl.classList.toggle('light', isDark);
+  }, { rootMargin: '-28px 0px -90% 0px' });
+  document.querySelectorAll('[data-nav="dark"]').forEach(el => navObs.observe(el));
 
   // ── Global gender bar ──
   const GKEY = 'tora_gender';

@@ -1105,16 +1105,21 @@
   rEls.forEach(el => obs.observe(el));
 
   // ── Nav colour switching ──
-  const siteLogo  = document.querySelector('.site-logo');
-  const hamburgerEl = document.getElementById('hamburger');
-  let darkCount = 0;
-  const navObs = new IntersectionObserver(entries => {
-    entries.forEach(e => { darkCount += e.isIntersecting ? 1 : -1; });
-    const isDark = darkCount > 0;
+  const siteLogo = document.querySelector('.site-logo');
+  const darkSections = Array.from(document.querySelectorAll('[data-nav="dark"]'));
+  function updateNavColour() {
+    if (hamburger.classList.contains('open')) return;
+    const navMid = window.scrollY + 36;
+    const isDark = darkSections.some(s => {
+      if (s.style.display === 'none') return false;
+      const top = s.offsetTop;
+      return navMid >= top && navMid < top + s.offsetHeight;
+    });
     siteLogo.classList.toggle('light', isDark);
-    if (!hamburgerEl.classList.contains('open')) hamburgerEl.classList.toggle('light', isDark);
-  }, { rootMargin: '-28px 0px -90% 0px' });
-  document.querySelectorAll('[data-nav="dark"]').forEach(el => navObs.observe(el));
+    hamburger.classList.toggle('light', isDark);
+  }
+  window.addEventListener('scroll', updateNavColour, { passive: true });
+  updateNavColour();
 
   // ── Global gender bar ──
   const GKEY = 'tora_gender';
@@ -1131,7 +1136,7 @@
       const eg = el.dataset.gender;
       el.style.display = (eg === g || eg === 'both') ? '' : 'none';
     });
-
+    updateNavColour();
   }
 
   gbarW.addEventListener('click', () => applyGender('w'));

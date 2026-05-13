@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scent — TÓRA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;0,9..40,900;1,9..40,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root { --black: #000; --white: #fff; --grey: #888; --grey-light: #eee; --grey-mid: #444; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--black); overflow-x: hidden; }
+
+    /* ── GENDER BAR ── */
+    .gender-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 490; display: flex; justify-content: center; align-items: center; padding: 18px 0; pointer-events: none; }
+    .gender-bar-inner { display: flex; pointer-events: all; border: 1px solid var(--grey-light); background: var(--white); }
+    .gbar-btn { font-size: 10px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; padding: 10px 24px; background: transparent; border: none; cursor: pointer; color: var(--grey); transition: background 0.2s, color 0.2s; }
+    .gbar-btn.active { background: var(--black); color: var(--white); }
+
+    /* ── NAV ── */
+    .site-logo { position: fixed; top: 28px; left: 36px; z-index: 500; font-size: 18px; font-weight: 900; letter-spacing: 6px; text-transform: uppercase; color: var(--black); text-decoration: none; }
+    .hamburger { position: fixed; top: 28px; right: 28px; z-index: 500; display: flex; flex-direction: column; gap: 6px; background: none; border: none; cursor: pointer; padding: 6px; }
+    .hamburger span { display: block; width: 28px; height: 1.5px; background: var(--black); transition: transform 0.3s ease, opacity 0.3s ease; }
+    .hamburger.open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+    .drawer { position: fixed; inset: 0; background: var(--white); z-index: 400; display: flex; flex-direction: column; justify-content: center; padding: 0 48px; transform: translateY(-100%); transition: transform 0.5s cubic-bezier(0.76,0,0.24,1); }
+    .drawer.open { transform: translateY(0); }
+    .drawer-nav { list-style: none; border-top: 1px solid var(--grey-light); }
+    .drawer-nav li { border-bottom: 1px solid var(--grey-light); }
+    .drawer-nav a { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; font-size: clamp(18px,3.5vw,28px); font-weight: 700; color: var(--black); text-decoration: none; text-transform: uppercase; letter-spacing: 1px; transition: color 0.2s; }
+    .drawer-nav a:hover { color: var(--grey); }
+    .drawer-nav .drawer-sub { font-size: clamp(11px,1.5vw,13px); font-weight: 500; letter-spacing: 2px; color: var(--grey); padding: 8px 0 8px 16px; border-bottom: 1px solid var(--grey-light); display: flex; align-items: center; justify-content: space-between; text-decoration: none; text-transform: uppercase; transition: color 0.2s; }
+    .drawer-nav .drawer-sub:hover { color: var(--black); }
+    .d-arrow { font-size: 18px; opacity: 0; transition: opacity 0.2s, transform 0.2s; transform: translateX(-8px); }
+    .drawer-nav a:hover .d-arrow { opacity: 1; transform: translateX(0); }
+    .drawer-footer { position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%); font-size: 11px; font-weight: 500; letter-spacing: 3px; text-transform: uppercase; color: var(--grey); white-space: nowrap; }
+
+    /* ── PAGE HERO ── */
+    .page-hero { background: var(--black); padding: 160px 36px 80px; position: relative; overflow: hidden; }
+    .page-hero::before { content: ''; position: absolute; top: 0; right: 0; width: 45%; height: 100%; background: url('images/scent.png') center/cover no-repeat; opacity: 0.15; }
+    .page-hero-inner { max-width: 1080px; margin: 0 auto; position: relative; z-index: 1; }
+    .breadcrumb { font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
+    .breadcrumb a { color: rgba(255,255,255,0.35); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: var(--white); }
+    .page-title { font-size: clamp(56px,12vw,120px); font-weight: 900; text-transform: uppercase; letter-spacing: -3px; line-height: 0.9; color: var(--white); margin-bottom: 28px; }
+    .page-desc { font-size: 18px; font-weight: 300; line-height: 1.8; color: rgba(255,255,255,0.5); max-width: 560px; }
+
+    /* ── SHARED ── */
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 36px; }
+    .sec-label { font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--grey); margin-bottom: 16px; }
+
+    /* ── CLIMATE SECTION ── */
+    #climate { padding: 96px 0; background: var(--white); }
+    .climate-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+    .climate-text h2 { font-size: clamp(28px,4vw,44px); font-weight: 700; color: var(--black); line-height: 1.1; margin-bottom: 20px; letter-spacing: -0.5px; }
+    .climate-text p { font-size: 16px; font-weight: 300; line-height: 1.9; color: var(--grey-mid); margin-bottom: 16px; }
+    .city-list { border-top: 1px solid var(--grey-light); }
+    .city-row { display: grid; grid-template-columns: 140px 1fr; gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--grey-light); align-items: start; }
+    .city-name { font-size: 14px; font-weight: 700; color: var(--black); }
+    .city-note { font-size: 14px; font-weight: 300; color: var(--grey-mid); line-height: 1.5; }
+
+    /* ── FAMILIES SECTION ── */
+    #families { padding: 96px 0; background: var(--black); }
+    .fam-header { margin-bottom: 64px; }
+    .fam-header h2 { font-size: clamp(28px,4vw,44px); font-weight: 700; color: var(--white); line-height: 1.1; margin-bottom: 12px; letter-spacing: -0.5px; }
+    .fam-header p { font-size: 16px; font-weight: 300; line-height: 1.8; color: rgba(255,255,255,0.4); max-width: 560px; }
+    .fam-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.07); }
+    .fam-card { background: var(--black); padding: 32px 24px; transition: background 0.2s; }
+    .fam-card:hover { background: #0d0d0d; }
+    .fam-name { font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 6px; }
+    .fam-sub { font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.25); margin-bottom: 14px; }
+    .fam-desc { font-size: 14px; font-weight: 300; line-height: 1.7; color: rgba(255,255,255,0.4); margin-bottom: 14px; }
+    .fam-climate { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.25); font-style: italic; border-left: 1px solid rgba(255,255,255,0.1); padding-left: 12px; line-height: 1.5; }
+
+    /* ── GENDERED SCENTS SECTION ── */
+    #gendered { padding: 96px 0; background: var(--white); }
+    .gen-header { margin-bottom: 64px; }
+    .gen-header h2 { font-size: clamp(28px,4vw,44px); font-weight: 700; color: var(--black); line-height: 1.1; margin-bottom: 12px; letter-spacing: -0.5px; }
+    .gen-header p { font-size: 16px; font-weight: 300; line-height: 1.8; color: var(--grey-mid); max-width: 560px; }
+    .gen-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--grey-light); border: 1px solid var(--grey-light); }
+    .gen-col { background: var(--white); padding: 40px 32px; }
+    .gen-col-label { font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--grey); margin-bottom: 20px; }
+    .gen-col-title { font-size: 22px; font-weight: 700; color: var(--black); margin-bottom: 16px; letter-spacing: -0.3px; }
+    .gen-col-desc { font-size: 15px; font-weight: 300; line-height: 1.8; color: var(--grey-mid); margin-bottom: 28px; }
+    .gen-scent-list { display: flex; flex-direction: column; gap: 14px; border-top: 1px solid var(--grey-light); padding-top: 24px; }
+    .gen-scent { display: grid; grid-template-columns: 1fr auto; align-items: start; gap: 12px; }
+    .gen-scent-name { font-size: 14px; font-weight: 600; color: var(--black); margin-bottom: 3px; }
+    .gen-scent-note { font-size: 13px; font-weight: 300; color: var(--grey-mid); line-height: 1.4; }
+    .gen-scent-tag { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--grey); background: var(--grey-light); padding: 4px 8px; white-space: nowrap; }
+    .gen-note { margin-top: 32px; font-size: 13px; font-weight: 400; color: var(--grey); font-style: italic; border-left: 2px solid var(--grey-light); padding-left: 14px; line-height: 1.6; }
+
+    /* ── CONCENTRATION SECTION ── */
+    #concentration { padding: 96px 0; background: var(--white); }
+    .conc-header { margin-bottom: 56px; }
+    .conc-header h2 { font-size: clamp(28px,4vw,44px); font-weight: 700; color: var(--black); line-height: 1.1; margin-bottom: 12px; letter-spacing: -0.5px; }
+    .conc-header p { font-size: 16px; font-weight: 300; line-height: 1.8; color: var(--grey-mid); max-width: 560px; }
+    .conc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--grey-light); border: 1px solid var(--grey-light); margin-bottom: 40px; }
+    .conc-card { background: var(--white); padding: 32px 24px; }
+    .conc-label { font-size: 24px; font-weight: 900; color: var(--black); margin-bottom: 6px; letter-spacing: -1px; }
+    .conc-name { font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--grey); margin-bottom: 14px; }
+    .conc-desc { font-size: 14px; font-weight: 300; line-height: 1.7; color: var(--grey-mid); margin-bottom: 12px; }
+    .conc-africa { font-size: 12px; font-weight: 500; color: var(--grey); font-style: italic; border-left: 2px solid var(--grey-light); padding-left: 12px; line-height: 1.5; }
+    .layering-note { background: var(--black); padding: 36px; }
+    .layering-note h3 { font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 12px; }
+    .layering-note p { font-size: 15px; font-weight: 300; color: rgba(255,255,255,0.5); line-height: 1.8; }
+
+    /* ── DAY/NIGHT SECTION ── */
+    #daynight { padding: 96px 0; background: var(--black); }
+    .dn-header { margin-bottom: 56px; }
+    .dn-header h2 { font-size: clamp(28px,4vw,44px); font-weight: 700; color: var(--white); line-height: 1.1; margin-bottom: 12px; letter-spacing: -0.5px; }
+    .dn-header p { font-size: 16px; font-weight: 300; color: rgba(255,255,255,0.4); max-width: 560px; line-height: 1.8; }
+    .dn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.07); }
+    .dn-card { background: var(--black); padding: 40px 32px; }
+    .dn-time { font-size: 20px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
+    .dn-sub { font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.25); margin-bottom: 20px; }
+    .dn-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .dn-list li { font-size: 14px; font-weight: 300; color: rgba(255,255,255,0.45); padding-left: 14px; position: relative; line-height: 1.5; }
+    .dn-list li::before { content: '—'; position: absolute; left: 0; color: rgba(255,255,255,0.15); }
+
+    /* ── CTA ── */
+    .cta-block { background: var(--white); padding: 80px 36px; text-align: center; border-top: 1px solid var(--grey-light); }
+    .cta-block h2 { font-size: clamp(26px,4vw,44px); font-weight: 700; color: var(--black); margin-bottom: 14px; letter-spacing: -0.5px; }
+    .cta-block p { font-size: 16px; font-weight: 300; color: var(--grey-mid); margin-bottom: 32px; max-width: 440px; margin-left: auto; margin-right: auto; line-height: 1.7; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 10px; background: var(--black); color: var(--white); font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; text-decoration: none; padding: 15px 30px; transition: background 0.2s; }
+    .cta-btn:hover { background: var(--grey-mid); }
+
+    /* ── SCROLL REVEAL ── */
+    .r { opacity: 0; transform: translateY(24px); transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1); }
+    .r.in { opacity: 1; transform: none; }
+    .d1 { transition-delay: 0.08s; } .d2 { transition-delay: 0.15s; } .d3 { transition-delay: 0.22s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 800px) {
+      .wrap { padding: 0 20px; }
+      .drawer { padding: 0 24px; overflow-y: auto; justify-content: flex-start; padding-top: 80px; padding-bottom: 60px; }
+      .drawer-footer { left: 50%; transform: translateX(-50%); white-space: nowrap; }
+      .page-hero { padding: 140px 20px 60px; }
+      .climate-grid { grid-template-columns: 1fr; gap: 48px; }
+      .fam-grid { grid-template-columns: 1fr 1fr; }
+      .gen-cols { grid-template-columns: 1fr; }
+      .conc-grid { grid-template-columns: 1fr; }
+      .dn-grid { grid-template-columns: 1fr; }
+      #climate, #families, #gendered, #concentration, #daynight { padding: 72px 0; }
+      .city-row { grid-template-columns: 110px 1fr; }
+      .site-logo { left: 20px; } .hamburger { right: 20px; top: 20px; }
+    }
+    @media (max-width: 480px) {
+      .fam-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="gender-bar" id="genderBar">
+  <div class="gender-bar-inner">
+    <button class="gbar-btn" id="gbarW" data-g="w">Women</button>
+    <button class="gbar-btn" id="gbarM" data-g="m">Men</button>
+  </div>
+</div>
+
+<a href="index.html" class="site-logo">TÓRA</a>
+<button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+<div class="drawer" id="drawer">
+  <ul class="drawer-nav">
+    <li><a href="index.html">Home <span class="d-arrow">→</span></a></li>
+    <li><a href="hair.html">Hair <span class="d-arrow">→</span></a></li>
+    <li><a href="body.html">Body <span class="d-arrow">→</span></a></li>
+    <li><a href="scent.html">Scent <span class="d-arrow">→</span></a></li>
+    <li><a href="index.html#pricing">Get Started <span class="d-arrow">→</span></a></li>
+  </ul>
+  <div class="drawer-footer">Hair · Body · Scent</div>
+</div>
+
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <p class="breadcrumb"><a href="index.html">TÓRA</a> / Scent</p>
+    <h1 class="page-title">SCENT</h1>
+    <p class="page-desc">Fragrance guidance built for African heat and humidity. What smells subtle in Paris is loud in Port Harcourt. Learn what works for your climate, your skin, and your lifestyle.</p>
+  </div>
+</div>
+
+<!-- CLIMATE -->
+<section id="climate">
+  <div class="wrap">
+    <div class="climate-grid">
+      <div class="climate-text r">
+        <p class="sec-label">Climate & Scent</p>
+        <h2>Why your location changes everything</h2>
+        <p>Fragrance performance is entirely dependent on temperature and humidity. Heat accelerates the evaporation of fragrance molecules — projection increases, sillage spreads further, and a scent that lasts 6 hours in a cool European climate may last 2–3 in Lagos.</p>
+        <p>This means most fragrance advice written for European audiences is actively misleading for African users. The amounts, concentration types, and fragrance families that work in Paris don't work the same way in Port Harcourt or Nairobi.</p>
+      </div>
+      <div class="r d1">
+        <p class="sec-label">City by city</p>
+        <div class="city-list">
+          <div class="city-row"><div class="city-name">Lagos</div><div class="city-note">Very high heat and humidity year-round. Light EDT concentrations can project strongly. Heavy orientals become overwhelming. Go lighter than you think.</div></div>
+          <div class="city-row"><div class="city-name">Abuja</div><div class="city-note">Drier heat, especially November–March. Projection is still amplified but less humidity means orientals and woods perform better here than in coastal cities.</div></div>
+          <div class="city-row"><div class="city-name">Accra</div><div class="city-note">Humid coastal climate similar to Lagos. Prioritise fresh, aquatic, and light floral families. Heavy musks can become cloying quickly.</div></div>
+          <div class="city-row"><div class="city-name">Port Harcourt</div><div class="city-note">Extreme coastal humidity — among the most challenging climates for fragrance. Heavy scents turn sharp quickly. Stick to light, clean EDTs and avoid layering multiple heavy notes.</div></div>
+          <div class="city-row"><div class="city-name">London / US diaspora</div><div class="city-note">Cooler climate means projection is subdued. African diaspora often over-apply because they're used to African climate. Less needed.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FRAGRANCE FAMILIES -->
+<section id="families">
+  <div class="wrap">
+    <div class="fam-header r">
+      <p class="sec-label" style="color:rgba(255,255,255,0.3)">Fragrance Families</p>
+      <h2>The main families — and how they behave in African heat</h2>
+      <p>Every fragrance belongs to a family. Knowing which families work in your climate is the first step to buying right.</p>
+    </div>
+    <div class="fam-grid r d1">
+      <div class="fam-card">
+        <div class="fam-name">Fresh / Aquatic</div>
+        <div class="fam-sub">Clean · Light · Airy</div>
+        <div class="fam-desc">Light, clean scents — citrus, green, ozonic notes. Evaporate quickly in heat, which means good projection but short longevity. Best for daytime and office.</div>
+        <div class="fam-climate">In Lagos heat: projects well initially, fades within 2–3 hours. Reapply or layer under a musk base.</div>
+      </div>
+      <div class="fam-card">
+        <div class="fam-name">Floral</div>
+        <div class="fam-sub">Rose · Jasmine · Tuberose</div>
+        <div class="fam-desc">Ranges from light (single florals) to heavy (white florals like tuberose). Light florals work well in African heat. White florals can become overwhelming in high humidity.</div>
+        <div class="fam-climate">In Lagos heat: single florals are excellent. White florals like tuberose — use sparingly or save for cooler harmattan months.</div>
+      </div>
+      <div class="fam-card">
+        <div class="fam-name">Woody</div>
+        <div class="fam-sub">Sandalwood · Oud · Vetiver</div>
+        <div class="fam-desc">Warm, earthy, often with African and Middle Eastern heritage. Oud performs well in heat — it's designed for it. Vetiver is cooler and works year-round.</div>
+        <div class="fam-climate">In Lagos heat: oud and sandalwood can be intense — wear sparingly. Vetiver and light cedar are more forgiving.</div>
+      </div>
+      <div class="fam-card">
+        <div class="fam-name">Oriental / Amber</div>
+        <div class="fam-sub">Warm · Spicy · Sweet</div>
+        <div class="fam-desc">Vanilla, amber, spice, and resin. Designed to project in cold climates. In high African heat and humidity these can become overwhelming and cloying very quickly.</div>
+        <div class="fam-climate">In Lagos heat: reserve for evening only, cooler months (harmattan), or air-conditioned environments. Apply to clothing rather than skin.</div>
+      </div>
+      <div class="fam-card">
+        <div class="fam-name">Gourmand</div>
+        <div class="fam-sub">Sweet · Food-like · Rich</div>
+        <div class="fam-desc">Dessert-like scents — vanilla, caramel, chocolate. Designed for cold weather. Almost universally too heavy for West African climate in daytime use.</div>
+        <div class="fam-climate">In Lagos heat: evening and night use only. In Nairobi's cooler climate, more usable. Avoid in humidity.</div>
+      </div>
+      <div class="fam-card">
+        <div class="fam-name">Musk / Clean</div>
+        <div class="fam-sub">Skin-like · Soft · Intimate</div>
+        <div class="fam-desc">Soft, skin-close scents that blend with your natural skin chemistry. Works as a base layer for other fragrances. More intimate than projecting. Good for office and close contact.</div>
+        <div class="fam-climate">In Lagos heat: excellent as a base. Low projection means less risk of overwhelming others. Good for professional settings.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MASCULINE / FEMININE -->
+<section id="gendered">
+  <div class="wrap">
+    <div class="gen-header r">
+      <p class="sec-label">Masculine & Feminine</p>
+      <h2>Masculine and feminine scents — and why the line is blurry</h2>
+      <p>The masculine/feminine divide in fragrance is mostly marketing. But certain notes, families, and structures do tend to read differently on skin — and knowing this helps you choose with intention rather than guess from the bottle.</p>
+    </div>
+    <div class="gen-cols r d1">
+
+      <div class="gen-col">
+        <div class="gen-col-label">Feminine</div>
+        <div class="gen-col-title">Florals, soft musks, and light gourmands</div>
+        <div class="gen-col-desc">Feminine fragrances tend to centre around floral and soft musk families. African skin chemistry often amplifies floral notes beautifully — jasmine and rose read warmer and more intense than on cooler European skin tones.</div>
+        <div class="gen-scent-list">
+          <div class="gen-scent">
+            <div>
+              <div class="gen-scent-name">Floral Soliflores</div>
+              <div class="gen-scent-note">Single-flower scents — rose, jasmine, ylang-ylang. Read clean and intentional. Work across all ages.</div>
+            </div>
+            <span class="gen-scent-tag">All climates</span>
+          </div>
+          <div class="gen-scent">
+            <div>
+              <div class="gen-scent-name">White Florals</div>
+              <div class="gen-scent-note">Tuberose, gardenia, magnolia. Rich, heady, and potent. Save for harmattan evenings — too heavy for Lagos noon heat.</div>
+            </div>
+            <span class="gen-scent-tag">Evening only</span>
+          </div>
+          <div class="gen-scent">
+            <div>
+              <div class="gen-scent-name">Soft Musks</div>
+              <div class="gen-scent-note">Skin-close, intimate. Great layering base under florals. Excellent for work and daily wear in humid climates.</div>
+            </div>
+            <span class="gen-scent-tag">Daily wear</span>
+          </div>
+          <div class="gen-scent">
+            <div>
+              <div class="gen-scent-name">Light Gourmands</div>
+              <div class="gen-scent-note">Vanilla and tonka bean — used sparingly as base notes rather than the full gourmand. Warmth without sweetness overload.</div>
+            </div>
+            <span class="gen-scent-tag">Evening</span>
+          </div>
+          <div class="gen-scent">
+            <div>
+              <div class="gen-scent-name">Fruity Florals</div>
+              <div class="gen-scent-note">Peach, lychee, raspberry layered with florals. Youthful and bright. Projects well in heat but fades quickly — EDT concentrations work best.</div>
+            </div>
+            <span class="gen-scent-tag">Daytime</span>
+          </div>
+        </div>
+        <div class="gen-note">African skin tends to amplify floral and musk notes more than cooler skin tones. What reads gentle on a European test strip may be more intense on your skin. Always test before buying.</div>
+      </div>
+
+      <div class="gen-col">
+        <div class="gen-col-label">Masculine</div>
+        <div class="gen-col-title">Woody, aromatic, and spice-forward</div>
+        <div class="gen-col-desc">Masculine fragrances tend to build around woody, aromatic, and spice families. Oud — native to African and Middle Eastern tradition — is one of the most powerful masculine notes and performs exceptionally in heat.</div>
+        <div class="gen-scent-list">
+          <div class="gen-scent">
+            <div>
+              <div class="gen-scent-name">Oud</div>
+              <div class="gen-scent-note">The most African of luxury base notes. Rich, animalic, dark. Designed for heat — it blooms rather than fades. Use sparingly. A single spray on the chest is enough.</div>
+            </div>
+            <span class="gen-scent-tag">All climates</span>
+          </div>
+          <div class="gen-scent">
+            <div>
+              <div class="gen-scent-name">Vetiver</div>
+              <div class="gen-scent-note">Earthy, smoky, rooty. One of the best masculine notes for African heat — it reads cool. Widely grown in West Africa (Haiti and Réunion supply most global vetiver).</div>
+            </div>
+            <span class="gen-scent-tag">All climates</span>
+          </div>
+          <div class="gen-scent">
+            <div>
+              <div class="gen-scent-name">Aromatic Fougères</div>
+              <div class="gen-scent-note">Lavender, oakmoss, coumarin. The classic barbershop/formal masculine. Light enough for daytime. Works well in offices and professional environments.</div>
+            </div>
+            <span class="gen-scent-tag">Daytime / work</span>
+          </div>
+          <div class="gen-scent">
+            <div>
+              <div class="gen-scent-name">Spice & Incense</div>
+              <div class="gen-scent-note">Pepper, cardamom, frankincense, myrrh. Deep cultural resonance across the continent. Can be overwhelming in high humidity — use in evening or dry-climate settings.</div>
+            </div>
+            <span class="gen-scent-tag">Evening</span>
+          </div>
+          <div class="gen-scent">
+            <div>
+              <div class="gen-scent-name">Citrus Colognes</div>
+              <div class="gen-scent-note">Bergamot, neroli, mandarin. Fresh, clean, instantly likable. Shortest longevity in heat — layering with a musk base significantly extends wear.</div>
+            </div>
+            <span class="gen-scent-tag">Daytime</span>
+          </div>
+        </div>
+        <div class="gen-note">The divide is soft. Many of the best masculine African fragrances — particularly oud-based ones — are worn across genders. Wear what works on your skin, not what the label says.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONCENTRATION -->
+<section id="concentration">
+  <div class="wrap">
+    <div class="conc-header r">
+      <p class="sec-label">Concentration</p>
+      <h2>EDT, EDP, Parfum — what actually matters</h2>
+      <p>Concentration determines how much fragrance oil is in the bottle. In African heat, this is more important than most fragrance guides will tell you — because higher concentration doesn't always mean better performance in humidity.</p>
+    </div>
+    <div class="conc-grid r d1">
+      <div class="conc-card">
+        <div class="conc-label">EDT</div>
+        <div class="conc-name">Eau de Toilette · 5–15% oil</div>
+        <div class="conc-desc">The most common concentration. Lighter, designed to project and fade over 3–5 hours. In African heat, EDT projection is often amplified — what seems light in the bottle can be very present on warm skin.</div>
+        <div class="conc-africa">Best choice for daytime in Lagos, Accra, and humid coastal cities. Reapply rather than wearing heavier concentrations.</div>
+      </div>
+      <div class="conc-card">
+        <div class="conc-label">EDP</div>
+        <div class="conc-name">Eau de Parfum · 15–20% oil</div>
+        <div class="conc-desc">Richer and longer-lasting than EDT. Better for evening use. In African heat, apply conservatively — 1–2 sprays maximum in humid conditions.</div>
+        <div class="conc-africa">Good for evenings and air-conditioned environments. Use with restraint in high heat. Better suited for Nairobi and Abuja's drier climate than coastal cities.</div>
+      </div>
+      <div class="conc-card">
+        <div class="conc-label">Parfum</div>
+        <div class="conc-name">Extrait · 20–40% oil</div>
+        <div class="conc-desc">The richest concentration. Designed for cold climates where fragrance needs help projecting. In African heat, one small dab is often enough — and sometimes too much.</div>
+        <div class="conc-africa">Use very sparingly. Apply to pulse points, not a spray. Best for evenings and cool-season events. Not ideal for humid daily wear.</div>
+      </div>
+    </div>
+    <div class="layering-note r d2">
+      <h3>How to layer fragrances</h3>
+      <p>Layering means applying two scents together to create something that neither achieves alone. The rule: start with the heavier, longer-lasting scent first (a musk or wood), then add a lighter scent on top. In African heat, layer lightly — both scents will project more than they would in cooler climates. A common mistake is applying the same amount as reviews written for European users suggest. Half is usually enough.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DAY VS NIGHT -->
+<section id="daynight">
+  <div class="wrap">
+    <div class="dn-header r">
+      <p class="sec-label" style="color:rgba(255,255,255,0.3)">Day vs Night</p>
+      <h2>What to wear and when</h2>
+      <p>African climate makes the day/night divide in fragrance more important than it is in cooler countries. The heat difference between noon and midnight is significant enough to change what works.</p>
+    </div>
+    <div class="dn-grid r d1">
+      <div class="dn-card">
+        <div class="dn-time">Daytime</div>
+        <div class="dn-sub">Work · Commute · Outdoor</div>
+        <ul class="dn-list">
+          <li>Fresh and aquatic families — light citrus, clean greens</li>
+          <li>Single florals — rose, jasmine in light concentrations</li>
+          <li>EDT concentrations only — 1–2 sprays</li>
+          <li>Apply to pulse points: wrists, neck, inner elbow</li>
+          <li>Avoid heavy orientals, gourmands, and heavy musks</li>
+          <li>Carry a travel size for midday reapplication if needed</li>
+        </ul>
+      </div>
+      <div class="dn-card">
+        <div class="dn-time">Evening</div>
+        <div class="dn-sub">Dinner · Events · Night out</div>
+        <ul class="dn-list">
+          <li>Woods — vetiver, sandalwood, cedar</li>
+          <li>Light orientals and ambers if the venue is air-conditioned</li>
+          <li>EDP concentrations acceptable — still apply conservatively</li>
+          <li>White florals work better in cooler evening temperatures</li>
+          <li>Layering works better in the evening than daytime heat</li>
+          <li>Apply to clothing as well as skin for longer projection</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="cta-block">
+  <h2>Read more on the platform</h2>
+  <p>All scent content on TÓRA is free — no account needed. The full guide includes affordable alternatives to designer fragrances for men and women.</p>
+  <a href="index.html" class="cta-btn">Back to TÓRA →</a>
+</div>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const drawer    = document.getElementById('drawer');
+  function setDrawer(open) { hamburger.classList.toggle('open', open); drawer.classList.toggle('open', open); document.body.style.overflow = open ? 'hidden' : ''; }
+  hamburger.addEventListener('click', e => { e.stopPropagation(); setDrawer(!drawer.classList.contains('open')); });
+  drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setDrawer(false)));
+  document.addEventListener('click', e => { if (!hamburger.contains(e.target) && !drawer.contains(e.target)) setDrawer(false); });
+  const rEls = document.querySelectorAll('.r');
+  const obs  = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }}); }, { threshold: 0.08 });
+  rEls.forEach(el => obs.observe(el));
+
+  // ── Global gender bar (cosmetic on this page, syncs across site) ──
+  const GKEY = 'tora_gender';
+  const gbarW = document.getElementById('gbarW');
+  const gbarM = document.getElementById('gbarM');
+  function applyGender(g) {
+    localStorage.setItem(GKEY, g);
+    gbarW.classList.toggle('active', g === 'w');
+    gbarM.classList.toggle('active', g === 'm');
+  }
+  gbarW.addEventListener('click', () => applyGender('w'));
+  gbarM.addEventListener('click', () => applyGender('m'));
+  applyGender(localStorage.getItem(GKEY) || 'w');
+</script>
+</body>
+</html>

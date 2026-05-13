@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hair — TÓRA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;0,9..40,900;1,9..40,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --black: #000;
+      --white: #fff;
+      --grey: #888;
+      --grey-light: #eee;
+      --grey-mid: #444;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--black); overflow-x: hidden; }
+
+    /* ── GENDER BAR ── */
+    .gender-bar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 490;
+      display: flex; justify-content: center; align-items: center;
+      padding: 18px 0; pointer-events: none;
+    }
+    .gender-bar-inner {
+      display: flex; pointer-events: all;
+      border: 1px solid var(--grey-light); background: var(--white);
+    }
+    .gbar-btn {
+      font-size: 10px; font-weight: 700; letter-spacing: 2.5px;
+      text-transform: uppercase; padding: 10px 24px;
+      background: transparent; border: none; cursor: pointer;
+      color: var(--grey); transition: background 0.2s, color 0.2s;
+    }
+    .gbar-btn.active { background: var(--black); color: var(--white); }
+
+    /* ── NAV ── */
+    .site-logo {
+      position: fixed; top: 28px; left: 36px; z-index: 500;
+      font-size: 18px; font-weight: 900; letter-spacing: 6px;
+      text-transform: uppercase; color: var(--black); text-decoration: none;
+    }
+    .hamburger {
+      position: fixed; top: 28px; right: 28px; z-index: 500;
+      display: flex; flex-direction: column; gap: 6px;
+      background: none; border: none; cursor: pointer; padding: 6px;
+    }
+    .hamburger span {
+      display: block; width: 28px; height: 1.5px; background: var(--black);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+
+    .drawer {
+      position: fixed; inset: 0; background: var(--white); z-index: 400;
+      display: flex; flex-direction: column; justify-content: center; padding: 0 48px;
+      transform: translateY(-100%); transition: transform 0.5s cubic-bezier(0.76,0,0.24,1);
+    }
+    .drawer.open { transform: translateY(0); }
+    .drawer-nav { list-style: none; border-top: 1px solid var(--grey-light); }
+    .drawer-nav li { border-bottom: 1px solid var(--grey-light); }
+    .drawer-nav a {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 0; font-size: clamp(18px, 3.5vw, 28px); font-weight: 700;
+      color: var(--black); text-decoration: none; text-transform: uppercase; letter-spacing: 1px;
+      transition: color 0.2s;
+    }
+    .drawer-nav a:hover { color: var(--grey); }
+    .drawer-nav .drawer-sub {
+      font-size: clamp(11px, 1.5vw, 13px); font-weight: 500; letter-spacing: 2px;
+      color: var(--grey); padding: 8px 0 8px 16px; border-bottom: 1px solid var(--grey-light);
+      display: flex; align-items: center; justify-content: space-between;
+      text-decoration: none; text-transform: uppercase; transition: color 0.2s;
+    }
+    .drawer-nav .drawer-sub:hover { color: var(--black); }
+    .d-arrow { font-size: 18px; opacity: 0; transition: opacity 0.2s, transform 0.2s; transform: translateX(-8px); }
+    .drawer-nav a:hover .d-arrow { opacity: 1; transform: translateX(0); }
+    .drawer-footer {
+      position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+      font-size: 11px; font-weight: 500; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--grey); white-space: nowrap;
+    }
+
+    /* ── PAGE HERO ── */
+    .page-hero {
+      background: var(--black);
+      padding: 160px 36px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute; top: 0; right: 0;
+      width: 50%; height: 100%;
+      background: url('images/Hair hero.png') center/cover no-repeat;
+      opacity: 0.18;
+    }
+    .page-hero-inner { max-width: 1080px; margin: 0 auto; position: relative; z-index: 1; }
+    .breadcrumb {
+      font-size: 11px; font-weight: 600; letter-spacing: 3px;
+      text-transform: uppercase; color: rgba(255,255,255,0.35);
+      margin-bottom: 24px; display: flex; align-items: center; gap: 10px;
+    }
+    .breadcrumb a { color: rgba(255,255,255,0.35); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: var(--white); }
+    .page-title {
+      font-size: clamp(56px, 12vw, 120px); font-weight: 900;
+      text-transform: uppercase; letter-spacing: -3px;
+      line-height: 0.9; color: var(--white); margin-bottom: 28px;
+    }
+    .page-desc {
+      font-size: 18px; font-weight: 300; line-height: 1.8;
+      color: rgba(255,255,255,0.5); max-width: 560px;
+    }
+
+    /* ── SHARED ── */
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 36px; }
+
+    .sec-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--grey); margin-bottom: 16px;
+    }
+
+    /* ── CURL TYPES SECTION ── */
+    #curl-types { padding: 96px 0; background: var(--white); }
+    .curl-intro { max-width: 640px; margin-bottom: 64px; }
+    .curl-intro h2 {
+      font-size: clamp(30px, 4vw, 48px); font-weight: 700;
+      color: var(--black); line-height: 1.1; margin-bottom: 16px; letter-spacing: -0.5px;
+    }
+    .curl-intro p { font-size: 16px; font-weight: 300; line-height: 1.85; color: var(--grey-mid); }
+
+    .curl-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--grey-light);
+      border: 1px solid var(--grey-light);
+      margin-bottom: 24px;
+    }
+    .curl-card {
+      background: var(--white);
+      padding: 36px 28px;
+      transition: background 0.2s;
+      overflow: hidden;
+    }
+    .curl-card:hover { background: #fafafa; }
+    .curl-type-label {
+      font-size: 32px; font-weight: 900; color: var(--black);
+      letter-spacing: -1px; line-height: 1; margin-bottom: 10px;
+    }
+    .curl-type-name {
+      font-size: 13px; font-weight: 600; color: var(--grey);
+      text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 16px;
+    }
+    .curl-type-desc {
+      font-size: 14px; font-weight: 300; line-height: 1.75; color: var(--grey-mid);
+      margin-bottom: 16px;
+    }
+    .curl-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .curl-tag {
+      font-size: 11px; font-weight: 500; color: var(--grey);
+      border: 1px solid var(--grey-light); padding: 4px 10px;
+    }
+    .curl-highlight { background: var(--black); }
+    .curl-highlight .curl-type-label,
+    .curl-highlight .curl-type-name,
+    .curl-highlight .curl-type-desc { color: var(--white); }
+    .curl-highlight .curl-type-name { color: rgba(255,255,255,0.4); }
+    .curl-highlight .curl-type-desc { color: rgba(255,255,255,0.5); }
+    .curl-highlight .curl-tag { color: rgba(255,255,255,0.4); border-color: rgba(255,255,255,0.1); }
+    .curl-note {
+      font-size: 13px; font-weight: 300; color: var(--grey); font-style: italic;
+      border-left: 2px solid var(--grey-light); padding-left: 16px;
+    }
+
+    /* ── POROSITY SECTION ── */
+    #porosity { padding: 96px 0; background: var(--black); }
+    .por-header { margin-bottom: 64px; }
+    .por-header h2 {
+      font-size: clamp(30px, 4vw, 48px); font-weight: 700;
+      color: var(--white); line-height: 1.1; margin-bottom: 16px; letter-spacing: -0.5px;
+    }
+    .por-header p { font-size: 16px; font-weight: 300; line-height: 1.8; color: rgba(255,255,255,0.4); max-width: 560px; }
+
+    .por-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.07);
+      margin-bottom: 48px;
+    }
+    .por-card { background: var(--black); padding: 36px 28px; transition: background 0.2s; }
+    .por-card:hover { background: #0d0d0d; }
+    .por-name {
+      font-size: 20px; font-weight: 700; color: var(--white);
+      margin-bottom: 6px; letter-spacing: -0.3px;
+    }
+    .por-sub { font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.25); margin-bottom: 20px; }
+    .por-desc { font-size: 14px; font-weight: 300; line-height: 1.75; color: rgba(255,255,255,0.45); margin-bottom: 20px; }
+    .por-signs h4 { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.25); margin-bottom: 10px; }
+    .por-signs ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+    .por-signs li { font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.4); padding-left: 14px; position: relative; }
+    .por-signs li::before { content: '—'; position: absolute; left: 0; color: rgba(255,255,255,0.2); }
+
+    .float-test {
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+      padding: 36px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;
+    }
+    .float-test h3 { font-size: 22px; font-weight: 700; color: var(--white); margin-bottom: 12px; }
+    .float-test p { font-size: 15px; font-weight: 300; line-height: 1.8; color: rgba(255,255,255,0.45); }
+    .float-steps { list-style: none; display: flex; flex-direction: column; gap: 0; border-top: 1px solid rgba(255,255,255,0.07); }
+    .float-step {
+      display: grid; grid-template-columns: 32px 1fr; gap: 14px;
+      padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.07); align-items: start;
+    }
+    .float-step-n { font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.2); }
+    .float-step-t { font-size: 14px; font-weight: 300; color: rgba(255,255,255,0.5); line-height: 1.5; }
+
+    /* ── DAMAGE SECTION ── */
+    #damage { padding: 96px 0; background: var(--white); }
+    .damage-header { margin-bottom: 64px; }
+    .damage-header h2 {
+      font-size: clamp(30px, 4vw, 48px); font-weight: 700;
+      color: var(--black); line-height: 1.1; margin-bottom: 16px; letter-spacing: -0.5px;
+    }
+    .damage-header p { font-size: 16px; font-weight: 300; line-height: 1.8; color: var(--grey-mid); max-width: 560px; }
+
+    .damage-list { border-top: 1px solid var(--grey-light); }
+    .damage-row {
+      display: grid; grid-template-columns: 200px 1fr;
+      gap: 40px; padding: 36px 0; border-bottom: 1px solid var(--grey-light);
+      align-items: start;
+    }
+    .damage-type {
+      font-size: 16px; font-weight: 700; color: var(--black); letter-spacing: -0.2px;
+    }
+    .damage-body { font-size: 15px; font-weight: 300; line-height: 1.8; color: var(--grey-mid); }
+    .damage-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+    .damage-tag { font-size: 11px; font-weight: 500; color: var(--grey); border: 1px solid var(--grey-light); padding: 4px 10px; }
+
+    /* ── MEN'S SECTION ── */
+    #mens { padding: 96px 0; background: #0a0a0a; }
+    .mens-header { margin-bottom: 64px; }
+    .mens-header h2 {
+      font-size: clamp(30px, 4vw, 48px); font-weight: 700;
+      color: var(--white); line-height: 1.1; margin-bottom: 16px; letter-spacing: -0.5px;
+    }
+    .mens-header p { font-size: 16px; font-weight: 300; line-height: 1.8; color: rgba(255,255,255,0.4); max-width: 560px; }
+
+    .mens-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 1px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.07);
+    }
+    .mens-card { background: #0a0a0a; padding: 36px 28px; transition: background 0.2s; overflow: hidden; }
+    .mens-card:hover { background: #111; }
+    .mens-card h3 { font-size: 20px; font-weight: 700; color: var(--white); margin-bottom: 12px; }
+    .mens-card p { font-size: 14px; font-weight: 300; line-height: 1.75; color: rgba(255,255,255,0.4); }
+
+    /* ── CURL CARD IMAGE ── */
+    .curl-img-wrap { width: calc(100% + 56px); aspect-ratio: 4/3; margin: -36px -28px 20px; }
+    .curl-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; filter: grayscale(100%); transition: transform 0.5s ease; }
+    .curl-card:hover .curl-img-wrap img { transform: scale(1.04); }
+
+    /* ── MENS CARD IMAGE ── */
+    .mens-img-wrap { width: calc(100% + 56px); aspect-ratio: 3/2; margin: -36px -28px 18px; }
+    .mens-img-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; filter: grayscale(100%); transition: transform 0.5s ease; }
+    .mens-card:hover .mens-img-wrap img { transform: scale(1.04); }
+
+    /* ── BEARD CARD IMAGE ── */
+    .beard-img-wrap { width: calc(100% + 52px); aspect-ratio: 3/2; margin: -32px -26px 18px; }
+    .beard-img-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; filter: grayscale(100%); transition: transform 0.5s ease; }
+    .beard-card:hover .beard-img-wrap img { transform: scale(1.04); }
+
+    /* ── FACE SHAPE CARD IMAGE ── */
+    .face-img-wrap { width: calc(100% + 52px); aspect-ratio: 1/1; margin: -32px -26px 16px; }
+    .face-img-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; filter: grayscale(100%); transition: transform 0.5s ease; }
+    .face-card:hover .face-img-wrap img { transform: scale(1.04); }
+
+    /* ── HEAD SHAPE CARD IMAGE ── */
+    .head-img-wrap { width: calc(100% + 56px); aspect-ratio: 3/2; margin: -36px -28px 16px; }
+    .head-img-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; filter: grayscale(100%); }
+
+    /* ── ACCESSORY CARD IMAGE ── */
+    .acc-img-wrap { width: calc(100% + 52px); aspect-ratio: 4/3; margin: -32px -26px 18px; }
+    .acc-img-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; filter: grayscale(100%); transition: transform 0.5s ease; }
+    .acc-card:hover .acc-img-wrap img { transform: scale(1.04); }
+
+    /* ── BEARD TYPES ── */
+    #beards { padding: 96px 0; background: var(--white); }
+    .beards-header { max-width: 640px; margin-bottom: 64px; }
+    .beards-header h2 { font-size: clamp(30px,4vw,48px); font-weight: 700; color: var(--black); line-height: 1.1; margin-bottom: 16px; letter-spacing: -0.5px; }
+    .beards-header p { font-size: 16px; font-weight: 300; line-height: 1.85; color: var(--grey-mid); }
+    .beard-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--grey-light); border: 1px solid var(--grey-light); }
+    .beard-card { background: var(--white); padding: 32px 26px; transition: background 0.2s; overflow: hidden; }
+    .beard-card:hover { background: #fafafa; }
+    .beard-name { font-size: 18px; font-weight: 700; color: var(--black); margin-bottom: 6px; letter-spacing: -0.2px; }
+    .beard-sub { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--grey); margin-bottom: 14px; }
+    .beard-desc { font-size: 14px; font-weight: 300; line-height: 1.75; color: var(--grey-mid); margin-bottom: 14px; }
+    .beard-tip { font-size: 12px; font-weight: 500; color: var(--grey); border-left: 2px solid var(--grey-light); padding-left: 12px; line-height: 1.5; }
+
+
+    /* ── FACE SHAPES ── */
+    #face-shapes { padding: 96px 0; background: var(--black); }
+    .face-header { margin-bottom: 48px; }
+    .face-header h2 { font-size: clamp(30px,4vw,48px); font-weight: 700; color: var(--white); line-height: 1.1; margin-bottom: 16px; letter-spacing: -0.5px; }
+    .face-header p { font-size: 16px; font-weight: 300; line-height: 1.8; color: rgba(255,255,255,0.4); max-width: 560px; }
+    .face-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.07); }
+    .face-card { background: var(--black); padding: 32px 26px; transition: background 0.2s; overflow: hidden; }
+    .face-card:hover { background: #0d0d0d; }
+    .face-shape-name { font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 6px; }
+    .face-shape-sub { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.25); margin-bottom: 14px; }
+    .face-shape-desc { font-size: 14px; font-weight: 300; line-height: 1.75; color: rgba(255,255,255,0.45); margin-bottom: 14px; }
+    .face-best h4 { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.2); margin-bottom: 8px; }
+    .face-best ul { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+    .face-best li { font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.35); padding-left: 14px; position: relative; line-height: 1.4; }
+    .face-best li::before { content: '—'; position: absolute; left: 0; color: rgba(255,255,255,0.15); }
+
+    /* ── HEAD SHAPES ── */
+    #head-shapes { padding: 96px 0; background: var(--white); }
+    .head-header { max-width: 640px; margin-bottom: 48px; }
+    .head-header h2 { font-size: clamp(30px,4vw,48px); font-weight: 700; color: var(--black); line-height: 1.1; margin-bottom: 16px; letter-spacing: -0.5px; }
+    .head-header p { font-size: 16px; font-weight: 300; line-height: 1.85; color: var(--grey-mid); }
+    .head-panel-label { font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--grey); margin-bottom: 20px; }
+    .head-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 1px; background: var(--grey-light); border: 1px solid var(--grey-light); }
+    .head-card { background: var(--white); padding: 36px 28px; transition: background 0.2s; overflow: hidden; }
+    .head-card:hover { background: #fafafa; }
+    .head-shape-name { font-size: 20px; font-weight: 700; color: var(--black); margin-bottom: 6px; letter-spacing: -0.2px; }
+    .head-shape-sub { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--grey); margin-bottom: 14px; }
+    .head-shape-desc { font-size: 14px; font-weight: 300; line-height: 1.75; color: var(--grey-mid); margin-bottom: 16px; }
+    .head-styles h4 { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--grey); margin-bottom: 8px; }
+    .head-styles ul { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+    .head-styles li { font-size: 13px; font-weight: 300; color: var(--grey-mid); padding-left: 14px; position: relative; line-height: 1.4; }
+    .head-styles li::before { content: '—'; position: absolute; left: 0; color: var(--grey-light); }
+
+    /* ── ACCESSORIES ── */
+    #accessories { padding: 96px 0; background: #0a0a0a; }
+    .acc-header { margin-bottom: 64px; }
+    .acc-header h2 { font-size: clamp(30px,4vw,48px); font-weight: 700; color: var(--white); line-height: 1.1; margin-bottom: 16px; letter-spacing: -0.5px; }
+    .acc-header p { font-size: 16px; font-weight: 300; line-height: 1.8; color: rgba(255,255,255,0.4); max-width: 560px; }
+    .acc-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.07); }
+    .acc-card { background: #0a0a0a; padding: 32px 26px; transition: background 0.2s; overflow: hidden; }
+    .acc-card:hover { background: #111; }
+    .acc-name { font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 6px; }
+    .acc-sub { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.25); margin-bottom: 14px; }
+    .acc-desc { font-size: 14px; font-weight: 300; line-height: 1.75; color: rgba(255,255,255,0.45); margin-bottom: 14px; }
+    .acc-works h4 { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.2); margin-bottom: 8px; }
+    .acc-works ul { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+    .acc-works li { font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.35); padding-left: 14px; position: relative; line-height: 1.4; }
+    .acc-works li::before { content: '—'; position: absolute; left: 0; color: rgba(255,255,255,0.15); }
+
+    /* ── QUIZ CTA ── */
+    .quiz-cta-block {
+      background: var(--black); padding: 80px 36px; text-align: center;
+    }
+    .quiz-cta-block h2 {
+      font-size: clamp(28px, 4vw, 48px); font-weight: 700; color: var(--white);
+      margin-bottom: 16px; letter-spacing: -0.5px;
+    }
+    .quiz-cta-block p {
+      font-size: 16px; font-weight: 300; color: rgba(255,255,255,0.4);
+      margin-bottom: 36px; max-width: 480px; margin-left: auto; margin-right: auto; line-height: 1.7;
+    }
+    .cta-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--white); color: var(--black);
+      font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase;
+      text-decoration: none; padding: 15px 30px; transition: background 0.2s, color 0.2s;
+    }
+    .cta-btn:hover { background: var(--grey-light); }
+
+    /* ── SCROLL REVEAL ── */
+    .r { opacity: 0; transform: translateY(24px); transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1); }
+    .r.in { opacity: 1; transform: none; }
+    .d1 { transition-delay: 0.08s; } .d2 { transition-delay: 0.15s; } .d3 { transition-delay: 0.22s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 800px) {
+      .wrap { padding: 0 20px; }
+      .drawer { padding: 0 24px; overflow-y: auto; justify-content: flex-start; padding-top: 80px; padding-bottom: 60px; }
+      .drawer-footer { left: 50%; transform: translateX(-50%); white-space: nowrap; }
+      .page-hero { padding: 140px 20px 60px; }
+      .page-hero::before { width: 100%; opacity: 0.1; }
+      .curl-grid { grid-template-columns: 1fr 1fr; }
+      .por-grid { grid-template-columns: 1fr; }
+      .float-test { grid-template-columns: 1fr; gap: 28px; }
+      .damage-row { grid-template-columns: 1fr; gap: 8px; }
+      .mens-grid { grid-template-columns: 1fr; }
+      .beard-grid { grid-template-columns: 1fr 1fr; }
+      .face-grid { grid-template-columns: 1fr 1fr; }
+      .head-grid { grid-template-columns: 1fr; }
+      .acc-grid { grid-template-columns: 1fr 1fr; }
+      #curl-types, #porosity, #damage, #mens, #beards, #face-shapes, #head-shapes, #accessories { padding: 72px 0; }
+      .site-logo { left: 20px; } .hamburger { right: 20px; top: 20px; }
+    }
+    @media (max-width: 560px) {
+      .curl-grid { grid-template-columns: 1fr; }
+      .beard-grid { grid-template-columns: 1fr; }
+      .face-grid { grid-template-columns: 1fr; }
+      .acc-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="gender-bar" id="genderBar">
+  <div class="gender-bar-inner">
+    <button class="gbar-btn" id="gbarW" data-g="w">Women</button>
+    <button class="gbar-btn" id="gbarM" data-g="m">Men</button>
+  </div>
+</div>
+
+<a href="index.html" class="site-logo">TÓRA</a>
+<button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+
+<div class="drawer" id="drawer">
+  <ul class="drawer-nav">
+    <li><a href="index.html">Home <span class="d-arrow">→</span></a></li>
+    <li><a href="hair.html">Hair <span class="d-arrow">→</span></a></li>
+    <li><a href="body.html">Body <span class="d-arrow">→</span></a></li>
+    <li><a href="scent.html">Scent <span class="d-arrow">→</span></a></li>
+    <li><a href="index.html#pricing">Get Started <span class="d-arrow">→</span></a></li>
+  </ul>
+  <div class="drawer-footer">Hair · Body · Scent</div>
+</div>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <p class="breadcrumb"><a href="index.html">TÓRA</a> / Hair</p>
+    <h1 class="page-title">HAIR</h1>
+    <p class="page-desc">Complete hair science for African textures — for women with natural, relaxed, or transitioning hair, and for men managing waves, locs, fades, and scalp health.</p>
+  </div>
+</div>
+
+<!-- CURL TYPES -->
+<section id="curl-types" data-gender="w">
+  <div class="wrap">
+    <div class="curl-intro r">
+      <p class="sec-label">Curl Typing</p>
+      <h2>Understanding your curl type — 3a to 4c</h2>
+      <p>The curl typing system describes the shape and pattern of your hair strands. For African hair, the most relevant types are 3c through 4c — but understanding where you sit changes what products you reach for and how you build your routine.</p>
+    </div>
+
+    <div class="curl-grid r d1">
+      <div class="curl-card">
+        <div class="curl-img-wrap"><img src="images/3c.png" alt="3C hair texture" loading="lazy"></div>
+        <div class="curl-type-label">3C</div>
+        <div class="curl-type-name">Tight Corkscrews</div>
+        <div class="curl-type-desc">Very tight corkscrews with lots of volume. Dense, prone to shrinkage. Still has a defined curl pattern without product. Common in mixed-texture and transitioning hair.</div>
+        <div class="curl-tags">
+          <span class="curl-tag">Defined without product</span>
+          <span class="curl-tag">High shrinkage</span>
+          <span class="curl-tag">Dense</span>
+        </div>
+      </div>
+      <div class="curl-card">
+        <div class="curl-img-wrap"><img src="images/4a.png" alt="4A hair texture" loading="lazy"></div>
+        <div class="curl-type-label">4A</div>
+        <div class="curl-type-name">Tight Coils</div>
+        <div class="curl-type-desc">Tight coils with a visible S-pattern when stretched. Retains moisture reasonably well compared to 4b and 4c. Shrinks significantly but maintains some definition.</div>
+        <div class="curl-tags">
+          <span class="curl-tag">S-pattern</span>
+          <span class="curl-tag">Moderate moisture retention</span>
+          <span class="curl-tag">~50% shrinkage</span>
+        </div>
+      </div>
+      <div class="curl-card curl-highlight">
+        <div class="curl-img-wrap"><img src="images/4b.png" alt="4B hair texture" loading="lazy"></div>
+        <div class="curl-type-label">4B</div>
+        <div class="curl-type-name">Z-Pattern Coil</div>
+        <div class="curl-type-desc">Z-shaped coil with very little curl definition without product. Very dense. Shrinks up to 75%. Extremely common in Nigeria and Ghana. Requires intentional moisture layering.</div>
+        <div class="curl-tags">
+          <span class="curl-tag">Z-pattern</span>
+          <span class="curl-tag">Very common in West Africa</span>
+          <span class="curl-tag">~75% shrinkage</span>
+        </div>
+      </div>
+      <div class="curl-card curl-highlight">
+        <div class="curl-img-wrap"><img src="images/4c.png" alt="4C hair texture" loading="lazy"></div>
+        <div class="curl-type-label">4C</div>
+        <div class="curl-type-name">Tightest Coil</div>
+        <div class="curl-type-desc">The tightest coil — almost no visible pattern without manipulation. Highest shrinkage of all types. The most common texture across West and East Africa. The most underserved by mainstream hair content.</div>
+        <div class="curl-tags">
+          <span class="curl-tag">Most common in Africa</span>
+          <span class="curl-tag">~80% shrinkage</span>
+          <span class="curl-tag">Most underserved</span>
+        </div>
+      </div>
+      <div class="curl-card">
+        <div class="curl-img-wrap"><img src="images/3a.png" alt="3A hair texture" loading="lazy"></div>
+        <div class="curl-type-label">3A</div>
+        <div class="curl-type-name">Loose Spirals</div>
+        <div class="curl-type-desc">Loose, well-defined spirals. Shiny, bouncy, and the least prone to dryness of the curly types. Less common in West Africa but relevant for the diaspora and mixed-texture hair.</div>
+        <div class="curl-tags">
+          <span class="curl-tag">Loose spiral</span>
+          <span class="curl-tag">Low shrinkage</span>
+          <span class="curl-tag">Retains moisture well</span>
+        </div>
+      </div>
+      <div class="curl-card">
+        <div class="curl-img-wrap"><img src="images/3b.png" alt="3B hair texture" loading="lazy"></div>
+        <div class="curl-type-label">3B</div>
+        <div class="curl-type-name">Springy Curls</div>
+        <div class="curl-type-desc">Tighter spirals with more volume than 3a. Still well-defined without product. More prone to frizz in humidity. Common in transitioning or heat-treated natural hair.</div>
+        <div class="curl-tags">
+          <span class="curl-tag">Springy</span>
+          <span class="curl-tag">Frizz-prone in humidity</span>
+          <span class="curl-tag">Medium shrinkage</span>
+        </div>
+      </div>
+    </div>
+    <p class="curl-note r d2">Note: Most people have multiple curl types across their head. Your nape is often a different type to your crown. Build your routine around your most difficult section.</p>
+  </div>
+</section>
+
+<!-- POROSITY -->
+<section id="porosity" data-gender="w">
+  <div class="wrap">
+    <div class="por-header r">
+      <p class="sec-label" style="color:rgba(255,255,255,0.3)">Porosity</p>
+      <h2>Why your hair rejects moisture — and how to fix it</h2>
+      <p>Porosity is how well your hair absorbs and retains water and product. It's determined by the state of your cuticle layer. Getting this wrong means your hair stays dry no matter how much you put on it — or it gets weighed down constantly.</p>
+    </div>
+
+    <div class="por-grid r d1">
+      <div class="por-card">
+        <div class="por-name">Low Porosity</div>
+        <div class="por-sub">Cuticles tightly shut</div>
+        <div class="por-desc">Water and product sit on the hair instead of absorbing. Takes forever to get fully wet. Products build up on the surface over time. Common in very healthy, unprocessed 4c hair.</div>
+        <div class="por-signs">
+          <h4>Signs</h4>
+          <ul>
+            <li>Hair takes long to get wet</li>
+            <li>Products sit on hair, don't absorb</li>
+            <li>Hair dries slowly</li>
+            <li>Product buildup despite using little</li>
+          </ul>
+        </div>
+      </div>
+      <div class="por-card">
+        <div class="por-name">Medium Porosity</div>
+        <div class="por-sub">Cuticles balanced</div>
+        <div class="por-desc">The ideal state. Hair absorbs moisture easily and holds it well. Styles hold, products work as expected, and routines are forgiving. Most routines are written for this porosity type.</div>
+        <div class="por-signs">
+          <h4>Signs</h4>
+          <ul>
+            <li>Hair gets wet quickly</li>
+            <li>Products absorb and dry at normal rate</li>
+            <li>Holds styles without too much effort</li>
+            <li>Responds well to most products</li>
+          </ul>
+        </div>
+      </div>
+      <div class="por-card">
+        <div class="por-name">High Porosity</div>
+        <div class="por-sub">Cuticles raised / damaged</div>
+        <div class="por-desc">Absorbs moisture very fast but loses it just as fast. Hair dries quickly, feels rough, tangles easily. Usually the result of heat damage, chemical processing, or hard water damage over time.</div>
+        <div class="por-signs">
+          <h4>Signs</h4>
+          <ul>
+            <li>Hair absorbs water immediately</li>
+            <li>Dries very fast after washing</li>
+            <li>Always feels dry despite moisturising</li>
+            <li>Tangles and breaks easily</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="float-test r d2">
+      <div>
+        <h3>The Float Test</h3>
+        <p>A simple at-home test to determine your porosity. Do this on clean, product-free hair for the most accurate result.</p>
+      </div>
+      <ul class="float-steps">
+        <li class="float-step"><span class="float-step-n">01</span><span class="float-step-t">Wash your hair with a clarifying shampoo and do not add any product</span></li>
+        <li class="float-step"><span class="float-step-n">02</span><span class="float-step-t">Let a few strands air dry completely</span></li>
+        <li class="float-step"><span class="float-step-n">03</span><span class="float-step-t">Drop the strands into a glass of room-temperature water</span></li>
+        <li class="float-step"><span class="float-step-n">04</span><span class="float-step-t">Wait 2–4 minutes without disturbing the glass</span></li>
+        <li class="float-step"><span class="float-step-n">05</span><span class="float-step-t">Floats = low porosity · Sinks slowly = medium · Sinks fast = high</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- DAMAGE -->
+<section id="damage" data-gender="w">
+  <div class="wrap">
+    <div class="damage-header r">
+      <p class="sec-label">Damage</p>
+      <h2>What's actually breaking your hair</h2>
+      <p>Most hair damage comes from one of six causes. Knowing which one is yours changes everything about how you treat it.</p>
+    </div>
+
+    <div class="damage-list r d1">
+      <div class="damage-row">
+        <div class="damage-type">Heat Damage</div>
+        <div>
+          <div class="damage-body">Permanent change to your curl pattern from flat irons, blow dryers, and hot combs applied too frequently or at too high a temperature. The hair does not bounce back. Straightened sections must be cut out over time.</div>
+          <div class="damage-tags"><span class="damage-tag">Permanent</span><span class="damage-tag">Curl pattern loss</span><span class="damage-tag">Must grow out</span></div>
+        </div>
+      </div>
+      <div class="damage-row">
+        <div class="damage-type">Chemical Damage</div>
+        <div>
+          <div class="damage-body">Relaxers, texturisers, and dyes alter the hair's protein structure. Overlapping relaxer on already-processed hair is the most common cause of severe breakage in Nigerian women.</div>
+          <div class="damage-tags"><span class="damage-tag">Protein structure change</span><span class="damage-tag">Overlapping relaxers</span><span class="damage-tag">Dye damage</span></div>
+        </div>
+      </div>
+      <div class="damage-row">
+        <div class="damage-type">Physical Breakage</div>
+        <div>
+          <div class="damage-body">Tight braids, rubber bands at the same spot repeatedly, harsh detangling, and manipulation when hair is dry. The edges and nape are the most vulnerable. Traction alopecia is the permanent version of this.</div>
+          <div class="damage-tags"><span class="damage-tag">Traction alopecia</span><span class="damage-tag">Edge loss</span><span class="damage-tag">Over-manipulation</span></div>
+        </div>
+      </div>
+      <div class="damage-row">
+        <div class="damage-type">Hard Water Damage</div>
+        <div>
+          <div class="damage-body">Extremely relevant in Lagos, Abuja, and many Nigerian cities. The minerals in hard water (calcium, magnesium) coat the hair shaft, block moisture absorption, cause dullness, and accelerate breakage over time. Your routine may not be failing — your water might be.</div>
+          <div class="damage-tags"><span class="damage-tag">Lagos-specific</span><span class="damage-tag">Mineral buildup</span><span class="damage-tag">Clarify monthly</span></div>
+        </div>
+      </div>
+      <div class="damage-row">
+        <div class="damage-type">Hygral Fatigue</div>
+        <div>
+          <div class="damage-body">Over-wetting the hair causes the cuticle to swell and contract repeatedly. Washing daily or keeping hair wet constantly weakens the strand structure. Particularly common with co-wash-only routines.</div>
+          <div class="damage-tags"><span class="damage-tag">Over-washing</span><span class="damage-tag">Co-wash overuse</span><span class="damage-tag">Cuticle swelling</span></div>
+        </div>
+      </div>
+      <div class="damage-row">
+        <div class="damage-type">Discolouration</div>
+        <div>
+          <div class="damage-body">Natural black hair turning reddish or brown is a signal — not a style. Causes include sun exposure (UV bleaching), hard water mineral deposits, protein deficiency, and chlorine from swimming pools. Each cause has a different fix.</div>
+          <div class="damage-tags"><span class="damage-tag">Sun bleaching</span><span class="damage-tag">Protein deficiency</span><span class="damage-tag">Chlorine damage</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MEN'S HAIR -->
+<section id="mens" data-gender="m">
+  <div class="wrap">
+    <div class="mens-header r">
+      <p class="sec-label" style="color:rgba(255,255,255,0.3)">Men's Hair</p>
+      <h2>For men — waves, fades, braids, locs, and scalp</h2>
+      <p>African men's hair covers every texture and style — from skin fades to braids to locs. This section covers what applies to men specifically.</p>
+    </div>
+
+    <div class="mens-grid r d1">
+      <div class="mens-card">
+        <div class="mens-img-wrap"><img src="images/360 wave.png" alt="360 waves" loading="lazy"></div>
+        <h3>Waves</h3>
+        <p>360 waves require consistent brushing, moisture, and compression. The right brush hardness depends on your curl type — 4c hair needs softer bristles with more moisture. Over-brushing on dry hair causes breakage, not progress.</p>
+      </div>
+      <div class="mens-card">
+        <div class="mens-img-wrap"><img src="images/men fade.png" alt="Low fade" loading="lazy"></div>
+        <h3>Low Cuts & Fades</h3>
+        <p>Scalp health matters more when your hair is short. Dry scalp, ingrown hairs, and razor bumps are common. Moisturising the scalp directly — not just the hair — and using a gentle exfoliant weekly prevents most issues.</p>
+      </div>
+      <div class="mens-card">
+        <div class="mens-img-wrap"><img src="images/dreadlocks.png" alt="Dreadlocks" loading="lazy"></div>
+        <h3>Locs</h3>
+        <p>Locs need moisture throughout — not just at the scalp. Buildup from heavy products inside loc strands causes the same issues as product buildup on loose hair. Clarify periodically, keep the scalp clean, and avoid over-retwisting which causes thinning at the root.</p>
+      </div>
+      <div class="mens-card">
+        <div class="mens-img-wrap"><img src="images/mens_skinfade.png" alt="Skin fade" loading="lazy"></div>
+        <h3>Skin Fade & Taper</h3>
+        <p>The skin fade starts at the skin at the sides and back and gradually blends into length on top. The taper is softer — it drops down without fully reaching skin. Skin fades suit round and wide head shapes; tapers are more forgiving on flat-back heads. Both require a barber who understands African hair texture — clipper settings and technique differ from European hair.</p>
+      </div>
+      <div class="mens-card">
+        <div class="mens-img-wrap"><img src="images/mens_braids.png" alt="Braided hair" loading="lazy"></div>
+        <h3>Braided Hair</h3>
+        <p>Braids on men have deep roots across West, East, and Central Africa — cornrows, single braids, fulani braids, and box braids are all part of the tradition, not a trend. They work from 4 inches upward. Braids are a protective style — they reduce manipulation and breakage while your hair grows. Keep the scalp moisturised and avoid leaving braids in past 6–8 weeks to prevent matting at the root.</p>
+      </div>
+      <div class="mens-card">
+        <div class="mens-img-wrap"><img src="images/beard.png" alt="Beard" loading="lazy"></div>
+        <h3>Beard & Follicle Health</h3>
+        <p>The same follicle science that applies to scalp hair applies to your beard. Ingrown hairs, patchiness, and dry skin under the beard are all addressable — and connected to how you treat your skin, not just your beard products.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BEARD TYPES -->
+<section id="beards" data-gender="m">
+  <div class="wrap">
+    <div class="beards-header r">
+      <p class="sec-label">Beard Types</p>
+      <h2>African beard types — and how to work with yours</h2>
+      <p>African beard hair tends to be coarser, curlier, and more prone to ingrown hairs than European beard types. Understanding your beard's growth pattern is the first step to grooming it properly.</p>
+    </div>
+    <div class="beard-grid r d1">
+
+      <div class="beard-card">
+        <div class="beard-img-wrap"><img src="images/beard_full.png" alt="Full beard" loading="lazy"></div>
+        <div class="beard-name">Full Beard</div>
+        <div class="beard-sub">All-over coverage</div>
+        <div class="beard-desc">Even growth across the chin, jaw, cheeks, and upper lip. The most versatile beard type. African full beards are typically denser and curlier than their counterparts — requiring regular moisture to prevent dryness and breakage.</div>
+        <div class="beard-tip">Moisturise daily with beard oil. Trim every 2 weeks to maintain shape. Condition with shea butter or a curl cream to keep coils defined.</div>
+      </div>
+
+      <div class="beard-card">
+        <div class="beard-img-wrap"><img src="images/beard_goatee.png" alt="Goatee" loading="lazy"></div>
+        <div class="beard-name">Goatee</div>
+        <div class="beard-sub">Chin and mustache only</div>
+        <div class="beard-desc">Hair on the chin and upper lip only, with clean-shaved cheeks. Excellent for men whose cheek growth is patchy. Balances round and full faces by elongating the chin. Very common in West African men.</div>
+        <div class="beard-tip">Clean shave the cheeks every 2–3 days. Keep the goatee edges sharp. Works well with both fades and longer hair styles.</div>
+      </div>
+
+      <div class="beard-card">
+        <div class="beard-img-wrap"><img src="images/beard_stubble.png" alt="Stubble" loading="lazy"></div>
+        <div class="beard-name">Stubble</div>
+        <div class="beard-sub">Short, even growth</div>
+        <div class="beard-desc">1–3mm of growth kept deliberately short and even. One of the most flattering beard types for most face shapes. Hides patchiness well and requires minimal maintenance. The right clipper guard makes all the difference.</div>
+        <div class="beard-tip">Use a 1–2 guard for light stubble. Moisturise the skin underneath — not just the beard. Fade into the hairline for a cleaner finish.</div>
+      </div>
+
+      <div class="beard-card">
+        <div class="beard-img-wrap"><img src="images/beard_patchy.png" alt="Patchy beard" loading="lazy"></div>
+        <div class="beard-name">Patchy Beard</div>
+        <div class="beard-sub">Uneven growth pattern</div>
+        <div class="beard-desc">Sparse or uneven growth in some areas — very common among African men. Often genetic, not a grooming failure. The right approach is working with the patches, not against them. Keeping it shorter makes patchiness less noticeable.</div>
+        <div class="beard-tip">Keep length short to even out density. Focus shaping on your strongest growth areas. Beard derma rollers and biotin can stimulate sparse areas over time.</div>
+      </div>
+
+      <div class="beard-card">
+        <div class="beard-img-wrap"><img src="images/beard_lowfade.png" alt="Low fade beard" loading="lazy"></div>
+        <div class="beard-name">Low Fade Beard</div>
+        <div class="beard-sub">Faded into the hairline</div>
+        <div class="beard-desc">The beard fades seamlessly into a low or mid haircut — no clear line between hair and beard. One of the sharpest looking styles for African men. Requires a skilled barber and regular upkeep every 1–2 weeks.</div>
+        <div class="beard-tip">Ask your barber specifically for a beard fade, not just a lineup. The fade should connect through the sideburns and temple. Don't let it grow out more than 10 days or the fade blurs.</div>
+      </div>
+
+      <div class="beard-card">
+        <div class="beard-img-wrap"><img src="images/beard_coily.png" alt="Coily natural beard" loading="lazy"></div>
+        <div class="beard-name">Coily / Natural Beard</div>
+        <div class="beard-sub">Unmanipulated coil growth</div>
+        <div class="beard-desc">Letting the beard grow in its natural coil pattern without heat or chemical straightening. African beard coils are some of the most distinct and textured in the world. Requires consistent moisture to prevent dryness and knots.</div>
+        <div class="beard-tip">Detangle while wet using a wide-tooth comb or brush. Use a leave-in conditioner or beard butter. Avoid over-brushing when dry — it causes frizz and breakage.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FACE SHAPES -->
+<section id="face-shapes" data-gender="w">
+  <div class="wrap">
+    <div class="face-header r">
+      <p class="sec-label" style="color:rgba(255,255,255,0.3)">Face Shapes</p>
+      <h2>Your face shape — and what it means for your hair</h2>
+      <p>Face shape is the single most useful factor when choosing a hairstyle. African facial structures cover the full spectrum — but proportions differ from the Western reference. Use this as a guide, not a rule.</p>
+    </div>
+
+
+    <div class="face-grid r d1">
+
+      <div class="face-card">
+        <div class="face-img-wrap"><img src="images/face_oval.png" alt="Oval face shape" loading="lazy"></div>
+        <div class="face-shape-name">Oval</div>
+        <div class="face-shape-sub">Balanced · Gently rounded chin</div>
+        <div class="face-shape-desc">Forehead slightly wider than the jaw with a softly rounded chin. The most versatile face shape — almost every hairstyle works. The reference most style guides assume as default.</div>
+        <div class="face-best">
+          <h4>Recommended styles</h4>
+          <ul>
+            <li>Wash-and-go afros, twist-outs, bantu knots — all flattering</li>
+            <li>Braids worn up, down, or half-up work equally well</li>
+            <li>Locs of any length sit beautifully on this shape</li>
+            <li>Experiment freely — very little to avoid here</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="face-card">
+        <div class="face-img-wrap"><img src="images/face_round.png" alt="Round face shape" loading="lazy"></div>
+        <div class="face-shape-name">Round</div>
+        <div class="face-shape-sub">Equal width and length · Soft jaw</div>
+        <div class="face-shape-desc">Width and length are roughly equal with a soft, curved jaw. Common in West African women. The goal is to add length and create the illusion of a slimmer frame.</div>
+        <div class="face-best">
+          <h4>Recommended styles</h4>
+          <ul>
+            <li>High buns and pineapple updos to add vertical height</li>
+            <li>Long braids or locs past the chin to elongate the face</li>
+            <li>Centre parts — avoid side parts that widen</li>
+            <li>Avoid wide, voluminous afros that add horizontal width</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="face-card">
+        <div class="face-img-wrap"><img src="images/face_square.png" alt="Square face shape" loading="lazy"></div>
+        <div class="face-shape-name">Square</div>
+        <div class="face-shape-sub">Strong jaw · Angular · Equal width</div>
+        <div class="face-shape-desc">Strong, defined jawline with similar width at the forehead and jaw. A powerful, structured look common across sub-Saharan women. The goal is to soften the angles with movement and texture.</div>
+        <div class="face-best">
+          <h4>Recommended styles</h4>
+          <ul>
+            <li>Loose twist-outs and curl definition — soft texture at the jaw</li>
+            <li>Side-swept braids or locs that break the jaw's straight line</li>
+            <li>Layers and volume at the crown to draw the eye upward</li>
+            <li>Avoid blunt bobs or straight cuts that mirror the jaw angle</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="face-card">
+        <div class="face-img-wrap"><img src="images/face_oblong.png" alt="Oblong face shape" loading="lazy"></div>
+        <div class="face-shape-name">Oblong / Rectangle</div>
+        <div class="face-shape-sub">Long · Narrow · Even width</div>
+        <div class="face-shape-desc">Face is noticeably longer than it is wide with consistent width throughout. Common in East African women — Kenyan, Ethiopian, Somali frames often carry this shape. The goal is to add width and break the vertical line.</div>
+        <div class="face-best">
+          <h4>Recommended styles</h4>
+          <ul>
+            <li>Wide afros with volume at the sides, not just height</li>
+            <li>Fringe and baby hairs to reduce the forehead's length</li>
+            <li>Short to medium bobs — shoulder-length styles look excellent</li>
+            <li>Avoid very long styles worn straight down</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="face-card">
+        <div class="face-img-wrap"><img src="images/face_diamond.png" alt="Diamond face shape" loading="lazy"></div>
+        <div class="face-shape-name">Diamond</div>
+        <div class="face-shape-sub">Narrow forehead · Wide cheekbones · Narrow chin</div>
+        <div class="face-shape-desc">Widest at the cheekbones, tapering to both a narrow forehead and chin. High cheekbones are a prominent African feature. The goal is to balance the forehead and soften the pointed chin.</div>
+        <div class="face-best">
+          <h4>Recommended styles</h4>
+          <ul>
+            <li>Volume or width at the crown to widen the forehead</li>
+            <li>Chin-length styles that add mass to the lower face</li>
+            <li>Wispy or feathered ends at the chin</li>
+            <li>Avoid styles with maximum volume at the cheekbones</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="face-card">
+        <div class="face-img-wrap"><img src="images/face_heart.png" alt="Heart face shape" loading="lazy"></div>
+        <div class="face-shape-name">Heart</div>
+        <div class="face-shape-sub">Wide forehead · Narrow jaw</div>
+        <div class="face-shape-desc">Wide forehead tapering to a pointed or narrow chin. Present across the continent, especially in women with high foreheads. The goal is to reduce forehead width and add weight at the lower face.</div>
+        <div class="face-best">
+          <h4>Recommended styles</h4>
+          <ul>
+            <li>Side parts and swept styles to break up the forehead</li>
+            <li>Volume and fullness at the jaw and chin</li>
+            <li>Chin-length bobs, lob styles, or braids at the chin</li>
+            <li>Avoid centre-parted styles with volume only at the top</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- HEAD SHAPES -->
+<section id="head-shapes" data-gender="m">
+  <div class="wrap">
+    <div class="head-header r">
+      <p class="sec-label">Head Shapes</p>
+      <h2>Head shape — what your barber considers first</h2>
+      <p>Your head shape affects how a fade or shape-up sits from every angle. This is what a good barber accounts for before they pick up the clippers.</p>
+    </div>
+
+    <div class="head-grid r d1">
+
+      <div class="head-card">
+        <div class="head-img-wrap"><img src="images/head_round.png" alt="Round head shape" loading="lazy"></div>
+        <div class="head-shape-name">Round Head</div>
+        <div class="head-shape-sub">Even curve all around</div>
+        <div class="head-shape-desc">Evenly curved from all angles with no flat spots. The most common head shape across African men. Cuts sit naturally — the shape is forgiving and works with almost any fade level or top length. Most barbers plan cuts assuming this shape.</div>
+        <div class="head-styles">
+          <h4>Best cuts</h4>
+          <ul>
+            <li>High fades with medium top length — very balanced</li>
+            <li>Natural afros with even shaping around the perimeter</li>
+            <li>Locs in any length — sit evenly all around</li>
+            <li>Skin fades look especially clean on this shape</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="head-card">
+        <div class="head-img-wrap"><img src="images/head_flattop.png" alt="Flat top head shape" loading="lazy"></div>
+        <div class="head-shape-name">Flat Back</div>
+        <div class="head-shape-sub">Flat occipital region</div>
+        <div class="head-shape-desc">A flat area at the back of the skull — very common and often unnoticed until a skin fade reveals it. Can make the back of a tight fade look uneven or square from the side. A skilled barber will feather the fade differently to compensate. Tell your barber upfront.</div>
+        <div class="head-styles">
+          <h4>Best cuts</h4>
+          <ul>
+            <li>Taper fades — softer drop at the back, less exposure of the flat zone</li>
+            <li>Leaving some length at the back to fill and round it visually</li>
+            <li>Locs — add fullness and completely mask the shape</li>
+            <li>Avoid very close skin fades at the back — exposes the flatness</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="head-card">
+        <div class="head-img-wrap"><img src="images/head_narrow.png" alt="Long narrow head shape" loading="lazy"></div>
+        <div class="head-shape-name">Long / Narrow</div>
+        <div class="head-shape-sub">Longer front-to-back than side-to-side</div>
+        <div class="head-shape-desc">Head is noticeably longer from front to back than it is wide side-to-side. Common in East African builds — Somali, Ethiopian, Eritrean frames often carry this shape. Adding width through the sides of a cut balances it; adding only height makes it more pronounced.</div>
+        <div class="head-styles">
+          <h4>Best cuts</h4>
+          <ul>
+            <li>Medium fades that keep volume through the sides</li>
+            <li>Afros shaped for width, not just height</li>
+            <li>Temp fades or low fades — preserve side width</li>
+            <li>Avoid very short all-over cuts and high skin fades — expose the length</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="head-card">
+        <div class="head-img-wrap"><img src="images/head_wide.png" alt="Wide broad head shape" loading="lazy"></div>
+        <div class="head-shape-name">Wide / Broad</div>
+        <div class="head-shape-sub">Wider than it is long</div>
+        <div class="head-shape-desc">Head is wider side-to-side than front-to-back. Common in broader West African frames. Adding vertical height through the top of a cut elongates the head shape visually. Skin fades are very effective here because they remove width at the sides.</div>
+        <div class="head-styles">
+          <h4>Best cuts</h4>
+          <ul>
+            <li>High skin fades — remove side width cleanly</li>
+            <li>Vertical growth on top — flat tops, high-top fades, afros with height</li>
+            <li>Locs worn up or piled high — add vertical presence</li>
+            <li>Avoid cuts that add maximum volume at the sides</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ACCESSORIES -->
+<section id="accessories">
+  <div class="wrap">
+    <div class="acc-header r">
+      <p class="sec-label" style="color:rgba(255,255,255,0.3)">Accessories</p>
+      <h2>What to wear with your hair — accessories that actually fit</h2>
+      <p>Accessories for natural hair, locs, and African head shapes. What works with your texture, curl type, and head shape — and what to avoid.</p>
+    </div>
+    <div class="acc-grid r d1">
+
+      <div class="acc-card">
+        <div class="acc-img-wrap"><img src="images/acc_headwrap.png" alt="Head wrap" loading="lazy"></div>
+        <div class="acc-name">Head Wraps & Gele</div>
+        <div class="acc-sub">All hair types · Women</div>
+        <div class="acc-desc">Ankara and Aso-oke head wraps are the most versatile accessory for African hair. They work on every texture from 3a to 4c, protect hair on lazy days or protective style transitions, and can be styled dozens of ways. Gele is the structured formal version for events.</div>
+        <div class="acc-works">
+          <h4>Works best for</h4>
+          <ul>
+            <li>4c and 4b hair — protects and adds visual drama</li>
+            <li>Transitioning hair — hides two textures during the grow-out</li>
+            <li>Bad hair days — always looks intentional</li>
+            <li>Any face shape — can be tied to add or reduce height</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="acc-card">
+        <div class="acc-img-wrap"><img src="images/acc_durag.png" alt="Durag" loading="lazy"></div>
+        <div class="acc-name">Durag & Wave Cap</div>
+        <div class="acc-sub">Short hair · Men · Waves</div>
+        <div class="acc-desc">Essential tool for 360 waves — not just a style accessory. The durag compresses the hair against the scalp after brushing, locking in the wave pattern. Satin durags are better than velvet for moisture retention and avoiding frizz.</div>
+        <div class="acc-works">
+          <h4>Works best for</h4>
+          <ul>
+            <li>Short natural hair working on wave patterns</li>
+            <li>After moisturising and brushing — locks in the work</li>
+            <li>Overnight — keeps edges laid while sleeping</li>
+            <li>Round and oval head shapes — the most secure fit</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="acc-card">
+        <div class="acc-img-wrap"><img src="images/acc_bonnet.png" alt="Satin bonnet" loading="lazy"></div>
+        <div class="acc-name">Satin Bonnet</div>
+        <div class="acc-sub">All textures · Women · Night</div>
+        <div class="acc-desc">Not optional for natural hair — cotton pillowcases draw moisture out of African hair overnight and cause friction that leads to breakage and frizz. A satin bonnet is the single cheapest habit that improves hair health immediately.</div>
+        <div class="acc-works">
+          <h4>Works best for</h4>
+          <ul>
+            <li>3c–4c textures — highest moisture loss without protection</li>
+            <li>Protective styles — keeps braids and twists fresh longer</li>
+            <li>Wash-and-go styles — preserves curl definition overnight</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="acc-card">
+        <div class="acc-img-wrap"><img src="images/acc_locjewellery.png" alt="Loc jewellery" loading="lazy"></div>
+        <div class="acc-name">Loc Jewellery & Cuffs</div>
+        <div class="acc-sub">Locs · Men & Women</div>
+        <div class="acc-desc">Metal cuffs, beads, and wraps for locs — a tradition with roots across West and East Africa. Modern loc jewellery ranges from minimal metal rings to elaborate cowrie shell and bead arrangements. They add visual interest without damaging the locs when fitted correctly.</div>
+        <div class="acc-works">
+          <h4>Works best for</h4>
+          <ul>
+            <li>Medium to long locs — enough length to hold the piece</li>
+            <li>Starter locs — beads add visual weight to thin new locs</li>
+            <li>Oblong and oval face shapes — draw the eye across the locs</li>
+            <li>Avoid very tight cuffs that compress the loc at the root</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="acc-card">
+        <div class="acc-img-wrap"><img src="images/acc_hairpins.png" alt="Hair pins" loading="lazy"></div>
+        <div class="acc-name">Hair Pins & Clips</div>
+        <div class="acc-sub">Natural & relaxed · Women</div>
+        <div class="acc-desc">Bobby pins and hair clips work differently on African hair — the coil pattern means more grip is needed and standard pins can slip. Spiral pins and duckbill clips with rubberised grips are significantly more effective for 4b and 4c textures. Avoid metal pins with rough ends on fine hair.</div>
+        <div class="acc-works">
+          <h4>Works best for</h4>
+          <ul>
+            <li>Pinning updos and twists in place without slipping</li>
+            <li>Sectioning during wash day</li>
+            <li>3a–3c hair — standard pins work reasonably well</li>
+            <li>4b–4c — use spiral pins or large jaw clips instead</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="acc-card">
+        <div class="acc-img-wrap"><img src="images/acc_facecap.png" alt="Face cap" loading="lazy"></div>
+        <div class="acc-name">Face Cap</div>
+        <div class="acc-sub">Short hair · Men · Everyday</div>
+        <div class="acc-desc">The face cap — snapback, dad hat, or fitted — is the most universal men's hair accessory. Works as protection from sun, wind, and dust. How it sits on your head depends on your head shape and haircut; high fades and low cuts pair cleanest with fitted caps.</div>
+        <div class="acc-works">
+          <h4>Works best for</h4>
+          <ul>
+            <li>Round and oval head shapes — sits evenly without gaps</li>
+            <li>Low cuts and skin fades — the cleanest pairing</li>
+            <li>Waves — a fitted cap compresses and sets the pattern</li>
+            <li>Avoid very high-top styles — the crown sits too high for most caps</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- QUIZ CTA -->
+<div class="quiz-cta-block">
+  <h2>Get your personalised hair regimen</h2>
+  <p>Take the quiz to build a complete, saved hair profile — your curl type, porosity, damage status, and a full routine built around how your hair actually works.</p>
+  <a href="index.html#quiz" class="cta-btn">
+    Take the Hair Quiz →
+  </a>
+</div>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const drawer    = document.getElementById('drawer');
+  function setDrawer(open) {
+    hamburger.classList.toggle('open', open);
+    drawer.classList.toggle('open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  }
+  hamburger.addEventListener('click', e => { e.stopPropagation(); setDrawer(!drawer.classList.contains('open')); });
+  drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setDrawer(false)));
+  document.addEventListener('click', e => { if (!hamburger.contains(e.target) && !drawer.contains(e.target)) setDrawer(false); });
+
+  const rEls = document.querySelectorAll('.r');
+  const obs  = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }});
+  }, { threshold: 0.08 });
+  rEls.forEach(el => obs.observe(el));
+
+  // ── Global gender bar ──
+  const GKEY = 'tora_gender';
+  const gbarW = document.getElementById('gbarW');
+  const gbarM = document.getElementById('gbarM');
+
+  function applyGender(g) {
+    localStorage.setItem(GKEY, g);
+    gbarW.classList.toggle('active', g === 'w');
+    gbarM.classList.toggle('active', g === 'm');
+
+    // Show/hide gender-specific elements
+    document.querySelectorAll('[data-gender]').forEach(el => {
+      const eg = el.dataset.gender;
+      el.style.display = (eg === g || eg === 'both') ? '' : 'none';
+    });
+
+  }
+
+  gbarW.addEventListener('click', () => applyGender('w'));
+  gbarM.addEventListener('click', () => applyGender('m'));
+
+  // Init from stored preference, default to women
+  applyGender(localStorage.getItem(GKEY) || 'w');
+</script>
+</body>
+</html>

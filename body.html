@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Body — TÓRA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;0,9..40,900;1,9..40,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root { --black: #000; --white: #fff; --grey: #888; --grey-light: #eee; --grey-mid: #444; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--black); overflow-x: hidden; }
+
+    /* ── GENDER BAR ── */
+    .gender-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 490; display: flex; justify-content: center; align-items: center; padding: 18px 0; pointer-events: none; }
+    .gender-bar-inner { display: flex; pointer-events: all; border: 1px solid var(--grey-light); background: var(--white); }
+    .gbar-btn { font-size: 10px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; padding: 10px 24px; background: transparent; border: none; cursor: pointer; color: var(--grey); transition: background 0.2s, color 0.2s; }
+    .gbar-btn.active { background: var(--black); color: var(--white); }
+
+    /* ── NAV (same pattern) ── */
+    .site-logo { position: fixed; top: 28px; left: 36px; z-index: 500; font-size: 18px; font-weight: 900; letter-spacing: 6px; text-transform: uppercase; color: var(--black); text-decoration: none; }
+    .hamburger { position: fixed; top: 28px; right: 28px; z-index: 500; display: flex; flex-direction: column; gap: 6px; background: none; border: none; cursor: pointer; padding: 6px; }
+    .hamburger span { display: block; width: 28px; height: 1.5px; background: var(--black); transition: transform 0.3s ease, opacity 0.3s ease; }
+    .hamburger.open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+    .drawer { position: fixed; inset: 0; background: var(--white); z-index: 400; display: flex; flex-direction: column; justify-content: center; padding: 0 48px; transform: translateY(-100%); transition: transform 0.5s cubic-bezier(0.76,0,0.24,1); }
+    .drawer.open { transform: translateY(0); }
+    .drawer-nav { list-style: none; border-top: 1px solid var(--grey-light); }
+    .drawer-nav li { border-bottom: 1px solid var(--grey-light); }
+    .drawer-nav a { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; font-size: clamp(18px,3.5vw,28px); font-weight: 700; color: var(--black); text-decoration: none; text-transform: uppercase; letter-spacing: 1px; transition: color 0.2s; }
+    .drawer-nav a:hover { color: var(--grey); }
+    .drawer-nav .drawer-sub { font-size: clamp(11px,1.5vw,13px); font-weight: 500; letter-spacing: 2px; color: var(--grey); padding: 8px 0 8px 16px; border-bottom: 1px solid var(--grey-light); display: flex; align-items: center; justify-content: space-between; text-decoration: none; text-transform: uppercase; transition: color 0.2s; }
+    .drawer-nav .drawer-sub:hover { color: var(--black); }
+    .d-arrow { font-size: 18px; opacity: 0; transition: opacity 0.2s, transform 0.2s; transform: translateX(-8px); }
+    .drawer-nav a:hover .d-arrow { opacity: 1; transform: translateX(0); }
+    .drawer-footer { position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%); font-size: 11px; font-weight: 500; letter-spacing: 3px; text-transform: uppercase; color: var(--grey); white-space: nowrap; }
+
+    /* ── PAGE HERO ── */
+    .page-hero { background: var(--black); padding: 160px 36px 80px; position: relative; overflow: hidden; }
+    .page-hero::before { content: ''; position: absolute; top: 0; right: 0; width: 45%; height: 100%; background: url('images/body hero.png') center/cover no-repeat; opacity: 0.15; }
+    .page-hero-inner { max-width: 1080px; margin: 0 auto; position: relative; z-index: 1; }
+    .breadcrumb { font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
+    .breadcrumb a { color: rgba(255,255,255,0.35); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: var(--white); }
+    .page-title { font-size: clamp(56px,12vw,120px); font-weight: 900; text-transform: uppercase; letter-spacing: -3px; line-height: 0.9; color: var(--white); margin-bottom: 28px; }
+    .page-desc { font-size: 18px; font-weight: 300; line-height: 1.8; color: rgba(255,255,255,0.5); max-width: 560px; }
+
+    /* ── SHARED ── */
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 36px; }
+    .sec-label { font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--grey); margin-bottom: 16px; }
+
+    /* ── INTRO TEXT ── */
+    #intro { padding: 96px 0; background: var(--white); }
+    .intro-text { max-width: 700px; margin-bottom: 0; }
+    .intro-text h2 { font-size: clamp(28px,4vw,44px); font-weight: 700; color: var(--black); line-height: 1.15; margin-bottom: 20px; letter-spacing: -0.5px; }
+    .intro-text p { font-size: 16px; font-weight: 300; line-height: 1.9; color: var(--grey-mid); margin-bottom: 16px; }
+
+    /* ── ARCH IMAGE ── */
+    .arch-img-wrap { width: calc(100% + 56px); aspect-ratio: 2/3; margin: -36px -28px 20px; }
+    .arch-img-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; filter: grayscale(100%); transition: transform 0.5s ease; }
+    .arch-card:hover .arch-img-wrap img { transform: scale(1.04); }
+
+    /* ── ARCHETYPE SECTION (shared styles) ── */
+    .arch-section { padding: 96px 0; }
+    .arch-section.dark { background: var(--black); }
+    .arch-section.light { background: var(--white); }
+
+    .arch-header { margin-bottom: 64px; }
+    .arch-header h2 { font-size: clamp(28px,4vw,44px); font-weight: 700; line-height: 1.1; margin-bottom: 12px; letter-spacing: -0.5px; }
+    .arch-section.dark .arch-header h2 { color: var(--white); }
+    .arch-section.light .arch-header h2 { color: var(--black); }
+    .arch-header p { font-size: 16px; font-weight: 300; line-height: 1.8; max-width: 560px; }
+    .arch-section.dark .arch-header p { color: rgba(255,255,255,0.4); }
+    .arch-section.light .arch-header p { color: var(--grey-mid); }
+
+    .arch-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; }
+    .arch-section.dark .arch-grid { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.07); }
+    .arch-section.light .arch-grid { background: var(--grey-light); border: 1px solid var(--grey-light); }
+
+    .arch-card { padding: 36px 28px; transition: background 0.2s; overflow: hidden; }
+    .arch-section.dark .arch-card { background: var(--black); }
+    .arch-section.dark .arch-card:hover { background: #0d0d0d; }
+    .arch-section.light .arch-card { background: var(--white); }
+    .arch-section.light .arch-card:hover { background: #fafafa; }
+
+    .arch-name { font-size: 22px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.3px; }
+    .arch-section.dark .arch-name { color: var(--white); }
+    .arch-section.light .arch-name { color: var(--black); }
+
+    .arch-sub { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 18px; }
+    .arch-section.dark .arch-sub { color: rgba(255,255,255,0.25); }
+    .arch-section.light .arch-sub { color: var(--grey); }
+
+    .arch-desc { font-size: 14px; font-weight: 300; line-height: 1.75; margin-bottom: 20px; }
+    .arch-section.dark .arch-desc { color: rgba(255,255,255,0.45); }
+    .arch-section.light .arch-desc { color: var(--grey-mid); }
+
+    .arch-style h4 { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
+    .arch-section.dark .arch-style h4 { color: rgba(255,255,255,0.2); }
+    .arch-section.light .arch-style h4 { color: var(--grey); }
+
+    .arch-style ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+    .arch-style li { font-size: 13px; font-weight: 300; padding-left: 14px; position: relative; line-height: 1.4; }
+    .arch-style li::before { content: '—'; position: absolute; left: 0; }
+    .arch-section.dark .arch-style li { color: rgba(255,255,255,0.35); }
+    .arch-section.dark .arch-style li::before { color: rgba(255,255,255,0.15); }
+    .arch-section.light .arch-style li { color: var(--grey-mid); }
+    .arch-section.light .arch-style li::before { color: var(--grey-light); }
+
+    /* ── CTA ── */
+    .cta-block { background: var(--black); padding: 80px 36px; text-align: center; }
+    .cta-block h2 { font-size: clamp(26px,4vw,44px); font-weight: 700; color: var(--white); margin-bottom: 14px; letter-spacing: -0.5px; }
+    .cta-block p { font-size: 16px; font-weight: 300; color: rgba(255,255,255,0.4); margin-bottom: 32px; max-width: 440px; margin-left: auto; margin-right: auto; line-height: 1.7; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 10px; background: var(--white); color: var(--black); font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; text-decoration: none; padding: 15px 30px; transition: background 0.2s; }
+    .cta-btn:hover { background: var(--grey-light); }
+
+    /* ── SCROLL REVEAL ── */
+    .r { opacity: 0; transform: translateY(24px); transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1); }
+    .r.in { opacity: 1; transform: none; }
+    .d1 { transition-delay: 0.08s; } .d2 { transition-delay: 0.15s; } .d3 { transition-delay: 0.22s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 800px) {
+      .wrap { padding: 0 20px; }
+      .drawer { padding: 0 24px; overflow-y: auto; justify-content: flex-start; padding-top: 80px; padding-bottom: 60px; }
+      .drawer-footer { left: 50%; transform: translateX(-50%); white-space: nowrap; }
+      .page-hero { padding: 140px 20px 60px; } .page-hero::before { width: 100%; opacity: 0.08; }
+      .arch-grid { grid-template-columns: 1fr 1fr; }
+      .arch-img-wrap { aspect-ratio: 3/4; }
+      #intro, .arch-section { padding: 72px 0; }
+      .site-logo { left: 20px; } .hamburger { right: 20px; top: 20px; }
+    }
+    @media (max-width: 480px) {
+      .arch-grid { grid-template-columns: 1fr; }
+      .arch-img-wrap { aspect-ratio: 2/3; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="gender-bar" id="genderBar">
+  <div class="gender-bar-inner">
+    <button class="gbar-btn" id="gbarW" data-g="w">Women</button>
+    <button class="gbar-btn" id="gbarM" data-g="m">Men</button>
+  </div>
+</div>
+
+<a href="index.html" class="site-logo">TÓRA</a>
+<button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+<div class="drawer" id="drawer">
+  <ul class="drawer-nav">
+    <li><a href="index.html">Home <span class="d-arrow">→</span></a></li>
+    <li><a href="hair.html">Hair <span class="d-arrow">→</span></a></li>
+    <li><a href="body.html">Body <span class="d-arrow">→</span></a></li>
+    <li><a href="scent.html">Scent <span class="d-arrow">→</span></a></li>
+    <li><a href="index.html#pricing">Get Started <span class="d-arrow">→</span></a></li>
+  </ul>
+  <div class="drawer-footer">Hair · Body · Scent</div>
+</div>
+
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <p class="breadcrumb"><a href="index.html">TÓRA</a> / Body</p>
+    <h1 class="page-title">BODY</h1>
+    <p class="page-desc">African body archetypes defined in their own terms — not as deviations from Western shapes. Styling guidance for both men and women, built around how African bodies are actually proportioned.</p>
+  </div>
+</div>
+
+<!-- INTRO -->
+<section id="intro">
+  <div class="wrap">
+    <div class="intro-text r">
+      <p class="sec-label">The Framework</p>
+      <h2>The Western system wasn't built for you.</h2>
+      <p>The apple, pear, hourglass, rectangle framework was designed around Western body proportions and implicitly ranks the hourglass as the ideal everything else is measured against. African bodies don't map cleanly onto this system.</p>
+      <p>Fuller hips, fuller seat, shorter torsos, wider shoulders in proportion — these aren't variations of Western types. They're their own categories that deserve their own style logic. That's what this section builds.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WOMEN'S ARCHETYPES -->
+<section class="arch-section dark" id="women" data-gender="w">
+  <div class="wrap">
+    <div class="arch-header r">
+      <p class="sec-label" style="color:rgba(255,255,255,0.3)">Women's Archetypes</p>
+      <h2>Women — know your body type</h2>
+      <p>Six body types, defined clearly. What to wear, what to avoid — no fluff.</p>
+    </div>
+    <div class="arch-grid r d1">
+
+      <div class="arch-card">
+        <div class="arch-img-wrap"><img src="images/hour glass.png" alt="Full hourglass body type" loading="lazy"></div>
+        <div class="arch-name">Full Hourglass</div>
+        <div class="arch-sub">Defined waist · Full bust and hips</div>
+        <div class="arch-desc">Bust and hips are roughly equal with a clearly defined, narrower waist. The waist is your strongest feature — the goal is to always acknowledge it.</div>
+        <div class="arch-style">
+          <h4>Wear</h4>
+          <ul>
+            <li>Wrap dresses — follow the waist naturally</li>
+            <li>Belted midi and maxi dresses</li>
+            <li>Bodycon and pencil skirt silhouettes</li>
+            <li>High-waist wide-leg trousers with a tucked-in top</li>
+            <li>V-neck and scoop necks to balance bust volume</li>
+            <li>Fit-and-flare dresses that cinch at the waist</li>
+          </ul>
+          <h4>Avoid</h4>
+          <ul>
+            <li>Boxy, oversized cuts that hide the waist</li>
+            <li>Drop-waist dresses that sit below your natural waist</li>
+            <li>Very stiff fabrics that don't follow the body's shape</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="arch-card">
+        <div class="arch-img-wrap"><img src="images/pear woman.png" alt="Pear body type" loading="lazy"></div>
+        <div class="arch-name">Pear</div>
+        <div class="arch-sub">Narrower shoulders · Fuller hips and thighs</div>
+        <div class="arch-desc">Shoulders are narrower than the hips, with a fuller seat and thighs. Very common. The goal is to add presence at the top to balance the lower body — not to shrink the hips.</div>
+        <div class="arch-style">
+          <h4>Wear</h4>
+          <ul>
+            <li>Off-shoulder, boat-neck, and statement-sleeve tops</li>
+            <li>Bold colours and prints on the top half</li>
+            <li>Structured blazers and jackets to widen the shoulders</li>
+            <li>A-line and fit-and-flare dresses — skim the hips cleanly</li>
+            <li>High-waist wide-leg trousers</li>
+            <li>Wrap dresses that flow over the hips without clinging</li>
+          </ul>
+          <h4>Avoid</h4>
+          <ul>
+            <li>Tapered trousers and pencil skirts — emphasise the hip-to-thigh difference</li>
+            <li>Busy prints or heavy embellishment below the waist</li>
+            <li>Skin-tight bodycon midi skirts</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="arch-card">
+        <div class="arch-img-wrap"><img src="images/rectangle woman.png" alt="Rectangle body type" loading="lazy"></div>
+        <div class="arch-name">Rectangle</div>
+        <div class="arch-sub">Shoulders and hips roughly equal · Less waist definition</div>
+        <div class="arch-desc">Shoulders and hips are similar in width with a less defined waist. Creates a long, straight silhouette. The goal is to create the illusion of curves — or to own the straight line confidently.</div>
+        <div class="arch-style">
+          <h4>Wear</h4>
+          <ul>
+            <li>Peplum tops and ruffle details at the hip — creates shape</li>
+            <li>Wrap and belted dresses to suggest a waist</li>
+            <li>Bodycon dresses — long straight frames carry them well</li>
+            <li>Flared and A-line skirts to add hip volume</li>
+            <li>Cropped tops with high-waist bottoms to break the torso</li>
+            <li>Dropped-shoulder and off-shoulder styles for upper body interest</li>
+          </ul>
+          <h4>Avoid</h4>
+          <ul>
+            <li>Shapeless, unfitted pieces that emphasise the straight silhouette</li>
+            <li>Drop-waist styles that add no shape at all</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="arch-card">
+        <div class="arch-img-wrap"><img src="images/plus size.png" alt="Full figure body type" loading="lazy"></div>
+        <div class="arch-name">Full Figure</div>
+        <div class="arch-sub">Fuller proportions throughout</div>
+        <div class="arch-desc">Fuller proportions distributed across the whole body. The goal is elongation and clean structure — not compression or concealment.</div>
+        <div class="arch-style">
+          <h4>Wear</h4>
+          <ul>
+            <li>V-neck dresses — lengthen the neckline and draw the eye down</li>
+            <li>Wrap dresses that define the waist without gripping</li>
+            <li>Empire-waist maxi dresses — flow from just below the bust</li>
+            <li>A-line midi skirts with a fitted top</li>
+            <li>Monochromatic outfits — one colour top to bottom reads taller</li>
+            <li>Tailored blazer worn open over a simple dress or top</li>
+          </ul>
+          <h4>Avoid</h4>
+          <ul>
+            <li>Very tight all-over bodycon — limits movement and looks uncomfortable</li>
+            <li>Stiff, rigid fabrics that don't drape</li>
+            <li>Very short hemlines with no structure above</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="arch-card">
+        <div class="arch-img-wrap"><img src="images/broadshoulder woman.png" alt="Broad shoulder body type" loading="lazy"></div>
+        <div class="arch-name">Broad Shoulder</div>
+        <div class="arch-sub">Shoulders wider than hips</div>
+        <div class="arch-desc">Shoulders are noticeably wider than the hips. Common in women with athletic or naturally wider frames. The goal is to add volume and visual weight at the hips and lower body.</div>
+        <div class="arch-style">
+          <h4>Wear</h4>
+          <ul>
+            <li>Full and flared skirts — add hip volume to balance the shoulders</li>
+            <li>Wide-leg and palazzo trousers</li>
+            <li>A-line and fit-and-flare dresses</li>
+            <li>V-necks and deep scoop necks — draw the eye inward and down</li>
+            <li>Halter necks — surprisingly flattering, visually narrows the shoulder line</li>
+            <li>Bold prints and colour below the waist, simpler tops</li>
+          </ul>
+          <h4>Avoid</h4>
+          <ul>
+            <li>Boat necks and cap sleeves — widen the shoulder line further</li>
+            <li>Cold-shoulder cuts and heavy embellishment at the shoulders</li>
+            <li>Strapless or very wide-set straps</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="arch-card">
+        <div class="arch-img-wrap"><img src="images/apple woman.png" alt="Apple body type" loading="lazy"></div>
+        <div class="arch-name">Apple</div>
+        <div class="arch-sub">Fuller midsection · Slimmer legs</div>
+        <div class="arch-desc">Fullness sits at the midsection and bust, with a less defined waist and generally slimmer legs. The goal is to draw attention to the legs and décolletage — both strong features — while creating vertical length through the torso.</div>
+        <div class="arch-style">
+          <h4>Wear</h4>
+          <ul>
+            <li>V-neck and wrap-style tops — create a vertical line through the chest</li>
+            <li>Empire-waist dresses — sit just above the fullest part of the midsection</li>
+            <li>A-line dresses that skim the midsection without gripping</li>
+            <li>Straight-leg and wide-leg trousers — show off the legs</li>
+            <li>Longline cardigans and open blazers — add a clean vertical column</li>
+            <li>Midi and maxi lengths — elongate the whole frame</li>
+          </ul>
+          <h4>Avoid</h4>
+          <ul>
+            <li>Fitted, tucked-in tops with high-waist bottoms — highlights the midsection</li>
+            <li>Belted styles right at the natural waist</li>
+            <li>Very cropped tops paired with low-rise bottoms</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- MEN'S ARCHETYPES -->
+<section class="arch-section light" id="men" data-gender="m">
+  <div class="wrap">
+    <div class="arch-header r">
+      <p class="sec-label">Men's Archetypes</p>
+      <h2>Men — know your body type</h2>
+      <p>Four builds. What to wear, what to avoid.</p>
+    </div>
+    <div class="arch-grid r d1">
+
+      <div class="arch-card">
+        <div class="arch-img-wrap"><img src="images/athletic man.png" alt="Athletic body type" loading="lazy"></div>
+        <div class="arch-name">Athletic / V-Shape</div>
+        <div class="arch-sub">Broad shoulders · Narrow waist</div>
+        <div class="arch-desc">Broad shoulders tapering to a narrower waist. Most tailored clothing is cut for this shape — almost everything works, the goal is not to fight it.</div>
+        <div class="arch-style">
+          <h4>Wear</h4>
+          <ul>
+            <li>Slim-fit or tapered trousers — balance the broad shoulder line</li>
+            <li>Single-button jackets that emphasise the V taper</li>
+            <li>Fitted shirts tucked in — the waist definition does the work</li>
+            <li>Crew-neck and polo shirts — chest width reads as strength</li>
+            <li>Well-fitted chinos and straight-leg trousers</li>
+          </ul>
+          <h4>Avoid</h4>
+          <ul>
+            <li>Very padded or structured shoulders — you already have them</li>
+            <li>Boxy oversized tops that swamp the upper body shape</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="arch-card">
+        <div class="arch-img-wrap"><img src="images/rectangle man.png" alt="Rectangle body type" loading="lazy"></div>
+        <div class="arch-name">Rectangle</div>
+        <div class="arch-sub">Balanced proportions throughout</div>
+        <div class="arch-desc">Shoulders and waist are roughly equal width. Straight build through the body. Very common. The goal is to add shape and visual interest where the frame gives none naturally.</div>
+        <div class="arch-style">
+          <h4>Wear</h4>
+          <ul>
+            <li>Structured and lightly padded-shoulder blazers — define the upper body</li>
+            <li>Layered looks: jacket over a fitted shirt over trousers</li>
+            <li>Straight-leg and wide-leg trousers for a clean silhouette</li>
+            <li>Bold prints and colour — pattern adds visual dimension to a straight frame</li>
+            <li>Tucked-in shirts to suggest a waist</li>
+          </ul>
+          <h4>Avoid</h4>
+          <ul>
+            <li>Overly baggy fits that remove all definition</li>
+            <li>All-one-tone outfits with no structure — disappear on a straight frame</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="arch-card">
+        <div class="arch-img-wrap"><img src="images/large man.png" alt="Fuller body type" loading="lazy"></div>
+        <div class="arch-name">Fuller / Stocky</div>
+        <div class="arch-sub">Broader, solid frame</div>
+        <div class="arch-desc">Solid, broader frame with fullness through the chest and midsection. The goal is clean lines and good fabric drape — not hiding the build, not fighting it.</div>
+        <div class="arch-style">
+          <h4>Wear</h4>
+          <ul>
+            <li>V-neck shirts and open-collar tops — elongate the chest and neck</li>
+            <li>Dark, solid-colour trousers with a print or textured top</li>
+            <li>Single-breasted jackets with a clean lapel</li>
+            <li>Vertical stripes and linear patterns — add perceived height</li>
+            <li>Well-fitted over loose — clean drape always wins</li>
+          </ul>
+          <h4>Avoid</h4>
+          <ul>
+            <li>Horizontal stripes and very busy all-over prints</li>
+            <li>Double-breasted jackets — add bulk at the chest</li>
+            <li>Boxy, oversized fits — add volume without shape</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="arch-card">
+        <div class="arch-img-wrap"><img src="images/lean man.png" alt="Lean body type" loading="lazy"></div>
+        <div class="arch-name">Lean / Slim</div>
+        <div class="arch-sub">Narrow frame throughout</div>
+        <div class="arch-desc">Narrow throughout — shoulders, chest, and waist. Very common in East African builds and younger frames. The goal is to add visual mass and presence.</div>
+        <div class="arch-style">
+          <h4>Wear</h4>
+          <ul>
+            <li>Layered looks — jacket over shirt adds perceived bulk</li>
+            <li>Bold, large-scale prints — pattern fills out a narrow frame visually</li>
+            <li>Padded-shoulder jackets and blazers</li>
+            <li>Straight-leg and wide-leg trousers to add width below</li>
+            <li>Crew-neck and horizontal-stripe tops to widen the chest</li>
+            <li>Slightly looser fits — reads as more substantial than very slim-cut</li>
+          </ul>
+          <h4>Avoid</h4>
+          <ul>
+            <li>Very slim-fit everything — emphasises how narrow the frame is</li>
+            <li>Dark, simple, unstructured outfits with no volume or layering</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="arch-card">
+        <div class="arch-name">Short / Compact</div>
+        <div class="arch-sub">Under 5'7" · Shorter torso and legs</div>
+        <div class="arch-desc">Common across West and Central African men. The biggest style mistake is wearing clothes sized for taller men — oversized clothes shorten the frame further. The goal is to create the illusion of length through proportion and fit.</div>
+        <div class="arch-style">
+          <h4>Wear</h4>
+          <ul>
+            <li>Well-tailored, well-fitted clothing — excess fabric kills proportion</li>
+            <li>Monochromatic outfits — one colour top to bottom elongates the frame</li>
+            <li>Vertical stripes and vertical seam details</li>
+            <li>High-rise trousers that sit at the natural waist — lengthen the legs</li>
+            <li>Short to mid-length jackets — long ones cut the leg length</li>
+            <li>Slim or tapered trousers with a clean break at the shoe</li>
+          </ul>
+          <h4>Avoid</h4>
+          <ul>
+            <li>Oversized or baggy clothing — shortens and widens the frame</li>
+            <li>Cropped trousers that cut mid-calf — shortens the leg visually</li>
+            <li>Very long jackets or coats below the hip</li>
+            <li>Horizontal stripes across the torso</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="arch-card">
+        <div class="arch-name">Tall</div>
+        <div class="arch-sub">Over 6'2" · Long torso and legs</div>
+        <div class="arch-desc">Tall African men — common in East African (Dinka, Nilotic) and some West African builds — face the opposite problem: most clothes aren't made for the proportions. Standard shirts are too short, trousers show the ankle, and slim-fit becomes skin-tight. The goal is managing proportion and finding clothes that actually fit.</div>
+        <div class="arch-style">
+          <h4>Wear</h4>
+          <ul>
+            <li>Relaxed and regular-fit silhouettes — tall frames carry volume well</li>
+            <li>Horizontal details that break up the height — wide belts, colour blocking</li>
+            <li>Wide-leg and straight-leg trousers with enough length</li>
+            <li>Layered looks — more pieces add horizontal visual interest</li>
+            <li>Bold prints across the full outfit — fills the frame</li>
+          </ul>
+          <h4>Avoid</h4>
+          <ul>
+            <li>Very slim-fit trousers — expose ankle and look too tight on long legs</li>
+            <li>Cropped anything — shortens where you don't need it</li>
+            <li>All-black slim-fit — makes a tall frame look very severe</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="cta-block">
+  <h2>Style tool — coming soon</h2>
+  <p>The interactive body type selector with outfit visualisation is in Phase 1. Get full access when it launches.</p>
+  <a href="index.html#pricing" class="cta-btn">Get Full Access →</a>
+</div>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const drawer    = document.getElementById('drawer');
+  function setDrawer(open) { hamburger.classList.toggle('open', open); drawer.classList.toggle('open', open); document.body.style.overflow = open ? 'hidden' : ''; }
+  hamburger.addEventListener('click', e => { e.stopPropagation(); setDrawer(!drawer.classList.contains('open')); });
+  drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setDrawer(false)));
+  document.addEventListener('click', e => { if (!hamburger.contains(e.target) && !drawer.contains(e.target)) setDrawer(false); });
+  const rEls = document.querySelectorAll('.r');
+  const obs  = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }}); }, { threshold: 0.08 });
+  rEls.forEach(el => obs.observe(el));
+
+  // ── Global gender bar ──
+  const GKEY = 'tora_gender';
+  const gbarW = document.getElementById('gbarW');
+  const gbarM = document.getElementById('gbarM');
+
+  function applyGender(g) {
+    localStorage.setItem(GKEY, g);
+    gbarW.classList.toggle('active', g === 'w');
+    gbarM.classList.toggle('active', g === 'm');
+    document.querySelectorAll('[data-gender]').forEach(el => {
+      el.style.display = (el.dataset.gender === g || el.dataset.gender === 'both') ? '' : 'none';
+    });
+  }
+
+  gbarW.addEventListener('click', () => applyGender('w'));
+  gbarM.addEventListener('click', () => applyGender('m'));
+  applyGender(localStorage.getItem(GKEY) || 'w');
+</script>
+</body>
+</html>

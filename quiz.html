@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Style Quiz — Find Your Profile | TÓRA</title>
+  <meta name="description" content="Take the TÓRA style quiz to discover your personalised hair, body, and scent profile — built for Black and African people." />
+  <link rel="icon" type="image/png" href="images/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;0,9..40,900;1,9..40,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --black: #000;
+      --white: #fff;
+      --grey: #888;
+      --grey-light: #eee;
+      --grey-mid: #444;
+    }
+    html, body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--white);
+      color: var(--black);
+      overflow: hidden;
+      height: 100%;
+      width: 100%;
+    }
+
+    /* ── NAV (logo only, no hamburger) ── */
+    .site-logo {
+      position: fixed;
+      top: 28px; left: 36px;
+      z-index: 600;
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: var(--black);
+      text-decoration: none;
+      transition: color 0.4s ease;
+    }
+    .site-logo.light { color: var(--white); }
+
+    /* ── PROGRESS BAR ── */
+    .progress-rail {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--grey-light);
+      z-index: 600;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--black);
+      transition: width 0.7s cubic-bezier(0.76, 0, 0.24, 1);
+      width: 0%;
+    }
+    .progress-rail.light { background: rgba(255,255,255,0.2); }
+    .progress-rail.light .progress-fill { background: var(--white); }
+
+    /* ── BACK BUTTON ── */
+    .back-btn {
+      position: fixed;
+      top: 22px; left: 36px;
+      z-index: 600;
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--black);
+      padding: 6px 0;
+      transition: color 0.3s;
+    }
+    .back-btn.visible { display: flex; }
+    .back-btn.light { color: var(--white); }
+    .back-btn svg { transition: transform 0.2s; }
+    .back-btn:hover svg { transform: translateX(-3px); }
+
+    /* ── STEP COUNTER ── */
+    .step-counter {
+      position: fixed;
+      top: 28px; right: 36px;
+      z-index: 600;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--grey);
+      transition: color 0.4s;
+    }
+    .step-counter.light { color: rgba(255,255,255,0.4); }
+
+    /* ── CONTINUE BUTTON ── */
+    .continue-btn {
+      position: fixed;
+      bottom: 40px; right: 36px;
+      z-index: 600;
+      background: var(--black);
+      color: var(--white);
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      padding: 15px 32px;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      gap: 10px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.4s ease, transform 0.4s ease, background 0.2s;
+    }
+    .continue-btn.visible { display: flex; }
+    .continue-btn.shown { opacity: 1; transform: translateY(0); }
+    .continue-btn:hover { background: var(--grey-mid); }
+
+    /* ── STEPS WRAPPER ── */
+    .quiz-stage {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    /* ── EACH STEP ── */
+    .quiz-step {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 100px 36px 120px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow-y: auto;
+    }
+    .quiz-step.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .quiz-step.dark { background: var(--black); }
+    .quiz-step.light-bg { background: var(--white); }
+
+    /* Step inner container */
+    .step-inner {
+      width: 100%;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    /* Step number */
+    .step-num {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-bottom: 20px;
+    }
+    .dark .step-num { color: rgba(255,255,255,0.3); }
+
+    /* Step question */
+    .step-question {
+      font-size: clamp(32px, 5vw, 64px);
+      font-weight: 900;
+      letter-spacing: -1.5px;
+      line-height: 1.0;
+      color: var(--black);
+      margin-bottom: 16px;
+      max-width: 700px;
+    }
+    .dark .step-question { color: var(--white); }
+
+    /* Step subtitle */
+    .step-sub {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--grey);
+      margin-bottom: 56px;
+      line-height: 1.6;
+    }
+    .dark .step-sub { color: rgba(255,255,255,0.35); }
+
+    /* ── GENDER CARDS (Step 1) ── */
+    .gender-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      max-width: 600px;
+    }
+    .gender-card {
+      background: var(--black);
+      color: var(--white);
+      padding: 56px 48px;
+      cursor: pointer;
+      transition: background 0.25s, transform 0.2s;
+      border: 2px solid transparent;
+    }
+    .gender-card:first-child { background: var(--black); }
+    .gender-card:last-child { background: var(--grey-light); color: var(--black); }
+    .gender-card:hover { transform: translateY(-2px); }
+    .gender-card.selected {
+      border-color: var(--black);
+      outline: 3px solid var(--black);
+    }
+    .gender-card:last-child.selected { outline-color: var(--grey-mid); }
+    .gender-label {
+      font-size: clamp(24px, 4vw, 40px);
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+    .gender-sub {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      opacity: 0.5;
+    }
+
+    /* ── IMAGE OPTION GRID ── */
+    .img-options {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      width: 100%;
+    }
+    .img-options.cols-4 { grid-template-columns: repeat(4, 1fr); }
+    .img-options.cols-2 { grid-template-columns: repeat(2, 1fr); }
+
+    .img-option {
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+      background: var(--grey-light);
+      border: 2px solid transparent;
+      transition: border-color 0.25s, transform 0.2s;
+      aspect-ratio: 3/4;
+    }
+    .img-option:hover { transform: translateY(-2px); }
+    .img-option.selected { border-color: var(--black); }
+
+    .img-option img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      filter: grayscale(100%);
+      transition: transform 0.5s ease;
+    }
+    .img-option:hover img { transform: scale(1.04); }
+
+    /* Overlay on selected */
+    .img-check-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.25s;
+      pointer-events: none;
+    }
+    .img-option.selected .img-check-overlay {
+      background: rgba(0,0,0,0.55);
+    }
+    .img-check-icon {
+      width: 40px; height: 40px;
+      border: 2px solid var(--white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: scale(0.6);
+      transition: opacity 0.25s, transform 0.25s;
+    }
+    .img-option.selected .img-check-icon {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .img-check-icon svg { color: var(--white); }
+
+    .img-option-label {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 28px 12px 12px;
+      background: linear-gradient(to top, rgba(0,0,0,0.75), transparent);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--white);
+    }
+
+    /* ── TEXT OPTIONS ── */
+    .text-options {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      max-width: 640px;
+    }
+    .text-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      border: 1px solid var(--grey-light);
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--black);
+      background: var(--white);
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+      letter-spacing: -0.1px;
+    }
+    .text-option:hover { background: #fafafa; border-color: #ccc; }
+    .text-option.selected {
+      background: var(--black);
+      border-color: var(--black);
+      color: var(--white);
+    }
+    .text-option-arrow {
+      font-size: 16px;
+      opacity: 0;
+      transition: opacity 0.2s, transform 0.2s;
+      transform: translateX(-6px);
+    }
+    .text-option:hover .text-option-arrow,
+    .text-option.selected .text-option-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* ── DARK STEP TEXT OPTIONS ── */
+    .dark .text-option {
+      background: #111;
+      border-color: rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.8);
+    }
+    .dark .text-option:hover { background: #1a1a1a; border-color: rgba(255,255,255,0.2); }
+    .dark .text-option.selected {
+      background: var(--white);
+      border-color: var(--white);
+      color: var(--black);
+    }
+
+    /* ── STEP 1 (Gender) — full black ── */
+    #step-1 {
+      background: var(--black);
+      justify-content: center;
+    }
+    #step-1 .step-num { color: rgba(255,255,255,0.3); }
+    #step-1 .step-question { color: var(--white); }
+    #step-1 .step-sub { color: rgba(255,255,255,0.35); }
+
+    /* ── HEAD SHAPE extras for men (text-only add-ons) ── */
+    .body-extras {
+      margin-top: 12px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      color: var(--grey);
+      text-transform: uppercase;
+    }
+    .body-extra-opts {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+    .body-extra-btn {
+      padding: 10px 20px;
+      border: 1px solid var(--grey-light);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      background: var(--white);
+      color: var(--black);
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .body-extra-btn:hover { background: #fafafa; }
+    .body-extra-btn.selected { background: var(--black); color: var(--white); border-color: var(--black); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 800px) {
+      .quiz-step { padding: 90px 20px 120px; }
+      .img-options { grid-template-columns: repeat(2, 1fr); }
+      .img-options.cols-4 { grid-template-columns: repeat(2, 1fr); }
+      .gender-cards { grid-template-columns: 1fr; max-width: 100%; }
+      .site-logo { left: 20px; }
+      .back-btn { left: 20px; }
+      .step-counter { right: 20px; }
+      .continue-btn { right: 20px; bottom: 28px; }
+    }
+    @media (max-width: 480px) {
+      .img-options { grid-template-columns: repeat(2, 1fr); }
+      .step-question { font-size: clamp(28px, 8vw, 44px); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Fixed nav elements -->
+<div class="progress-rail" id="progressRail">
+  <div class="progress-fill" id="progressFill"></div>
+</div>
+
+<a href="index.html" class="site-logo" id="siteLogo">TÓRA</a>
+
+<button class="back-btn" id="backBtn" aria-label="Go back">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M19 12H5M12 19l-7-7 7-7"/>
+  </svg>
+  Back
+</button>
+
+<span class="step-counter" id="stepCounter"></span>
+
+<button class="continue-btn" id="continueBtn" aria-label="Continue">
+  Continue
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M5 12h14M12 5l7 7-7 7"/>
+  </svg>
+</button>
+
+<!-- Quiz Stage -->
+<div class="quiz-stage" id="quizStage">
+
+  <!-- STEP 1: Gender -->
+  <div class="quiz-step active dark" id="step-1" data-step="1">
+    <div class="step-inner">
+      <p class="step-num">Step 01</p>
+      <h2 class="step-question">Who is this profile for?</h2>
+      <p class="step-sub">Your answers will personalise everything — hair, body, and scent.</p>
+      <div class="gender-cards">
+        <div class="gender-card" data-value="women" id="genderWomen">
+          <div class="gender-label">Women</div>
+          <div class="gender-sub">Hair · Body · Scent</div>
+        </div>
+        <div class="gender-card" data-value="men" id="genderMen">
+          <div class="gender-label">Men</div>
+          <div class="gender-sub">Hair · Body · Scent</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2W: Curl Type (Women) -->
+  <div class="quiz-step light-bg" id="step-2w" data-step="2">
+    <div class="step-inner">
+      <p class="step-num">Step 02</p>
+      <h2 class="step-question">What is your curl type?</h2>
+      <p class="step-sub">Choose the pattern closest to your natural texture — most people sit between types.</p>
+      <div class="img-options" id="curlOptions">
+        <div class="img-option" data-value="3a">
+          <img src="images/3a.png" alt="3A curl type" loading="eager">
+          <div class="img-check-overlay"><div class="img-check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+          <div class="img-option-label">3A — Loose Spirals</div>
+        </div>
+        <div class="img-option" data-value="3b">
+          <img src="images/3b.png" alt="3B curl type" loading="eager">
+          <div class="img-check-overlay"><div class="img-check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+          <div class="img-option-label">3B — Springy Curls</div>
+        </div>
+        <div class="img-option" data-value="3c">
+          <img src="images/3c.png" alt="3C curl type" loading="eager">
+          <div class="img-check-overlay"><div class="img-check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+          <div class="img-option-label">3C — Tight Corkscrews</div>
+        </div>
+        <div class="img-option" data-value="4a">
+          <img src="images/4a.png" alt="4A curl type" loading="eager">
+          <div class="img-check-overlay"><div class="img-check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+          <div class="img-option-label">4A — Tight Coils</div>
+        </div>
+        <div class="img-option" data-value="4b">
+          <img src="images/4b.png" alt="4B curl type" loading="eager">
+          <div class="img-check-overlay"><div class="img-check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+          <div class="img-option-label">4B — Z-Pattern Coil</div>
+        </div>
+        <div class="img-option" data-value="4c">
+          <img src="images/4c.png" alt="4C curl type" loading="eager">
+          <div class="img-check-overlay"><div class="img-check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+          <div class="img-option-label">4C — Tightest Coil</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2M: Hair Type (Men) -->
+  <div class="quiz-step light-bg" id="step-2m" data-step="2">
+    <div class="step-inner">
+      <p class="step-num">Step 02</p>
+      <h2 class="step-question">What is your hair type?</h2>
+      <p class="step-sub">Choose the texture closest to your natural hair.</p>
+      <div class="img-options cols-2" id="hairOptionsMen" style="max-width:560px;">
+        <div class="img-option" data-value="4a">
+          <img src="images/4a.png" alt="4A hair type" loading="eager">
+          <div class="img-check-overlay"><div class="img-check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+          <div class="img-option-label">4A — Tight Coils</div>
+        </div>
+        <div class="img-option" data-value="4b">
+          <img src="images/4b.png" alt="4B hair type" loading="eager">
+          <div class="img-check-overlay"><div class="img-check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+          <div class="img-option-label">4B — Z-Pattern</div>
+        </div>
+        <div class="img-option" data-value="4c">
+          <img src="images/4c.png" alt="4C hair type" loading="eager">
+          <div class="img-check-overlay"><div class="img-check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+          <div class="img-option-label">4C — Tightest Coil</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3W: Face Shape (Women) -->
+  <div class="quiz-step dark" id="step-3w" data-step="3">
+    <div class="step-inner">
+      <p class="step-num">Step 03</p>
+      <h2 class="step-question">What is your face shape?</h2>
+      <p class="step-sub">The shape that most closely describes the outline of your face.</p>
+      <div class="img-options" id="faceOptionsW">
+        <div class="img-option" data-value="oval">
+          <img src="images/face_oval.png" alt="Oval face shape" loading="eager">
+          <div class="img-check-overlay"><div class="img-check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+          <div class="img-option-label">Oval</div>
+        </div>
+        <div class="img-option" data-value="round">
+          <img src="images/face_round.png" alt="Round face shape" loading="eager">
+          <div class="img-check-overlay"><div class="img-check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+          <div class="img-option-label">Round</div>
+        </div>
+        <div class="img-option" data-value="square">
+          <img src="images/face_square.png" alt="Square face shape" loading="eager">
+          <div class="img-check-overlay"><div class="img-check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+          <div class="img-option-label">Square</div>
+        </div>
+        <div class="img-option" data-value="oblong">
+          <img src="images/face_oblong.png" alt="Oblong face shape" loading="eager">
+          <div class="img-check-overlay"><div class="img-check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+          <div class="img-option-label">Oblong</div>
+        </div>
+        <div class="img-option" data-value="diamond">
+          <img src="images/face_diamond.png" alt="Diamond face shape" loading="eager">
+          <div class="img-check-overlay"><div class="img-check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+          <div class="img-option-label">Diamond</div>
+        </div>
+        <div class="img-option" data-value="heart">
+          <img src="images/face_heart.png" alt="Heart face shape" loading="eager">
+          <div class="img-check-overlay"><div class="img-check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+          <div class="img-option-label">Heart</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3M: Face Shape (Men) -->
+  <div class="quiz-step dark" id="step-3m" data-step="3">
+    <div class="step-inner">
+      <p class="step-num">Step 03</p>
+      <h2 class="step-question">What is your face shape?</h2>
+      <p class="step-sub">Your face shape determines which cuts and styles work for you.</p>
+      <div class="img-options cols-4" id="faceOptionsM">
+        <div class="img-option" data-value="oval">
+          <img src="images/face_oval.png" alt="Oval face shape" loading="eager">
+          <div class="img-check-overlay"><div class="img-check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+          <div class="img-option-label">Oval</div>
+        </div>
+        <div class="img-option" data-value="round">
+          <img src="images/face_round.png" alt="Round face shape" loading="eager">
+          <div class="img-check-overlay"><div class="img-check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+          <div class="img-option-label">Round</div>
+        </div>
+        <div class="img-option" data-value="square">
+          <img src="images/face_square.png" alt="Square face shape" loading="eager">
+          <div class="img-check-overlay"><div class="img-check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+          <div class="img-option-label">Square</div>
+        </div>
+        <div class="img-option" data-value="oblong">
+          <img src="images/face_oblong.png" alt="Oblong face shape" loading="eager">
+          <div class="img-check-overlay"><div class="img-check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+          <div class="img-option-label">Oblong</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 4W: Body Type (Women) -->
+  <div class="quiz-step light-bg" id="step-4w" data-step="4">
+    <div class="step-inner">
+      <p class="step-num">Step 04</p>
+      <h2 class="step-question">What is your body type?</h2>
+      <p class="step-sub">Choose the shape that most closely describes your natural proportions.</p>
+      <div class="img-options" id="bodyOptionsW">
+        <div class="img-option" data-value="hourglass">
+          <img src="images/hour glass.png" alt="Hourglass body type" loading="eager">
+          <div class="img-check-overlay"><div class="img-check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+          <div class="img-option-label">Hourglass</div>
+        </div>
+        <div class="img-option" data-value="pear">
+          <img src="images/pear woman.png" alt="Pear body type" loading="eager">
+          <div class="img-check-overlay"><div class="img-check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+          <div class="img-option-label">Pear</div>
+        </div>
+        <div class="img-option" data-value="rectangle">
+          <img src="images/rectangle woman.png" alt="Rectangle body type" loading="eager">
+          <div class="img-check-overlay"><div class="img-check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+          <div class="img-option-label">Rectangle</div>
+        </div>
+        <div class="img-option" data-value="fullfigure">
+          <img src="images/plus size.png" alt="Full figure body type" loading="eager">
+          <div class="img-check-overlay"><div class="img-check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+          <div class="img-option-label">Full Figure</div>
+        </div>
+        <div class="img-option" data-value="broadshoulder">
+          <img src="images/broadshoulder woman.png" alt="Broad shoulder body type" loading="eager">
+          <div class="img-check-overlay"><div class="img-check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+          <div class="img-option-label">Broad Shoulder</div>
+        </div>
+        <div class="img-option" data-value="apple">
+          <img src="images/apple woman.png" alt="Apple body type" loading="eager">
+          <div class="img-check-overlay"><div class="img-check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+          <div class="img-option-label">Apple</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 4M: Body Type (Men) -->
+  <div class="quiz-step light-bg" id="step-4m" data-step="4">
+    <div class="step-inner">
+      <p class="step-num">Step 04</p>
+      <h2 class="step-question">What is your body type?</h2>
+      <p class="step-sub">Choose the frame that most closely describes your natural build.</p>
+      <div class="img-options cols-4" id="bodyOptionsM" style="max-width:900px;">
+        <div class="img-option" data-value="athletic">
+          <img src="images/athletic man.png" alt="Athletic body type" loading="eager">
+          <div class="img-check-overlay"><div class="img-check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+          <div class="img-option-label">Athletic</div>
+        </div>
+        <div class="img-option" data-value="rectangle">
+          <img src="images/rectangle man.png" alt="Rectangle body type" loading="eager">
+          <div class="img-check-overlay"><div class="img-check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+          <div class="img-option-label">Rectangle</div>
+        </div>
+        <div class="img-option" data-value="fuller">
+          <img src="images/large man.png" alt="Fuller body type" loading="eager">
+          <div class="img-check-overlay"><div class="img-check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+          <div class="img-option-label">Fuller</div>
+        </div>
+        <div class="img-option" data-value="lean">
+          <img src="images/lean man.png" alt="Lean body type" loading="eager">
+          <div class="img-check-overlay"><div class="img-check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+          <div class="img-option-label">Lean</div>
+        </div>
+      </div>
+      <div class="body-extras">
+        <span>Also applies to you?</span>
+        <div class="body-extra-opts" id="menBodyExtras">
+          <button class="body-extra-btn" data-modifier="short">Short / Compact</button>
+          <button class="body-extra-btn" data-modifier="tall">Tall</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 5M: Head Shape (Men) -->
+  <div class="quiz-step dark" id="step-5m" data-step="5">
+    <div class="step-inner">
+      <p class="step-num">Step 05</p>
+      <h2 class="step-question">What is your head shape?</h2>
+      <p class="step-sub">Your head shape determines which fades and cuts look best from all angles.</p>
+      <div class="img-options cols-4" id="headOptionsM">
+        <div class="img-option" data-value="round">
+          <img src="images/head_round.png" alt="Round head shape" loading="eager">
+          <div class="img-check-overlay"><div class="img-check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+          <div class="img-option-label">Round</div>
+        </div>
+        <div class="img-option" data-value="flattop">
+          <img src="images/head_flattop.png" alt="Flat top head shape" loading="eager">
+          <div class="img-check-overlay"><div class="img-check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+          <div class="img-option-label">Flat Back</div>
+        </div>
+        <div class="img-option" data-value="narrow">
+          <img src="images/head_narrow.png" alt="Narrow head shape" loading="eager">
+          <div class="img-check-overlay"><div class="img-check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+          <div class="img-option-label">Long / Narrow</div>
+        </div>
+        <div class="img-option" data-value="wide">
+          <img src="images/head_wide.png" alt="Wide head shape" loading="eager">
+          <div class="img-check-overlay"><div class="img-check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+          <div class="img-option-label">Wide / Broad</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 5W: Lifestyle (Women) -->
+  <div class="quiz-step dark" id="step-5w" data-step="5">
+    <div class="step-inner">
+      <p class="step-num">Step 05</p>
+      <h2 class="step-question">Describe your hair lifestyle.</h2>
+      <p class="step-sub">This shapes the style advice we give you.</p>
+      <div class="text-options" id="lifestyleOptions">
+        <div class="text-option" data-value="natural_journey">
+          <span>Natural hair journey</span>
+          <span class="text-option-arrow">→</span>
+        </div>
+        <div class="text-option" data-value="protective_always">
+          <span>Protective styles always</span>
+          <span class="text-option-arrow">→</span>
+        </div>
+        <div class="text-option" data-value="mix_both">
+          <span>Mix of both</span>
+          <span class="text-option-arrow">→</span>
+        </div>
+        <div class="text-option" data-value="relaxed_heat">
+          <span>Relaxed / heat styled</span>
+          <span class="text-option-arrow">→</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 6W: Climate (Women) -->
+  <div class="quiz-step light-bg" id="step-6w" data-step="6">
+    <div class="step-inner">
+      <p class="step-num">Step 06</p>
+      <h2 class="step-question">Where are you based?</h2>
+      <p class="step-sub">Climate shapes everything from fragrance choice to hair care routine.</p>
+      <div class="text-options" id="climateOptionsW">
+        <div class="text-option" data-value="lagos">
+          <span>Lagos</span>
+          <span class="text-option-arrow">→</span>
+        </div>
+        <div class="text-option" data-value="abuja">
+          <span>Abuja</span>
+          <span class="text-option-arrow">→</span>
+        </div>
+        <div class="text-option" data-value="accra">
+          <span>Accra</span>
+          <span class="text-option-arrow">→</span>
+        </div>
+        <div class="text-option" data-value="portharcourt">
+          <span>Port Harcourt</span>
+          <span class="text-option-arrow">→</span>
+        </div>
+        <div class="text-option" data-value="diaspora">
+          <span>Diaspora — London / US</span>
+          <span class="text-option-arrow">→</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 6M: Climate (Men) -->
+  <div class="quiz-step light-bg" id="step-6m" data-step="6">
+    <div class="step-inner">
+      <p class="step-num">Step 06</p>
+      <h2 class="step-question">Where are you based?</h2>
+      <p class="step-sub">Climate shapes your fragrance and grooming routine.</p>
+      <div class="text-options" id="climateOptionsM">
+        <div class="text-option" data-value="lagos">
+          <span>Lagos</span>
+          <span class="text-option-arrow">→</span>
+        </div>
+        <div class="text-option" data-value="abuja">
+          <span>Abuja</span>
+          <span class="text-option-arrow">→</span>
+        </div>
+        <div class="text-option" data-value="accra">
+          <span>Accra</span>
+          <span class="text-option-arrow">→</span>
+        </div>
+        <div class="text-option" data-value="portharcourt">
+          <span>Port Harcourt</span>
+          <span class="text-option-arrow">→</span>
+        </div>
+        <div class="text-option" data-value="diaspora">
+          <span>Diaspora — London / US</span>
+          <span class="text-option-arrow">→</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end quiz-stage -->
+
+<script>
+  // ── Quiz state ──
+  const answers = {
+    gender: null,
+    curlType: null,
+    faceShape: null,
+    bodyType: null,
+    bodyModifier: null,
+    climate: null,
+    lifestyle: null,
+    headShape: null
+  };
+
+  let currentStep = 1;
+  let gender = null; // 'women' | 'men'
+
+  const TOTAL_STEPS = 7; // 1 gender + 6
+
+  // ── DOM refs ──
+  const progressFill  = document.getElementById('progressFill');
+  const progressRail  = document.getElementById('progressRail');
+  const siteLogo      = document.getElementById('siteLogo');
+  const backBtn       = document.getElementById('backBtn');
+  const stepCounter   = document.getElementById('stepCounter');
+  const continueBtn   = document.getElementById('continueBtn');
+
+  // ── Step sequence maps ──
+  // stepId = what div ID is shown. Returns array of step IDs in order.
+  function getStepSequence(g) {
+    if (g === 'women') {
+      return ['step-1','step-2w','step-3w','step-4w','step-5w','step-6w'];
+    } else {
+      return ['step-1','step-2m','step-3m','step-4m','step-5m','step-6m'];
+    }
+  }
+
+  // Current index in sequence
+  let stepSequence = ['step-1']; // starts with just step 1 until gender chosen
+  let stepIndex = 0;
+
+  // ── Show / hide steps with crossfade ──
+  function showStep(stepId) {
+    document.querySelectorAll('.quiz-step').forEach(s => {
+      s.classList.remove('active');
+      s.style.pointerEvents = 'none';
+    });
+    const el = document.getElementById(stepId);
+    if (!el) return;
+    el.classList.add('active');
+
+    // Update nav color
+    const isDark = el.classList.contains('dark');
+    siteLogo.classList.toggle('light', isDark);
+    backBtn.classList.toggle('light', isDark);
+    stepCounter.classList.toggle('light', isDark);
+    progressRail.classList.toggle('light', isDark);
+
+    // Progress
+    const pct = (stepIndex / (stepSequence.length - 1)) * 100;
+    progressFill.style.width = Math.max(pct, 8) + '%';
+
+    // Back button
+    if (stepIndex === 0) {
+      backBtn.classList.remove('visible');
+    } else {
+      backBtn.classList.add('visible');
+    }
+
+    // Step counter
+    if (stepIndex === 0) {
+      stepCounter.textContent = '';
+    } else {
+      stepCounter.textContent = stepIndex + ' / ' + (stepSequence.length - 1);
+    }
+
+    // Reset continue button
+    hideContinue();
+  }
+
+  function showContinue() {
+    continueBtn.classList.add('visible');
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        continueBtn.classList.add('shown');
+      });
+    });
+  }
+
+  function hideContinue() {
+    continueBtn.classList.remove('shown');
+    setTimeout(() => continueBtn.classList.remove('visible'), 400);
+  }
+
+  // ── Navigation ──
+  function goNext() {
+    if (stepIndex < stepSequence.length - 1) {
+      stepIndex++;
+      showStep(stepSequence[stepIndex]);
+    } else {
+      // Final step — save and redirect
+      saveAndRedirect();
+    }
+  }
+
+  function goBack() {
+    if (stepIndex > 0) {
+      stepIndex--;
+      showStep(stepSequence[stepIndex]);
+      // Check if current selection exists → restore continue
+      checkCurrentSelectionRestored();
+    }
+  }
+
+  function checkCurrentSelectionRestored() {
+    const stepId = stepSequence[stepIndex];
+    const el = document.getElementById(stepId);
+    if (!el) return;
+    const selected = el.querySelector('.img-option.selected, .text-option.selected, .gender-card.selected');
+    if (selected) showContinue();
+  }
+
+  // ── Gender selection ──
+  document.getElementById('genderWomen').addEventListener('click', function() {
+    selectGenderCard(this, 'women');
+  });
+  document.getElementById('genderMen').addEventListener('click', function() {
+    selectGenderCard(this, 'men');
+  });
+
+  function selectGenderCard(card, g) {
+    document.querySelectorAll('.gender-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    gender = g;
+    answers.gender = g;
+    stepSequence = getStepSequence(g);
+    stepIndex = 0;
+    showContinue();
+  }
+
+  // ── Image option clicks ──
+  document.querySelectorAll('.img-option').forEach(opt => {
+    opt.addEventListener('click', function() {
+      // Deselect siblings in same container
+      const parent = this.closest('.img-options');
+      parent.querySelectorAll('.img-option').forEach(o => o.classList.remove('selected'));
+      this.classList.add('selected');
+
+      // Store answer
+      const stepEl = this.closest('.quiz-step');
+      const stepId = stepEl.id;
+      const val = this.dataset.value;
+
+      if (stepId === 'step-2w' || stepId === 'step-2m') {
+        answers.curlType = val;
+      } else if (stepId.startsWith('step-3')) {
+        answers.faceShape = val;
+      } else if (stepId.startsWith('step-4')) {
+        answers.bodyType = val;
+      } else if (stepId === 'step-5m') {
+        answers.headShape = val;
+      }
+
+      showContinue();
+    });
+  });
+
+  // ── Text option clicks ──
+  document.querySelectorAll('.text-option').forEach(opt => {
+    opt.addEventListener('click', function() {
+      const parent = this.closest('.text-options');
+      parent.querySelectorAll('.text-option').forEach(o => o.classList.remove('selected'));
+      this.classList.add('selected');
+
+      const stepEl = this.closest('.quiz-step');
+      const stepId = stepEl.id;
+      const val = this.dataset.value;
+
+      if (stepId === 'step-5w') {
+        answers.lifestyle = val;
+      } else if (stepId === 'step-6w' || stepId === 'step-6m') {
+        answers.climate = val;
+      }
+
+      showContinue();
+    });
+  });
+
+  // ── Men body modifier ──
+  document.querySelectorAll('.body-extra-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      if (this.classList.contains('selected')) {
+        this.classList.remove('selected');
+        answers.bodyModifier = null;
+      } else {
+        document.querySelectorAll('.body-extra-btn').forEach(b => b.classList.remove('selected'));
+        this.classList.add('selected');
+        answers.bodyModifier = this.dataset.modifier;
+      }
+    });
+  });
+
+  // ── Continue button ──
+  continueBtn.addEventListener('click', function() {
+    goNext();
+  });
+
+  // ── Back button ──
+  backBtn.addEventListener('click', function() {
+    goBack();
+  });
+
+  // ── Keyboard nav ──
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && continueBtn.classList.contains('shown')) {
+      goNext();
+    }
+    if (e.key === 'Escape' || e.key === 'Backspace') {
+      if (document.activeElement.tagName !== 'INPUT') goBack();
+    }
+  });
+
+  // ── Handle missing images gracefully ──
+  document.querySelectorAll('.img-option img').forEach(img => {
+    img.addEventListener('error', function() {
+      this.closest('.img-option').style.background = '#f0f0f0';
+      this.style.display = 'none';
+    });
+  });
+
+  // ── Save and redirect ──
+  function saveAndRedirect() {
+    localStorage.setItem('tora_quiz', JSON.stringify(answers));
+    // Brief delay for final visual satisfaction
+    document.getElementById(stepSequence[stepIndex]).style.opacity = '0';
+    setTimeout(() => {
+      window.location.href = 'results.html';
+    }, 400);
+  }
+
+  // ── Init ──
+  showStep('step-1');
+</script>
+</body>
+</html>

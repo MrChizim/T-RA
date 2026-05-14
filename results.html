@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your TÓRA Profile | Results</title>
+  <meta name="description" content="Your personalised TÓRA style profile — hair, body, and scent recommendations built around your specific combination." />
+  <link rel="icon" type="image/png" href="images/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;0,9..40,900;1,9..40,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --black: #000;
+      --white: #fff;
+      --grey: #888;
+      --grey-light: #eee;
+      --grey-mid: #444;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--white);
+      color: var(--black);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    .site-logo {
+      position: fixed; top: 28px; left: 36px; z-index: 500;
+      font-size: 18px; font-weight: 900; letter-spacing: 6px;
+      text-transform: uppercase; color: var(--white); text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    .site-logo.dark { color: var(--black); }
+    .hamburger {
+      position: fixed; top: 28px; right: 28px; z-index: 500;
+      display: flex; flex-direction: column; gap: 6px;
+      background: none; border: none; cursor: pointer; padding: 6px;
+    }
+    .hamburger span {
+      display: block; width: 28px; height: 1.5px; background: var(--white);
+      transition: transform 0.3s ease, opacity 0.3s ease, background 0.3s ease;
+    }
+    .hamburger.dark span { background: var(--black); }
+    .hamburger.open span { background: var(--black) !important; }
+    .hamburger.open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+    .drawer {
+      position: fixed; inset: 0; background: var(--white); z-index: 400;
+      display: flex; flex-direction: column; justify-content: center; padding: 0 48px;
+      transform: translateY(-100%); transition: transform 0.5s cubic-bezier(0.76,0,0.24,1);
+    }
+    .drawer.open { transform: translateY(0); }
+    .drawer-nav { list-style: none; border-top: 1px solid var(--grey-light); }
+    .drawer-nav li { border-bottom: 1px solid var(--grey-light); }
+    .drawer-nav a {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 0; font-size: clamp(18px, 3.5vw, 28px); font-weight: 700;
+      color: var(--black); text-decoration: none; text-transform: uppercase; letter-spacing: 1px;
+      transition: color 0.2s;
+    }
+    .drawer-nav a:hover { color: var(--grey); }
+    .d-arrow { font-size: 18px; opacity: 0; transition: opacity 0.2s, transform 0.2s; transform: translateX(-8px); }
+    .drawer-nav a:hover .d-arrow { opacity: 1; transform: translateX(0); }
+    .drawer-footer {
+      position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+      font-size: 11px; font-weight: 500; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--grey); white-space: nowrap;
+    }
+
+    /* ── HERO ── */
+    .results-hero {
+      background: var(--black);
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 160px 36px 72px;
+      position: relative;
+      overflow: hidden;
+    }
+    .results-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #000 40%, #111 100%);
+      z-index: 0;
+    }
+    .hero-eyebrow {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-title {
+      font-size: clamp(48px, 10vw, 96px);
+      font-weight: 900;
+      letter-spacing: -2px;
+      line-height: 0.92;
+      color: var(--white);
+      text-transform: uppercase;
+      margin-bottom: 28px;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-combination {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-tag {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      border: 1px solid rgba(255,255,255,0.15);
+      padding: 6px 14px;
+    }
+    .hero-retake {
+      position: absolute;
+      bottom: 72px; right: 36px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      text-decoration: none;
+      transition: color 0.2s;
+      z-index: 1;
+    }
+    .hero-retake:hover { color: var(--white); }
+
+    /* ── SHARED SECTION STRUCTURE ── */
+    .results-section {
+      padding: 96px 0;
+      border-bottom: 1px solid var(--grey-light);
+    }
+    .results-section.dark {
+      background: var(--black);
+      border-bottom-color: rgba(255,255,255,0.07);
+    }
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 36px; }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 24px;
+      margin-bottom: 64px;
+    }
+    .section-number {
+      font-size: clamp(48px, 6vw, 72px);
+      font-weight: 900;
+      color: var(--grey-light);
+      letter-spacing: -2px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .dark .section-number { color: rgba(255,255,255,0.07); }
+    .section-title-block {}
+    .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-bottom: 8px;
+    }
+    .dark .section-label { color: rgba(255,255,255,0.3); }
+    .section-title {
+      font-size: clamp(26px, 3.5vw, 40px);
+      font-weight: 700;
+      color: var(--black);
+      letter-spacing: -0.5px;
+      line-height: 1.1;
+    }
+    .dark .section-title { color: var(--white); }
+
+    /* ── HAIR SECTION ── */
+    .curl-profile-card {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 0;
+      background: var(--black);
+      margin-bottom: 48px;
+    }
+    .curl-profile-img {
+      aspect-ratio: 3/4;
+      overflow: hidden;
+    }
+    .curl-profile-img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      filter: grayscale(100%);
+    }
+    .curl-profile-content {
+      padding: 40px 36px;
+    }
+    .curl-type-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 6px 14px;
+      margin-bottom: 20px;
+    }
+    .curl-profile-name {
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 900;
+      color: var(--white);
+      letter-spacing: -1px;
+      margin-bottom: 16px;
+    }
+    .curl-profile-desc {
+      font-size: 15px;
+      font-weight: 300;
+      line-height: 1.8;
+      color: rgba(255,255,255,0.45);
+      margin-bottom: 32px;
+    }
+    .curl-profile-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .curl-profile-tag {
+      font-size: 11px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.35);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 5px 12px;
+    }
+
+    /* Style recs */
+    .style-recs {
+      margin-bottom: 40px;
+    }
+    .style-recs-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-bottom: 20px;
+    }
+    .style-recs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+    .style-rec-card {
+      background: var(--grey-light);
+      aspect-ratio: 3/4;
+      position: relative;
+      overflow: hidden;
+    }
+    .style-rec-card img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      filter: grayscale(100%);
+      transition: transform 0.5s ease;
+    }
+    .style-rec-card:hover img { transform: scale(1.04); }
+    .style-rec-label {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 28px 14px 14px;
+      background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.8);
+    }
+    .style-rec-placeholder {
+      width: 100%; height: 100%;
+      background: linear-gradient(135deg, #e8e8e8, #f5f5f5);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 20px;
+      text-align: center;
+    }
+    .style-rec-placeholder-name {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--grey-mid);
+    }
+
+    /* Face modifier note */
+    .face-modifier-note {
+      background: var(--grey-light);
+      padding: 24px 28px;
+      margin-bottom: 24px;
+    }
+    .face-modifier-note h4 {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-bottom: 10px;
+    }
+    .face-modifier-note ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .face-modifier-note li {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--grey-mid);
+      padding-left: 14px;
+      position: relative;
+      line-height: 1.5;
+    }
+    .face-modifier-note li::before { content: '—'; position: absolute; left: 0; color: var(--grey-light); }
+
+    .hair-cta-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--black);
+      text-decoration: none;
+      border-bottom: 1px solid var(--black);
+      padding-bottom: 2px;
+      transition: color 0.2s;
+    }
+    .hair-cta-link:hover { color: var(--grey); border-color: var(--grey); }
+
+    /* ── BODY SECTION ── */
+    .body-profile-row {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 48px;
+      align-items: start;
+      margin-bottom: 48px;
+    }
+    .body-profile-img-wrap {
+      aspect-ratio: 2/3;
+      overflow: hidden;
+      background: var(--grey-light);
+    }
+    .body-profile-img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      filter: grayscale(100%);
+    }
+    .body-archetype-name {
+      font-size: clamp(28px, 4vw, 48px);
+      font-weight: 900;
+      color: var(--black);
+      letter-spacing: -1px;
+      margin-bottom: 8px;
+    }
+    .body-archetype-sub {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-bottom: 20px;
+    }
+    .body-archetype-desc {
+      font-size: 15px;
+      font-weight: 300;
+      line-height: 1.8;
+      color: var(--grey-mid);
+      margin-bottom: 28px;
+      max-width: 480px;
+    }
+    .wear-list-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-bottom: 14px;
+    }
+    .wear-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .wear-list li {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--black);
+      padding-left: 18px;
+      position: relative;
+      line-height: 1.5;
+    }
+    .wear-list li::before { content: '—'; position: absolute; left: 0; color: var(--grey-light); }
+
+    .outfit-img-block {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      margin-top: 40px;
+    }
+    .outfit-img-block-full { grid-template-columns: 1fr; }
+    .outfit-img-card {
+      aspect-ratio: 3/4;
+      background: var(--grey-light);
+      overflow: hidden;
+      position: relative;
+    }
+    .outfit-img-card img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      filter: grayscale(100%);
+      transition: transform 0.5s ease;
+    }
+    .outfit-img-card:hover img { transform: scale(1.03); }
+    .outfit-img-placeholder {
+      width: 100%; height: 100%;
+      background: linear-gradient(135deg, #ebebeb, #f8f8f8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--grey);
+    }
+
+    /* ── SCENT SECTION ── */
+    .scent-city-block {
+      background: var(--black);
+      padding: 48px;
+      margin-bottom: 40px;
+    }
+    .scent-city-name {
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 900;
+      color: var(--white);
+      letter-spacing: -1px;
+      margin-bottom: 16px;
+    }
+    .scent-city-desc {
+      font-size: 16px;
+      font-weight: 300;
+      line-height: 1.85;
+      color: rgba(255,255,255,0.45);
+      max-width: 580px;
+      margin-bottom: 28px;
+    }
+    .scent-recommendations {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+    .scent-rec-card {
+      background: var(--black);
+      padding: 24px 20px;
+    }
+    .scent-rec-family {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 6px;
+    }
+    .scent-rec-note {
+      font-size: 12px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.35);
+      line-height: 1.6;
+    }
+    .scent-rec-tag {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.25);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 4px 8px;
+    }
+
+    /* ── PREMIUM GATE ── */
+    .premium-section {
+      padding: 96px 0 0;
+      background: var(--white);
+      position: relative;
+    }
+    .premium-blurred-content {
+      filter: blur(7px);
+      pointer-events: none;
+      user-select: none;
+      padding: 0 36px 96px;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+    .premium-gate-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      padding: 36px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 30%, rgba(255,255,255,0.95) 60%, rgba(255,255,255,1) 100%);
+    }
+    .premium-gate-inner {
+      text-align: center;
+      max-width: 480px;
+    }
+    .lock-icon {
+      width: 48px; height: 48px;
+      border: 2px solid var(--black);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+    }
+    .gate-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-bottom: 16px;
+    }
+    .gate-title {
+      font-size: clamp(26px, 4vw, 40px);
+      font-weight: 900;
+      color: var(--black);
+      letter-spacing: -0.5px;
+      margin-bottom: 14px;
+      line-height: 1.1;
+    }
+    .gate-desc {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--grey-mid);
+      line-height: 1.8;
+      margin-bottom: 32px;
+    }
+    .gate-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 32px;
+      text-align: left;
+    }
+    .gate-list li {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--black);
+      padding-left: 18px;
+      position: relative;
+      line-height: 1.4;
+    }
+    .gate-list li::before { content: '—'; position: absolute; left: 0; color: var(--grey-light); }
+    .gate-price {
+      font-size: 36px;
+      font-weight: 900;
+      color: var(--black);
+      letter-spacing: -1px;
+      margin-bottom: 4px;
+    }
+    .gate-price-note {
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--grey);
+      margin-bottom: 28px;
+    }
+    .unlock-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--black);
+      color: var(--white);
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      padding: 16px 36px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .unlock-btn:hover { background: var(--grey-mid); }
+
+    /* Premium blurred preview cards */
+    .premium-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+      margin-bottom: 48px;
+    }
+    .premium-preview-card {
+      background: var(--grey-light);
+      aspect-ratio: 3/4;
+    }
+    .premium-brief {
+      background: var(--black);
+      padding: 48px;
+      margin-bottom: 2px;
+    }
+    .premium-brief-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 16px;
+    }
+    .premium-brief-title {
+      font-size: clamp(20px, 3vw, 32px);
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: -0.5px;
+      margin-bottom: 16px;
+    }
+    .premium-brief-text {
+      font-size: 15px;
+      font-weight: 300;
+      line-height: 1.85;
+      color: rgba(255,255,255,0.4);
+    }
+
+    /* ── SCROLL REVEAL ── */
+    .r { opacity: 0; transform: translateY(24px); transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1); }
+    .r.in { opacity: 1; transform: none; }
+    .d1 { transition-delay: 0.08s; } .d2 { transition-delay: 0.15s; } .d3 { transition-delay: 0.22s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 800px) {
+      .wrap { padding: 0 20px; }
+      .results-hero { padding: 140px 20px 64px; }
+      .curl-profile-card { grid-template-columns: 1fr; }
+      .curl-profile-img { aspect-ratio: 16/9; max-height: 260px; }
+      .body-profile-row { grid-template-columns: 1fr; }
+      .style-recs-grid { grid-template-columns: 1fr 1fr; }
+      .scent-recommendations { grid-template-columns: 1fr; }
+      .premium-preview-grid { grid-template-columns: repeat(2, 1fr); }
+      .results-section { padding: 64px 0; }
+      .section-header { flex-direction: column; gap: 8px; margin-bottom: 40px; }
+      .section-number { font-size: 36px; }
+      .scent-city-block { padding: 32px 24px; }
+      .site-logo { left: 20px; }
+      .hamburger { right: 20px; top: 20px; }
+      .hero-retake { right: 20px; bottom: 24px; }
+      .drawer { padding: 0 24px; overflow-y: auto; justify-content: flex-start; padding-top: 80px; padding-bottom: 60px; }
+      .outfit-img-block { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .style-recs-grid { grid-template-columns: 1fr; }
+      .premium-preview-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<a href="index.html" class="site-logo" id="siteLogo">TÓRA</a>
+<button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+<div class="drawer" id="drawer">
+  <ul class="drawer-nav">
+    <li><a href="index.html">Home <span class="d-arrow">→</span></a></li>
+    <li><a href="hair.html">Hair <span class="d-arrow">→</span></a></li>
+    <li><a href="body.html">Body <span class="d-arrow">→</span></a></li>
+    <li><a href="scent.html">Scent <span class="d-arrow">→</span></a></li>
+    <li><a href="quiz.html">Retake Quiz <span class="d-arrow">→</span></a></li>
+  </ul>
+  <div class="drawer-footer">Hair · Body · Scent</div>
+</div>
+
+<!-- HERO -->
+<div class="results-hero" id="resultsHero">
+  <p class="hero-eyebrow">Your TÓRA Profile</p>
+  <h1 class="hero-title" id="heroTitle">YOUR<br>PROFILE</h1>
+  <div class="hero-combination" id="heroCombination"></div>
+  <a href="quiz.html" class="hero-retake">Retake Quiz →</a>
+</div>
+
+<!-- SECTION 01 — HAIR -->
+<section class="results-section" id="hairSection">
+  <div class="wrap">
+    <div class="section-header r">
+      <div class="section-number">01</div>
+      <div class="section-title-block">
+        <p class="section-label">Hair Profile</p>
+        <h2 class="section-title" id="hairSectionTitle">Your curl type</h2>
+      </div>
+    </div>
+
+    <!-- Curl type card -->
+    <div class="curl-profile-card r d1" id="curlCard">
+      <div class="curl-profile-img" id="curlCardImg">
+        <!-- filled by JS -->
+      </div>
+      <div class="curl-profile-content" id="curlCardContent">
+        <!-- filled by JS -->
+      </div>
+    </div>
+
+    <!-- Face shape modifier -->
+    <div class="face-modifier-note r d2" id="faceModifierNote" style="display:none;">
+      <h4>Adjusted for your face shape</h4>
+      <ul id="faceModifierList"></ul>
+    </div>
+
+    <!-- Recommended styles -->
+    <div class="style-recs r d2">
+      <p class="style-recs-label">Recommended for your combination</p>
+      <div class="style-recs-grid" id="styleRecsGrid">
+        <!-- filled by JS -->
+      </div>
+    </div>
+
+    <a href="hair.html" class="hair-cta-link r d3">
+      Read the full hair guide →
+    </a>
+  </div>
+</section>
+
+<!-- SECTION 02 — BODY -->
+<section class="results-section" id="bodySection">
+  <div class="wrap">
+    <div class="section-header r">
+      <div class="section-number">02</div>
+      <div class="section-title-block">
+        <p class="section-label">Body Profile</p>
+        <h2 class="section-title" id="bodySectionTitle">Your body type</h2>
+      </div>
+    </div>
+
+    <div class="body-profile-row r d1" id="bodyProfileRow">
+      <!-- filled by JS -->
+    </div>
+
+    <div class="outfit-img-block r d2" id="outfitImgBlock">
+      <!-- filled by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 03 — SCENT -->
+<section class="results-section dark" id="scentSection">
+  <div class="wrap">
+    <div class="section-header r">
+      <div class="section-number" style="color:rgba(255,255,255,0.05);">03</div>
+      <div class="section-title-block">
+        <p class="section-label">Scent Profile</p>
+        <h2 class="section-title" id="scentSectionTitle">Your climate, your scent</h2>
+      </div>
+    </div>
+
+    <div class="scent-city-block r d1" id="scentCityBlock">
+      <!-- filled by JS -->
+    </div>
+
+    <div class="scent-recommendations r d2" id="scentRecsGrid">
+      <!-- filled by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 04 — PREMIUM GATE -->
+<div class="premium-section" id="premiumSection">
+
+  <!-- Blurred preview content -->
+  <div class="premium-blurred-content" id="premiumBlurred">
+    <div class="section-header">
+      <div class="section-number">04</div>
+      <div class="section-title-block">
+        <p class="section-label">Full Profile</p>
+        <h2 class="section-title">Your complete style brief</h2>
+      </div>
+    </div>
+
+    <!-- Preview cards -->
+    <div class="premium-preview-grid">
+      <div class="premium-preview-card"></div>
+      <div class="premium-preview-card" style="background:#e8e8e8;"></div>
+      <div class="premium-preview-card" style="background:#f0f0f0;"></div>
+      <div class="premium-preview-card" style="background:#e4e4e4;"></div>
+    </div>
+
+    <div class="premium-brief">
+      <p class="premium-brief-label">Your complete style brief</p>
+      <h3 class="premium-brief-title" id="blurredBriefTitle">Personalised for your combination</h3>
+      <p class="premium-brief-text" id="blurredBriefText">
+        Your face shape, curl type, and body archetype create a specific set of style opportunities that most guides never address together. The notes below combine all three dimensions into one coherent styling direction — what to prioritise, what to avoid, and why the combination you have works the way it does.
+      </p>
+    </div>
+
+    <!-- More blurred content suggestion -->
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:2px; margin-top:2px;">
+      <div style="background:var(--grey-light); height:120px; display:flex; align-items:center; justify-content:center;">
+        <span style="font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--grey);">Full Hairstyle Gallery</span>
+      </div>
+      <div style="background:var(--grey-light); height:120px; display:flex; align-items:center; justify-content:center;">
+        <span style="font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--grey);">Complete Outfit Lookbook</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gate overlay -->
+  <div class="premium-gate-overlay" id="premiumGateOverlay">
+    <div class="premium-gate-inner">
+      <div class="lock-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+      </div>
+      <p class="gate-label">Full Access</p>
+      <h3 class="gate-title">Unlock Your Complete Profile</h3>
+      <p class="gate-desc">You've seen the foundation. Your full profile goes deeper — combining all three dimensions of your identity into one personalised style brief.</p>
+      <ul class="gate-list">
+        <li>Full hairstyle gallery for your curl type and face shape combination</li>
+        <li>Complete outfit lookbook — all 6 combinations for your body type</li>
+        <li>Face shape and body type combined style insights</li>
+        <li>Personalised fragrance family ranking for your climate</li>
+        <li>Your complete style brief — written for your exact combination</li>
+      </ul>
+      <div class="gate-price">₦6,500</div>
+      <p class="gate-price-note">One-time · No subscription · No expiry</p>
+      <button class="unlock-btn" id="unlockBtn">
+        Unlock Full Profile
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── Guard: redirect if no quiz data ──
+  const rawAnswers = localStorage.getItem('tora_quiz');
+  if (!rawAnswers) {
+    window.location.href = 'quiz.html';
+  }
+  const A = JSON.parse(rawAnswers || '{}');
+
+  // ── DATA OBJECTS ──
+
+  const CURL_DATA = {
+    '3a': {
+      name: '3A',
+      label: 'Loose Spirals',
+      img: 'images/3a.png',
+      desc: 'Well-defined spirals that hold their shape easily. Shiny, bouncy, and significantly more forgiving with moisture than the 4 types. Less common in West Africa — more relevant for diaspora and mixed-texture hair.',
+      tags: ['Loose spiral', 'Low shrinkage', 'Retains moisture well'],
+      styles: ['style_w_washandgo', 'style_w_twistout', 'style_w_lowbun'],
+      styleNames: ['Wash & Go', 'Twist Out', 'Low Bun'],
+      porosity: 'Your coil pattern typically holds moisture well. Focus on light, water-based products. Avoid heavy butters and oils that sit on top of the curl.',
+    },
+    '3b': {
+      name: '3B',
+      label: 'Springy Curls',
+      img: 'images/3b.png',
+      desc: 'Tighter spirals with more volume than 3A. Still holds definition without much product. Frizzes more noticeably in humidity. Often found in hair that is transitioning from relaxed or heat-treated.',
+      tags: ['Springy', 'Frizz-prone in humidity', 'Medium shrinkage'],
+      styles: ['style_w_braidout', 'style_w_washandgo', 'style_w_twistout'],
+      styleNames: ['Braid Out', 'Wash & Go', 'Twist Out'],
+      porosity: 'Prone to frizz, especially in high humidity. Use a light hold gel or curl cream to define. Anti-humidity products will extend your styles in Lagos and Accra heat.',
+    },
+    '3c': {
+      name: '3C',
+      label: 'Tight Corkscrews',
+      img: 'images/3c.png',
+      desc: 'Very tight corkscrews with serious volume. Dense, shrinks significantly, but still holds a visible pattern without product. Common in transitioning hair and mixed African textures.',
+      tags: ['Defined without product', 'High shrinkage', 'Dense'],
+      styles: ['style_w_twistout', 'style_w_braidout', 'style_w_puffs'],
+      styleNames: ['Twist Out', 'Braid Out', 'Puffs'],
+      porosity: 'Density is your biggest asset and your biggest challenge. Moisture needs to penetrate through thick layers — work in sections and use the LOC method (liquid, oil, cream) for best results.',
+    },
+    '4a': {
+      name: '4A',
+      label: 'Tight Coils',
+      img: 'images/4a.png',
+      desc: 'Tight coils with a visible S-pattern when you stretch them. Better at holding moisture than 4B or 4C. Still shrinks a lot, but you will see definition even without product.',
+      tags: ['S-pattern', 'Moderate moisture retention', '~50% shrinkage'],
+      styles: ['style_w_twistout', 'style_w_bantuknots', 'style_w_cornrows'],
+      styleNames: ['Twist Out', 'Bantu Knots', 'Cornrows'],
+      porosity: 'Your coils open up beautifully with moisture but benefit from sealing. After a water-based moisturiser, always seal with a light oil — shea or jojoba — to lock it in. Hard water in Lagos will strip moisture faster, so clarify monthly.',
+    },
+    '4b': {
+      name: '4B',
+      label: 'Z-Pattern Coil',
+      img: 'images/4b.png',
+      desc: 'Z-shaped coil — looks almost shrunk-flat without product. Very dense and very common across West Africa. Shrinks up to 75%. The pattern becomes visible once you add moisture and define it, but you have to earn it.',
+      tags: ['Z-pattern', 'Very common in West Africa', '~75% shrinkage'],
+      styles: ['style_w_twists', 'style_w_bantuknots', 'style_w_highhun'],
+      styleNames: ['Two-Strand Twists', 'Bantu Knots', 'High Bun'],
+      porosity: 'The Z-pattern can make your hair feel dry quickly even after moisturising — because the coil shape physically prevents products from distributing evenly. Detangle and apply products section by section, not all at once. Deep conditioning weekly is not optional.',
+    },
+    '4c': {
+      name: '4C',
+      label: 'Tightest Coil',
+      img: 'images/4c.png',
+      desc: 'The tightest coil — no visible pattern until you manipulate it. Highest shrinkage of any type, often 80% or more. The most common texture across West and East Africa, and the most consistently ignored by mainstream hair content.',
+      tags: ['Most common in Africa', '~80% shrinkage', 'Most underserved'],
+      styles: ['style_w_twists', 'style_w_locs', 'style_w_stretchblowout'],
+      styleNames: ['Protective Twists', 'Locs / Starter Locs', 'Stretched Styles'],
+      porosity: 'Your hair is naturally resistant to moisture absorption — this is not damage, it is your structure. Use heat to open the cuticle: warm your conditioner before applying, or deep condition with gentle heat for 15–20 minutes. Never detangle dry. Always apply products to soaking-wet hair.',
+    }
+  };
+
+  const CURL_DATA_MEN = {
+    '4a': {
+      name: '4A', label: 'Tight Coils', img: 'images/4a.png',
+      desc: 'Tight coils with a visible pattern when stretched. The most moisture-retentive of the 4 types. Responds well to waves and defined short styles.',
+      tags: ['S-pattern', 'Good for waves', '~50% shrinkage'],
+      styles: ['style_m_waves', 'style_m_twistout', 'style_m_fade'],
+      styleNames: ['360 Waves', 'Twist Out', 'Low Fade'],
+      porosity: 'Your coils hold moisture well but benefit from sealing with a light oil after wash day. Brush consistently with a soft bristle brush to build waves without breakage.'
+    },
+    '4b': {
+      name: '4B', label: 'Z-Pattern', img: 'images/4b.png',
+      desc: 'Z-shaped coil — very common across West Africa. Works well for locs, braids, and short fades. Requires consistent moisture to stay healthy.',
+      tags: ['Z-pattern', 'West Africa dominant', '~75% shrinkage'],
+      styles: ['style_m_locs', 'style_m_braids', 'style_m_fade'],
+      styleNames: ['Locs', 'Braids', 'Skin Fade'],
+      porosity: 'Moisture is your primary challenge. Apply products section by section on wet hair. For short styles, a daily spray of water and lightweight leave-in is better than heavy butters.'
+    },
+    '4c': {
+      name: '4C', label: 'Tightest Coil', img: 'images/4c.png',
+      desc: 'The tightest coil — most common across Africa. Works beautifully for locs, fades, and afro styles. Moisturise consistently and avoid dry manipulation.',
+      tags: ['Most common in Africa', '~80% shrinkage', 'Locs recommended'],
+      styles: ['style_m_locs', 'style_m_fade', 'style_m_afro'],
+      styleNames: ['Locs', 'Skin Fade', 'Shaped Afro'],
+      porosity: 'Your cuticles resist moisture — use warm conditioner and work it in while wet. For fades, ask your barber about moisture-safe clipper techniques. Keep your scalp oiled between wash days.'
+    }
+  };
+
+  const FACE_HAIR_MODIFIER = {
+    oval: { title: 'Oval — the most versatile face shape', note: 'Almost every hairstyle works for you. Explore freely. No restrictions.', add: [], avoid: [] },
+    round: {
+      title: 'Adjusted for round face shape',
+      note: 'Round faces benefit from height and length. Avoid wide horizontal volume.',
+      add: ['High buns and pineapple updos that add vertical height', 'Long braids or locs past the chin to elongate the face', 'Centre parts to lengthen the face'],
+      avoid: ['Wide afros with volume at the sides', 'Short cuts that sit at jaw level', 'Side parts that add horizontal width']
+    },
+    square: {
+      title: 'Adjusted for square face shape',
+      note: 'Strong, structured frames benefit from softness and movement at the jaw.',
+      add: ['Loose twist-outs with soft texture at the jaw', 'Side-swept braids or locs that break the jaw\'s straight line', 'Volume and layers at the crown'],
+      avoid: ['Blunt bobs or straight cuts that mirror the jaw angle', 'Very close-cropped or box-shaped styles']
+    },
+    oblong: {
+      title: 'Adjusted for oblong / rectangle face shape',
+      note: 'Long faces benefit from width and horizontal volume. Avoid adding more vertical height.',
+      add: ['Wide afros with volume at the sides', 'Fringe and baby hairs to reduce the forehead\'s length', 'Short to medium bobs at shoulder length'],
+      avoid: ['Very long styles worn straight down', 'Extremely high updos that add more height', 'Very sleek styles that emphasise the face\'s length']
+    },
+    diamond: {
+      title: 'Adjusted for diamond face shape',
+      note: 'High cheekbones are a defining feature. Balance the forehead and soften the chin.',
+      add: ['Volume or width at the crown to widen the forehead', 'Chin-length styles that add mass to the lower face', 'Wispy or feathered ends near the chin'],
+      avoid: ['Styles with maximum volume at the cheekbones only', 'Very sleek styles that narrow the top of the head']
+    },
+    heart: {
+      title: 'Adjusted for heart face shape',
+      note: 'Wide forehead, narrow chin. Reduce width at the top and add weight at the lower face.',
+      add: ['Side parts and swept styles to break up the forehead', 'Volume and fullness at the jaw and chin', 'Chin-length bobs, lob styles, or braids at the chin'],
+      avoid: ['Centre-parted styles with volume only at the top', 'Very high updos that expose a wide forehead', 'Styles that add width at the temples only']
+    }
+  };
+
+  const FACE_MODIFIER_MEN = {
+    oval: { note: 'Oval is the most versatile shape — almost every cut works. Experiment freely.' },
+    round: { note: 'Add height on top to elongate. Avoid cutting the sides too long — fades and tapers work well.' },
+    square: { note: 'A strong jawline is a strong feature. Soften with textured tops and avoid very boxy cuts.' },
+    oblong: { note: 'Keep width at the sides. Avoid adding height only. Medium fades preserve the width you need.' }
+  };
+
+  const BODY_DATA_WOMEN = {
+    hourglass: {
+      name: 'Full Hourglass',
+      sub: 'Defined waist · Full bust and hips',
+      img: 'images/hour glass.png',
+      desc: 'Bust and hips roughly equal with a clearly defined waist. Your waist is your strongest feature — every style decision should work with it, not around it.',
+      wear: ['Wrap dresses — follow the waist naturally', 'Belted midi and maxi dresses', 'Bodycon and pencil skirt silhouettes', 'High-waist wide-leg trousers with a tucked-in top', 'V-neck and scoop necks to balance bust volume'],
+      outfit: 'outfit_w_hourglass'
+    },
+    pear: {
+      name: 'Pear',
+      sub: 'Narrower shoulders · Fuller hips and thighs',
+      img: 'images/pear woman.png',
+      desc: 'Shoulders narrower than the hips, with a fuller seat and thighs. Very common across African women. The goal is to build visual presence at the top to balance the lower body.',
+      wear: ['Off-shoulder, boat-neck, and statement-sleeve tops', 'Bold colours and prints on the top half', 'Structured blazers and jackets to widen the shoulders', 'A-line and fit-and-flare dresses', 'Wrap dresses that flow over the hips without clinging'],
+      outfit: 'outfit_w_pear'
+    },
+    rectangle: {
+      name: 'Rectangle',
+      sub: 'Shoulders and hips roughly equal · Less waist definition',
+      img: 'images/rectangle woman.png',
+      desc: 'Shoulders and hips similar in width, with less definition at the waist. Creates a long, clean silhouette. Work the straight line as a strong, architectural look.',
+      wear: ['Peplum tops and ruffle details at the hip', 'Wrap and belted dresses to suggest a waist', 'Bodycon dresses — long straight frames carry them well', 'Flared and A-line skirts to add hip volume', 'Cropped tops with high-waist bottoms'],
+      outfit: 'outfit_w_rectangle'
+    },
+    fullfigure: {
+      name: 'Full Figure',
+      sub: 'Fuller proportions throughout',
+      img: 'images/plus size.png',
+      desc: 'Fuller proportions across the whole body. The goal is always elongation and clean, draping structure — not compression, not concealment. Clothes that work with the body always look better.',
+      wear: ['V-neck dresses — lengthen the neckline and draw the eye down', 'Wrap dresses that define the waist without gripping', 'Empire-waist maxi dresses', 'A-line midi skirts with a fitted top', 'Monochromatic outfits — one colour top to bottom reads taller'],
+      outfit: 'outfit_w_fullfigure'
+    },
+    broadshoulder: {
+      name: 'Broad Shoulder',
+      sub: 'Shoulders wider than hips',
+      img: 'images/broadshoulder woman.png',
+      desc: 'Shoulders noticeably wider than the hips — common in women with athletic builds or naturally wide frames. The goal is to bring visual weight downward, adding fullness at the hips.',
+      wear: ['Full and flared skirts — add hip volume to balance the shoulders', 'Wide-leg and palazzo trousers', 'A-line and fit-and-flare dresses', 'V-necks and deep scoop necks', 'Bold prints and colour below the waist, simpler tops'],
+      outfit: 'outfit_w_broadshoulder'
+    },
+    apple: {
+      name: 'Apple',
+      sub: 'Fuller midsection · Slimmer legs',
+      img: 'images/apple woman.png',
+      desc: 'Fullness sits at the midsection and bust, with a less defined waist and typically slimmer legs. The legs and décolletage are strong features — dress to highlight both.',
+      wear: ['V-neck and wrap-style tops — create a vertical line through the chest', 'Empire-waist dresses — sit just above the fullest part of the midsection', 'A-line dresses that skim the midsection without gripping', 'Straight-leg and wide-leg trousers — show off the legs', 'Longline cardigans and open blazers'],
+      outfit: 'outfit_w_apple'
+    }
+  };
+
+  const BODY_DATA_MEN = {
+    athletic: {
+      name: 'Athletic / V-Shape',
+      sub: 'Broad shoulders · Narrow waist',
+      img: 'images/athletic man.png',
+      desc: 'Broad shoulders tapering to a narrower waist. Most tailored menswear is cut with this shape in mind — almost everything works. The main goal is not to add bulk where you already have it.',
+      wear: ['Slim-fit or tapered trousers — balance the broad shoulder line', 'Single-button jackets that emphasise the V taper', 'Fitted shirts tucked in', 'Crew-neck and polo shirts', 'Well-fitted chinos and straight-leg trousers'],
+      outfit: 'outfit_m_athletic'
+    },
+    rectangle: {
+      name: 'Rectangle',
+      sub: 'Balanced proportions throughout',
+      img: 'images/rectangle man.png',
+      desc: 'Shoulders and waist roughly equal, with a straight build. Very common. The frame does not create shape on its own — build it through layering, structure, and visual detail.',
+      wear: ['Structured and lightly padded-shoulder blazers', 'Layered looks: jacket over shirt over trousers', 'Bold prints and colour — pattern adds visual dimension', 'Tucked-in shirts to suggest a waist', 'Straight-leg and wide-leg trousers'],
+      outfit: 'outfit_m_rectangle'
+    },
+    fuller: {
+      name: 'Fuller / Stocky',
+      sub: 'Broader, solid frame',
+      img: 'images/large man.png',
+      desc: 'Solid, broader build with fullness through the chest and midsection. The goal is clean lines and good drape — fabric that works with the frame rather than against it.',
+      wear: ['V-neck shirts and open-collar tops — elongate the chest and neck', 'Dark, solid-colour trousers with a print or textured top', 'Single-breasted jackets with a clean lapel', 'Vertical stripes and linear patterns', 'Well-fitted always wins over loose'],
+      outfit: 'outfit_m_fuller'
+    },
+    lean: {
+      name: 'Lean / Slim',
+      sub: 'Narrow frame throughout',
+      img: 'images/lean man.png',
+      desc: 'Narrow throughout — shoulders, chest, and waist. Very common in East African builds and younger men. Build visual mass and presence through layering and proportion.',
+      wear: ['Layered looks — jacket over shirt adds perceived bulk', 'Bold, large-scale prints — pattern fills out a narrow frame', 'Padded-shoulder jackets and blazers', 'Crew-neck and horizontal-stripe tops to widen the chest', 'Slightly looser fits — reads as more substantial'],
+      outfit: 'outfit_m_lean'
+    }
+  };
+
+  const SCENT_DATA = {
+    lagos: {
+      city: 'Lagos',
+      desc: 'Very high heat and humidity year-round. Light EDT concentrations can project strongly — what seems subtle in the bottle becomes present on warm skin. Heavy orientals become overwhelming in high humidity. Go lighter than you think, and reapply rather than over-applying at the start.',
+      recs: [
+        { family: 'Fresh / Aquatic', note: 'Your go-to daytime family. Strong opening, fades in 2–3 hours. Reapply midday.', tag: 'Daytime' },
+        { family: 'Single Florals', note: 'Rose and jasmine in EDT concentrations. Clean, wearable at any time.', tag: 'All day' },
+        { family: 'Vetiver / Cedar', note: 'Earthy, smoky woods that read cool even in heat. Evening wear.', tag: 'Evening' }
+      ]
+    },
+    abuja: {
+      city: 'Abuja',
+      desc: 'Drier heat, especially November through March. Projection is still amplified but less humidity means orientals and woods perform better here than in coastal cities. You have more latitude than Lagos — but still significantly more than European climates.',
+      recs: [
+        { family: 'Woody / Oud', note: 'Blooms in heat rather than burning off. One spray is enough. Very effective in Abuja\'s dry heat.', tag: 'Day & Evening' },
+        { family: 'Aromatic Fougères', note: 'Lavender-forward scents. Professional, works in offices and outdoor settings.', tag: 'Daytime' },
+        { family: 'Light Orientals', note: 'Amber and light spice work in the evening. Still apply conservatively.', tag: 'Evening' }
+      ]
+    },
+    accra: {
+      city: 'Accra',
+      desc: 'Humid coastal climate similar to Lagos. Prioritise fresh, aquatic, and light floral families. Heavy musks can become cloying quickly in the Accra humidity. The sea breeze gives you brief windows where projection behaves differently.',
+      recs: [
+        { family: 'Fresh / Citrus', note: 'Bergamot, mandarin, and clean aquatics. The safest and most wearable in coastal humidity.', tag: 'Daytime' },
+        { family: 'Soft Musks', note: 'Skin-close, won\'t overwhelm. Great for professional environments.', tag: 'Daily wear' },
+        { family: 'Light Florals', note: 'Rose and jasmine in EDT. Avoid white florals during peak heat hours.', tag: 'Morning' }
+      ]
+    },
+    portharcourt: {
+      city: 'Port Harcourt',
+      desc: 'Extreme coastal humidity — among the most challenging climates for fragrance. Heavy scents turn sharp quickly. Stick to light, clean EDTs and avoid layering multiple heavy notes. Application should be minimal — one spray, pulse points only.',
+      recs: [
+        { family: 'Fresh / Aquatic', note: 'The only reliable daytime family in Port Harcourt. Apply once, to the chest. Do not over-apply.', tag: 'Essential' },
+        { family: 'Soft Musks', note: 'Stays close to skin and does not project into a room. Professional-safe.', tag: 'Daily' },
+        { family: 'Light EDT only', note: 'No EDP or Parfum during the day. Evening: very light woods only.', tag: 'Concentration rule' }
+      ]
+    },
+    diaspora: {
+      city: 'London / Diaspora',
+      desc: 'Cooler climate means projection is naturally subdued. African diaspora often over-apply because they are calibrated to African heat where fragrance needs to work harder. In a British or US climate, less is genuinely enough — and what felt light in Lagos will be strong here.',
+      recs: [
+        { family: 'Oriental / Amber', note: 'These finally perform as intended. Warm, long-lasting in the cool. 2–3 sprays acceptable.', tag: 'All seasons' },
+        { family: 'Woody / Oud', note: 'The depth and projection you could not use in Lagos is perfect here. EDP concentration works.', tag: 'Autumn/Winter' },
+        { family: 'White Florals', note: 'Tuberose and gardenia — too heavy at home, beautiful in a cool climate. Evening ideal.', tag: 'Evening' }
+      ]
+    }
+  };
+
+  // ── Build the page ──
+
+  const g = A.gender || 'women';
+  const isWomen = g === 'women';
+
+  // Hero
+  const heroTitle = document.getElementById('heroTitle');
+  const heroCombination = document.getElementById('heroCombination');
+
+  const curlKey = A.curlType || '4c';
+  const faceKey = A.faceShape || 'oval';
+  const bodyKey = A.bodyType || (isWomen ? 'hourglass' : 'athletic');
+  const climateKey = A.climate || 'lagos';
+  const curlData = isWomen ? CURL_DATA[curlKey] : CURL_DATA_MEN[curlKey];
+  const bodyData = isWomen ? BODY_DATA_WOMEN[bodyKey] : BODY_DATA_MEN[bodyKey];
+  const scentData = SCENT_DATA[climateKey];
+
+  // Tags for hero
+  const tagValues = [
+    curlData ? curlData.name : curlKey.toUpperCase(),
+    faceKey.charAt(0).toUpperCase() + faceKey.slice(1),
+    bodyData ? bodyData.name : bodyKey,
+    scentData ? scentData.city : climateKey
+  ];
+  tagValues.forEach(t => {
+    const span = document.createElement('span');
+    span.className = 'hero-tag';
+    span.textContent = t;
+    heroCombination.appendChild(span);
+  });
+  if (A.lifestyle) {
+    const lifestyleMap = {
+      natural_journey: 'Natural Journey',
+      protective_always: 'Protective Styles',
+      mix_both: 'Mix of Both',
+      relaxed_heat: 'Relaxed / Heat Styled'
+    };
+    const ls = document.createElement('span');
+    ls.className = 'hero-tag';
+    ls.textContent = lifestyleMap[A.lifestyle] || A.lifestyle;
+    heroCombination.appendChild(ls);
+  }
+
+  // ── SECTION 01 — HAIR ──
+  document.getElementById('hairSectionTitle').textContent = isWomen ? 'Your curl type' : 'Your hair type';
+
+  if (curlData) {
+    // Curl card image
+    const curlCardImg = document.getElementById('curlCardImg');
+    const img = document.createElement('img');
+    img.src = curlData.img;
+    img.alt = curlData.name + ' hair type';
+    img.onerror = function() { this.closest('.curl-profile-img').style.background = '#111'; this.style.display = 'none'; };
+    curlCardImg.appendChild(img);
+
+    // Curl card content
+    const curlCardContent = document.getElementById('curlCardContent');
+    curlCardContent.innerHTML = `
+      <div class="curl-type-badge">${curlData.name} — ${curlData.label}</div>
+      <div class="curl-profile-name">${curlData.name}</div>
+      <div class="curl-profile-desc">${curlData.desc}</div>
+      <div style="margin-bottom:20px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.25);margin-bottom:12px;">Porosity & Care Note</div>
+        <div style="font-size:14px;font-weight:300;line-height:1.75;color:rgba(255,255,255,0.4);">${curlData.porosity}</div>
+      </div>
+      <div class="curl-profile-tags">${curlData.tags.map(t => `<span class="curl-profile-tag">${t}</span>`).join('')}</div>
+    `;
+
+    // Face shape modifier (women only)
+    if (isWomen && faceKey && FACE_HAIR_MODIFIER[faceKey]) {
+      const mod = FACE_HAIR_MODIFIER[faceKey];
+      const noteEl = document.getElementById('faceModifierNote');
+      const listEl = document.getElementById('faceModifierList');
+      if (mod.add.length > 0 || mod.avoid.length > 0) {
+        noteEl.style.display = '';
+        noteEl.querySelector('h4').textContent = mod.title;
+        const items = [
+          ...mod.add.map(a => `<li><strong>Add:</strong> ${a}</li>`),
+          ...mod.avoid.map(a => `<li><strong>Avoid:</strong> ${a}</li>`)
+        ];
+        listEl.innerHTML = items.join('');
+      } else if (mod.note) {
+        noteEl.style.display = '';
+        noteEl.querySelector('h4').textContent = mod.title;
+        listEl.innerHTML = `<li>${mod.note}</li>`;
+      }
+    } else if (!isWomen && faceKey && FACE_MODIFIER_MEN[faceKey]) {
+      const mod = FACE_MODIFIER_MEN[faceKey];
+      const noteEl = document.getElementById('faceModifierNote');
+      const listEl = document.getElementById('faceModifierList');
+      noteEl.style.display = '';
+      noteEl.querySelector('h4').textContent = 'Face shape — hair note';
+      listEl.innerHTML = `<li>${mod.note}</li>`;
+    }
+
+    // Style recs
+    const styleRecsGrid = document.getElementById('styleRecsGrid');
+    curlData.styles.forEach((styleFile, i) => {
+      const card = document.createElement('div');
+      card.className = 'style-rec-card';
+      const styleName = curlData.styleNames[i] || styleFile;
+      card.innerHTML = `
+        <img src="images/${styleFile}.png" alt="${styleName}" onerror="this.parentElement.innerHTML='<div class=\\'style-rec-placeholder\\'><div class=\\'style-rec-placeholder-name\\'>${styleName}</div></div>'">
+        <div class="style-rec-label">${styleName}</div>
+      `;
+      styleRecsGrid.appendChild(card);
+    });
+  }
+
+  // ── SECTION 02 — BODY ──
+  if (bodyData) {
+    document.getElementById('bodySectionTitle').textContent = isWomen ? 'Your body archetype' : 'Your body type';
+    const bodyProfileRow = document.getElementById('bodyProfileRow');
+    bodyProfileRow.innerHTML = `
+      <div class="body-profile-img-wrap">
+        <img src="${bodyData.img}" alt="${bodyData.name}" onerror="this.style.display='none'">
+      </div>
+      <div>
+        <div class="body-archetype-name">${bodyData.name}</div>
+        <div class="body-archetype-sub">${bodyData.sub}</div>
+        <div class="body-archetype-desc">${bodyData.desc}</div>
+        <div class="wear-list-label">Wear</div>
+        <ul class="wear-list">
+          ${bodyData.wear.slice(0,3).map(w => `<li>${w}</li>`).join('')}
+        </ul>
+      </div>
+    `;
+
+    // Outfit image
+    const outfitImgBlock = document.getElementById('outfitImgBlock');
+    outfitImgBlock.innerHTML = `
+      <div class="outfit-img-card">
+        <img src="images/${bodyData.outfit}.png" alt="Outfit for ${bodyData.name}"
+          onerror="this.parentElement.innerHTML='<div class=\\'outfit-img-placeholder\\'>${bodyData.name} · Outfit Reference</div>'">
+      </div>
+    `;
+  }
+
+  // ── SECTION 03 — SCENT ──
+  if (scentData) {
+    document.getElementById('scentSectionTitle').textContent = scentData.city + ' — scent guide';
+    const scentCityBlock = document.getElementById('scentCityBlock');
+    scentCityBlock.innerHTML = `
+      <div class="scent-city-name">${scentData.city}</div>
+      <div class="scent-city-desc">${scentData.desc}</div>
+    `;
+    const scentRecsGrid = document.getElementById('scentRecsGrid');
+    scentData.recs.forEach(rec => {
+      const card = document.createElement('div');
+      card.className = 'scent-rec-card';
+      card.innerHTML = `
+        <div class="scent-rec-family">${rec.family}</div>
+        <div class="scent-rec-note">${rec.note}</div>
+        <span class="scent-rec-tag">${rec.tag}</span>
+      `;
+      scentRecsGrid.appendChild(card);
+    });
+  }
+
+  // ── PREMIUM section blurred brief title ──
+  if (curlData && bodyData) {
+    document.getElementById('blurredBriefTitle').textContent =
+      `${curlData.name} · ${faceKey.charAt(0).toUpperCase() + faceKey.slice(1)} · ${bodyData.name}`;
+    document.getElementById('blurredBriefText').textContent =
+      `Your ${curlData.label.toLowerCase()} hair, ${faceKey} face shape, and ${bodyData.name.toLowerCase()} frame create a specific set of style opportunities that most guides never address together. The notes below combine all three dimensions into one coherent styling direction — what to prioritise, what to avoid, and why the combination you have works the way it does. This section also includes your personalised fragrance family ranking for ${scentData ? scentData.city : 'your climate'} and a curated lookbook for your exact archetype.`;
+  }
+
+  // ── Unlock button stub ──
+  document.getElementById('unlockBtn').addEventListener('click', function() {
+    console.log('[TÓRA] Unlock triggered. Answers:', A);
+    // TODO: Firebase auth → Paystack payment
+    // signInGoogle().then(user => initiatePaystack(user, A));
+    alert('Payment coming soon. Your profile has been saved.');
+  });
+
+  // ── Nav behaviour ──
+  const siteLogo = document.getElementById('siteLogo');
+  const hamburger = document.getElementById('hamburger');
+  const drawer = document.getElementById('drawer');
+
+  function updateNav() {
+    const pastHero = window.scrollY > (document.getElementById('resultsHero').offsetHeight - 60);
+    siteLogo.classList.toggle('dark', pastHero);
+    if (!hamburger.classList.contains('open')) {
+      hamburger.classList.toggle('dark', pastHero);
+    }
+  }
+  window.addEventListener('scroll', updateNav, { passive: true });
+  updateNav();
+
+  function setDrawer(open) {
+    hamburger.classList.toggle('open', open);
+    drawer.classList.toggle('open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+    if (open) {
+      siteLogo.classList.add('dark');
+      hamburger.classList.remove('dark');
+    } else {
+      updateNav();
+    }
+  }
+  hamburger.addEventListener('click', e => { e.stopPropagation(); setDrawer(!drawer.classList.contains('open')); });
+  drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setDrawer(false)));
+  document.addEventListener('click', e => { if (!hamburger.contains(e.target) && !drawer.contains(e.target)) setDrawer(false); });
+
+  // ── Scroll reveal ──
+  const rEls = document.querySelectorAll('.r');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+  }, { threshold: 0.06 });
+  rEls.forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

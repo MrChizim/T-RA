@@ -410,6 +410,43 @@
       .care-tips-grid { grid-template-columns: 1fr; }
     }
 
+    /* ── PROTECTIVE STYLES SECTION ── */
+    #protective-styles { padding: 96px 0; background: var(--white); }
+    .protective-header { max-width: 640px; margin-bottom: 64px; }
+    .protective-header h2 {
+      font-size: clamp(28px, 4vw, 44px); font-weight: 700;
+      line-height: 1.1; margin-bottom: 16px; letter-spacing: -0.5px; color: var(--black);
+    }
+    .protective-header p { font-size: 16px; font-weight: 300; line-height: 1.85; color: var(--grey-mid); }
+    .protective-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+    }
+    .protective-card { position: relative; overflow: hidden; aspect-ratio: 3/4; background: var(--grey-light); }
+    .protective-card img {
+      width: 100%; height: 100%; object-fit: cover; object-position: center top;
+      display: block; filter: grayscale(100%);
+      transition: transform 0.6s ease;
+    }
+    .protective-card:hover img { transform: scale(1.04); }
+    .protective-card-label {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 40px 18px 18px;
+      background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+      font-size: 11px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: rgba(255,255,255,0.85);
+    }
+    .protective-card-note {
+      font-size: 11px; font-weight: 300; color: rgba(255,255,255,0.5);
+      letter-spacing: 0; text-transform: none; margin-top: 4px;
+    }
+    @media (max-width: 800px) {
+      #protective-styles { padding: 72px 0; }
+      .protective-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .protective-grid { grid-template-columns: 1fr 1fr; }
+    }
+
     /* ── MEN'S SECTION ── */
     #mens { padding: 96px 0; background: #0a0a0a; }
     .mens-header { margin-bottom: 64px; }
@@ -561,7 +598,7 @@
       .face-grid { grid-template-columns: 1fr 1fr; }
       .head-grid { grid-template-columns: 1fr; }
       .acc-grid { grid-template-columns: 1fr 1fr; }
-      #curl-types, #porosity, #damage, #natural-journey, #mens, #beards, #face-shapes, #head-shapes, #accessories { padding: 72px 0; }
+      #curl-types, #porosity, #damage, #natural-journey, #protective-styles, #mens, #beards, #face-shapes, #head-shapes, #accessories { padding: 72px 0; }
       .site-logo { left: 20px; } .hamburger { right: 20px; top: 20px; }
     }
     @media (max-width: 560px) {
@@ -1007,6 +1044,55 @@
       </div>
     </div>
 
+  </div>
+</section>
+
+<!-- NATURAL PROTECTIVE HAIRSTYLES -->
+<section id="protective-styles" data-gender="w">
+  <div class="wrap">
+    <div class="protective-header r">
+      <p class="sec-label">Protective Styles</p>
+      <h2>Natural protective hairstyles</h2>
+      <p>Protective hairstyles reduce breakage, retain moisture, and protect natural hair from daily manipulation. These styles use your own hair — no extensions needed. They are lighter on the scalp, easier to maintain, and support healthier growth when done consistently and gently.</p>
+    </div>
+
+    <div class="protective-grid r d1">
+      <div class="protective-card">
+        <img src="images/small twists.PNG" alt="Small twists" loading="lazy">
+        <div class="protective-card-label">
+          Small Twists
+          <div class="protective-card-note">Retains moisture · Low manipulation</div>
+        </div>
+      </div>
+      <div class="protective-card">
+        <img src="images/cornrows.PNG" alt="Cornrows" loading="lazy">
+        <div class="protective-card-label">
+          Cornrows
+          <div class="protective-card-note">Scalp protection · Long-lasting</div>
+        </div>
+      </div>
+      <div class="protective-card">
+        <img src="images/halo crown.PNG" alt="Halo crown" loading="lazy">
+        <div class="protective-card-label">
+          Halo Crown
+          <div class="protective-card-note">Elegant · All curl types</div>
+        </div>
+      </div>
+      <div class="protective-card">
+        <img src="images/wash N go.PNG" alt="Wash and go" loading="lazy">
+        <div class="protective-card-label">
+          Wash & Go
+          <div class="protective-card-note">Defines curl pattern · Quick</div>
+        </div>
+      </div>
+      <div class="protective-card">
+        <img src="images/braids in a bun:puff.PNG" alt="Braids in a bun or puff" loading="lazy">
+        <div class="protective-card-label">
+          Braids in a Bun / Puff
+          <div class="protective-card-note">Versatile · Ends tucked away</div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 

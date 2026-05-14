@@ -857,12 +857,13 @@
       .product-recs-grid { grid-template-columns: 1fr 1fr; }
     }
     @media (max-width: 560px) {
-      .accessories-grid { grid-template-columns: 1fr 1fr 1fr; }
+      .accessories-grid { grid-template-columns: 1fr 1fr; }
       .product-recs-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 480px) {
       .style-recs-grid { grid-template-columns: 1fr; }
       .premium-preview-grid { grid-template-columns: 1fr 1fr; }
+      .accessories-grid { grid-template-columns: 1fr 1fr; }
     }
 
     /* ── PAYMENT MODAL ── */
@@ -1170,8 +1171,8 @@
       img: 'images/3a.png',
       desc: 'Well-defined spirals that hold their shape easily. Shiny, bouncy, and significantly more forgiving with moisture than the 4 types. Less common in West Africa — more relevant for diaspora and mixed-texture hair.',
       tags: ['Loose spiral', 'Low shrinkage', 'Retains moisture well'],
-      styles: ['style_w_washandgo', 'style_w_twistout', 'style_w_lowbun'],
-      styleNames: ['Wash & Go', 'Twist Out', 'Low Bun'],
+      styles: ['wash N go', 'twist out', 'halo crown'],
+      styleNames: ['Wash & Go', 'Twist Out', 'Halo Crown'],
       porosity: 'Your coil pattern typically holds moisture well. Focus on light, water-based products. Avoid heavy butters and oils that sit on top of the curl.',
     },
     '3b': {
@@ -1180,8 +1181,8 @@
       img: 'images/3b.png',
       desc: 'Tighter spirals with more volume than 3A. Still holds definition without much product. Frizzes more noticeably in humidity. Often found in hair that is transitioning from relaxed or heat-treated.',
       tags: ['Springy', 'Frizz-prone in humidity', 'Medium shrinkage'],
-      styles: ['style_w_braidout', 'style_w_washandgo', 'style_w_twistout'],
-      styleNames: ['Braid Out', 'Wash & Go', 'Twist Out'],
+      styles: ['wash N go', 'twist out', 'braids in a bun:puff'],
+      styleNames: ['Wash & Go', 'Twist Out', 'Braids in a Bun'],
       porosity: 'Prone to frizz, especially in high humidity. Use a light hold gel or curl cream to define. Anti-humidity products will extend your styles in Lagos and Accra heat.',
     },
     '3c': {
@@ -1190,8 +1191,8 @@
       img: 'images/3c.png',
       desc: 'Very tight corkscrews with serious volume. Dense, shrinks significantly, but still holds a visible pattern without product. Common in transitioning hair and mixed African textures.',
       tags: ['Defined without product', 'High shrinkage', 'Dense'],
-      styles: ['style_w_twistout', 'style_w_braidout', 'style_w_puffs'],
-      styleNames: ['Twist Out', 'Braid Out', 'Puffs'],
+      styles: ['twist out', 'cornrows', 'braids in a bun:puff'],
+      styleNames: ['Twist Out', 'Cornrows', 'Braids in a Bun'],
       porosity: 'Density is your biggest asset and your biggest challenge. Moisture needs to penetrate through thick layers — work in sections and use the LOC method (liquid, oil, cream) for best results.',
     },
     '4a': {
@@ -1200,8 +1201,8 @@
       img: 'images/4a.png',
       desc: 'Tight coils with a visible S-pattern when you stretch them. Better at holding moisture than 4B or 4C. Still shrinks a lot, but you will see definition even without product.',
       tags: ['S-pattern', 'Moderate moisture retention', '~50% shrinkage'],
-      styles: ['style_w_twistout', 'style_w_bantuknots', 'style_w_cornrows'],
-      styleNames: ['Twist Out', 'Bantu Knots', 'Cornrows'],
+      styles: ['twist out', 'cornrows', 'small twists'],
+      styleNames: ['Twist Out', 'Cornrows', 'Small Twists'],
       porosity: 'Your coils open up beautifully with moisture but benefit from sealing. After a water-based moisturiser, always seal with a light oil — shea or jojoba — to lock it in. Hard water in Lagos will strip moisture faster, so clarify monthly.',
     },
     '4b': {
@@ -1210,8 +1211,8 @@
       img: 'images/4b.png',
       desc: 'Z-shaped coil — looks almost shrunk-flat without product. Very dense and very common across West Africa. Shrinks up to 75%. The pattern becomes visible once you add moisture and define it, but you have to earn it.',
       tags: ['Z-pattern', 'Very common in West Africa', '~75% shrinkage'],
-      styles: ['style_w_twists', 'style_w_bantuknots', 'style_w_highhun'],
-      styleNames: ['Two-Strand Twists', 'Bantu Knots', 'High Bun'],
+      styles: ['small twists', 'cornrows', 'braids in a bun:puff'],
+      styleNames: ['Small Twists', 'Cornrows', 'Braids in a Bun'],
       porosity: 'The Z-pattern can make your hair feel dry quickly even after moisturising — because the coil shape physically prevents products from distributing evenly. Detangle and apply products section by section, not all at once. Deep conditioning weekly is not optional.',
     },
     '4c': {
@@ -1220,8 +1221,8 @@
       img: 'images/4c.png',
       desc: 'The tightest coil — no visible pattern until you manipulate it. Highest shrinkage of any type, often 80% or more. The most common texture across West and East Africa, and the most consistently ignored by mainstream hair content.',
       tags: ['Most common in Africa', '~80% shrinkage', 'Most underserved'],
-      styles: ['style_w_twists', 'style_w_locs', 'style_w_stretchblowout'],
-      styleNames: ['Protective Twists', 'Locs / Starter Locs', 'Stretched Styles'],
+      styles: ['small twists', 'halo crown', 'cornrows'],
+      styleNames: ['Small Twists', 'Halo Crown', 'Cornrows'],
       porosity: 'Your hair is naturally resistant to moisture absorption — this is not damage, it is your structure. Use heat to open the cuticle: warm your conditioner before applying, or deep condition with gentle heat for 15–20 minutes. Never detangle dry. Always apply products to soaking-wet hair.',
     }
   };
@@ -1231,7 +1232,7 @@
       name: '4A', label: 'Tight Coils', img: 'images/4a.png',
       desc: 'Tight coils with a visible pattern when stretched. The most moisture-retentive of the 4 types. Responds well to waves and defined short styles.',
       tags: ['S-pattern', 'Good for waves', '~50% shrinkage'],
-      styles: ['style_m_waves', 'style_m_twistout', 'style_m_fade'],
+      styles: ['360 wave', 'twist out', 'men fade'],
       styleNames: ['360 Waves', 'Twist Out', 'Low Fade'],
       porosity: 'Your coils hold moisture well but benefit from sealing with a light oil after wash day. Brush consistently with a soft bristle brush to build waves without breakage.'
     },
@@ -1239,7 +1240,7 @@
       name: '4B', label: 'Z-Pattern', img: 'images/4b.png',
       desc: 'Z-shaped coil — very common across West Africa. Works well for locs, braids, and short fades. Requires consistent moisture to stay healthy.',
       tags: ['Z-pattern', 'West Africa dominant', '~75% shrinkage'],
-      styles: ['style_m_locs', 'style_m_braids', 'style_m_fade'],
+      styles: ['dreadlocks', 'mens_braids', 'mens_skinfade'],
       styleNames: ['Locs', 'Braids', 'Skin Fade'],
       porosity: 'Moisture is your primary challenge. Apply products section by section on wet hair. For short styles, a daily spray of water and lightweight leave-in is better than heavy butters.'
     },
@@ -1247,7 +1248,7 @@
       name: '4C', label: 'Tightest Coil', img: 'images/4c.png',
       desc: 'The tightest coil — most common across Africa. Works beautifully for locs, fades, and afro styles. Moisturise consistently and avoid dry manipulation.',
       tags: ['Most common in Africa', '~80% shrinkage', 'Locs recommended'],
-      styles: ['style_m_locs', 'style_m_fade', 'style_m_afro'],
+      styles: ['dreadlocks', 'mens_skinfade', 'afro man'],
       styleNames: ['Locs', 'Skin Fade', 'Shaped Afro'],
       porosity: 'Your cuticles resist moisture — use warm conditioner and work it in while wet. For fades, ask your barber about moisture-safe clipper techniques. Keep your scalp oiled between wash days.'
     }
@@ -1529,10 +1530,22 @@
       const card = document.createElement('div');
       card.className = 'style-rec-card';
       const styleName = curlData.styleNames[i] || styleFile;
-      card.innerHTML = `
-        <img src="images/${styleFile}.png" alt="${styleName}" onerror="this.parentElement.innerHTML='<div class=\\'style-rec-placeholder\\'><div class=\\'style-rec-placeholder-name\\'>${styleName}</div></div>'">
-        <div class="style-rec-label">${styleName}</div>
-      `;
+      // Try .PNG first (user uploads), fall back to .png, then placeholder
+      const imgEl = document.createElement('img');
+      imgEl.alt = styleName;
+      imgEl.src = `images/${styleFile}.PNG`;
+      imgEl.onerror = function() {
+        if (this.src.endsWith('.PNG')) {
+          this.src = `images/${styleFile}.png`;
+        } else {
+          this.parentElement.innerHTML = `<div class="style-rec-placeholder"><div class="style-rec-placeholder-name">${styleName}</div></div>`;
+        }
+      };
+      card.appendChild(imgEl);
+      const label = document.createElement('div');
+      label.className = 'style-rec-label';
+      label.textContent = styleName;
+      card.appendChild(label);
       styleRecsGrid.appendChild(card);
     });
   }
@@ -1628,19 +1641,19 @@
 
   const JEWELLERY_DATA = {
     warm: [
-      { type: 'Necklace', name: 'Gold chain', desc: 'A medium-weight 14k or 18k gold chain sits naturally against warm skin. Cuban links or rope chains are the strongest choice.', img: 'images/jewellery_gold_chain.png', link: 'https://www.jumia.com.ng/jewelry/' },
-      { type: 'Earrings', name: 'Gold hoops', desc: 'Gold hoops from small to oversized — all work on warm undertones. The larger the hoop, the more confident the statement.', img: 'images/jewellery_gold_hoops.png', link: 'https://www.jumia.com.ng/jewelry/' },
-      { type: 'Bracelet', name: 'Gold bangle', desc: 'Stacked gold bangles are a West African tradition for a reason. Warm skin makes the metal look intentional, not costume.', img: 'images/jewellery_gold_bangle.png', link: 'https://www.jumia.com.ng/jewelry/' }
+      { type: 'Necklace', name: 'Gold chain', desc: 'A medium-weight 14k or 18k gold chain sits naturally against warm skin. Cuban links or rope chains are the strongest choice.', img: 'images/gold necklace.png', link: 'https://www.jumia.com.ng/jewelry/' },
+      { type: 'Earrings', name: 'Gold hoops', desc: 'Gold hoops from small to oversized — all work on warm undertones. The larger the hoop, the more confident the statement.', img: 'images/gold earring.png', link: 'https://www.jumia.com.ng/jewelry/' },
+      { type: 'Bracelet', name: 'Gold bangle', desc: 'Stacked gold bangles are a West African tradition for a reason. Warm skin makes the metal look intentional, not costume.', img: 'images/rosegold bangle.png', link: 'https://www.jumia.com.ng/jewelry/' }
     ],
     cool: [
-      { type: 'Necklace', name: 'Silver chain', desc: 'Sterling silver or white gold chains sharpen cool undertones. Delicate layered chains or a single statement piece both work.', img: 'images/jewellery_silver_chain.png', link: 'https://www.jumia.com.ng/jewelry/' },
-      { type: 'Earrings', name: 'Silver hoops or studs', desc: 'Silver sits cleanly against cool undertones. Geometric silver earrings make a particularly strong impression.', img: 'images/jewellery_silver_hoops.png', link: 'https://www.jumia.com.ng/jewelry/' },
-      { type: 'Bracelet', name: 'Silver cuff', desc: 'A clean silver cuff or stacked thin silver bangles. Cool skin makes silver look expensive rather than cold.', img: 'images/jewellery_silver_cuff.png', link: 'https://www.jumia.com.ng/jewelry/' }
+      { type: 'Necklace', name: 'Silver chain', desc: 'Sterling silver or white gold chains sharpen cool undertones. Delicate layered chains or a single statement piece both work.', img: 'images/silver necklace.png', link: 'https://www.jumia.com.ng/jewelry/' },
+      { type: 'Earrings', name: 'Silver hoops or studs', desc: 'Silver sits cleanly against cool undertones. Geometric silver earrings make a particularly strong impression.', img: 'images/silver earring.png', link: 'https://www.jumia.com.ng/jewelry/' },
+      { type: 'Bracelet', name: 'Silver cuff', desc: 'A clean silver cuff or stacked thin silver bangles. Cool skin makes silver look expensive rather than cold.', img: 'images/silver cuff.png', link: 'https://www.jumia.com.ng/jewelry/' }
     ],
     neutral: [
-      { type: 'Necklace', name: 'Rose gold chain', desc: 'Rose gold is the most universally flattering metal for neutral African skin tones. It bridges warm and cool without committing to either.', img: 'images/jewellery_rosegold_chain.png', link: 'https://www.jumia.com.ng/jewelry/' },
-      { type: 'Earrings', name: 'Mixed metal', desc: 'Neutral undertones can wear mixed metals without it looking unintentional. Layer gold and silver together freely.', img: 'images/jewellery_mixed_metal.png', link: 'https://www.jumia.com.ng/jewelry/' },
-      { type: 'Bracelet', name: 'Rose gold bangle', desc: 'Both gold and rose gold work. Try stacking one of each — neutral undertones are the only type that pulls this off naturally.', img: 'images/jewellery_rosegold_bangle.png', link: 'https://www.jumia.com.ng/jewelry/' }
+      { type: 'Necklace', name: 'Rose gold chain', desc: 'Rose gold is the most universally flattering metal for neutral African skin tones. It bridges warm and cool without committing to either.', img: 'images/rosegold chain.png', link: 'https://www.jumia.com.ng/jewelry/' },
+      { type: 'Earrings', name: 'Mixed metal', desc: 'Neutral undertones can wear mixed metals without it looking unintentional. Layer gold and silver together freely.', img: 'images/mixed metal earring.png', link: 'https://www.jumia.com.ng/jewelry/' },
+      { type: 'Bracelet', name: 'Rose gold bangle', desc: 'Both gold and rose gold work. Try stacking one of each — neutral undertones are the only type that pulls this off naturally.', img: 'images/rosegold bangle.png', link: 'https://www.jumia.com.ng/jewelry/' }
     ]
   };
 
@@ -1689,7 +1702,7 @@
     const skinCard = document.getElementById('skinUndertoneCard');
     skinCard.innerHTML = `
       <div class="skin-ref-img-wrap">
-        <img src="images/skin_${skinKey}.png" alt="${skinData.name} skin tone"
+        <img src="images/${skinKey} skin.png" alt="${skinData.name} skin tone"
              onerror="this.parentElement.style.background='${skinData.swatch}';this.style.display='none'">
       </div>
       <div class="skin-info-panel">

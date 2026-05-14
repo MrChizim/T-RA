@@ -396,6 +396,69 @@
     .body-extra-btn:hover { background: #fafafa; }
     .body-extra-btn.selected { background: var(--black); color: var(--white); border-color: var(--black); }
 
+    /* ── SKIN TONE STEP ── */
+    .skin-tone-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      max-width: 600px;
+      margin: 40px auto 24px;
+    }
+    .skin-option {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      padding: 20px 12px;
+      border: 1px solid var(--grey-light);
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .skin-option:hover { border-color: var(--grey); }
+    .skin-option.selected { border-color: var(--black); background: #fafafa; }
+    .skin-swatch {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      transition: transform 0.2s;
+    }
+    .skin-option.selected .skin-swatch { transform: scale(1.1); }
+    .skin-option.selected::after {
+      content: '✓';
+      position: absolute;
+      font-size: 18px;
+      color: var(--black);
+    }
+    .skin-option { position: relative; }
+    .skin-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--black);
+      letter-spacing: 0.5px;
+    }
+    .skin-sub {
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--grey);
+      letter-spacing: 0.3px;
+      text-align: center;
+    }
+    .skin-guide-link {
+      display: block;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--grey);
+      letter-spacing: 1px;
+      text-decoration: none;
+      margin-top: 8px;
+      transition: color 0.2s;
+    }
+    .skin-guide-link:hover { color: var(--black); }
+    @media (max-width: 480px) {
+      .skin-tone-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 800px) {
       .quiz-step { padding: 90px 20px 120px; }
@@ -798,6 +861,49 @@
     </div>
   </div>
 
+  <!-- STEP 7: Skin Tone (shared) -->
+  <div class="quiz-step light-bg" id="step-7" data-step="7">
+    <div class="step-inner">
+      <p class="step-num">Step 07</p>
+      <h2 class="step-question">What is your skin tone?</h2>
+      <p class="step-sub">We use this for colour, jewellery, and accessory recommendations.</p>
+      <div class="skin-tone-grid" id="skinToneOptions">
+        <!-- 6 skin tone swatches -->
+        <div class="skin-option" data-value="light" data-undertone="warm">
+          <div class="skin-swatch" style="background:#C68642;"></div>
+          <div class="skin-label">Light</div>
+          <div class="skin-sub">Golden / warm</div>
+        </div>
+        <div class="skin-option" data-value="light_cool" data-undertone="cool">
+          <div class="skin-swatch" style="background:#C49A6C;"></div>
+          <div class="skin-label">Light</div>
+          <div class="skin-sub">Rosy / cool</div>
+        </div>
+        <div class="skin-option" data-value="medium_warm" data-undertone="warm">
+          <div class="skin-swatch" style="background:#8D5524;"></div>
+          <div class="skin-label">Medium</div>
+          <div class="skin-sub">Warm / golden</div>
+        </div>
+        <div class="skin-option" data-value="medium_cool" data-undertone="cool">
+          <div class="skin-swatch" style="background:#7B4F3A;"></div>
+          <div class="skin-label">Medium</div>
+          <div class="skin-sub">Cool / neutral</div>
+        </div>
+        <div class="skin-option" data-value="deep_warm" data-undertone="warm">
+          <div class="skin-swatch" style="background:#4A2912;"></div>
+          <div class="skin-label">Deep</div>
+          <div class="skin-sub">Rich / warm</div>
+        </div>
+        <div class="skin-option" data-value="deep_cool" data-undertone="cool">
+          <div class="skin-swatch" style="background:#2C1503;"></div>
+          <div class="skin-label">Deep</div>
+          <div class="skin-sub">Cool / ashy</div>
+        </div>
+      </div>
+      <a href="skin.html" class="skin-guide-link">Not sure? Read the undertone guide →</a>
+    </div>
+  </div>
+
 </div><!-- end quiz-stage -->
 
 <script>
@@ -810,13 +916,15 @@
     bodyModifier: null,
     climate: null,
     lifestyle: null,
-    headShape: null
+    headShape: null,
+    skinTone: null,
+    undertone: null
   };
 
   let currentStep = 1;
   let gender = null; // 'women' | 'men'
 
-  const TOTAL_STEPS = 7; // 1 gender + 6
+  const TOTAL_STEPS = 7; // step-1 (gender) + 5 path steps + step-7 (skin)
 
   // ── DOM refs ──
   const progressFill  = document.getElementById('progressFill');
@@ -830,9 +938,9 @@
   // stepId = what div ID is shown. Returns array of step IDs in order.
   function getStepSequence(g) {
     if (g === 'women') {
-      return ['step-1','step-2w','step-3w','step-4w','step-5w','step-6w'];
+      return ['step-1','step-2w','step-3w','step-4w','step-5w','step-6w','step-7'];
     } else {
-      return ['step-1','step-2m','step-3m','step-4m','step-5m','step-6m'];
+      return ['step-1','step-2m','step-3m','step-4m','step-5m','step-6m','step-7'];
     }
   }
 
@@ -917,7 +1025,7 @@
     const stepId = stepSequence[stepIndex];
     const el = document.getElementById(stepId);
     if (!el) return;
-    const selected = el.querySelector('.img-option.selected, .text-option.selected, .gender-card.selected');
+    const selected = el.querySelector('.img-option.selected, .text-option.selected, .gender-card.selected, .skin-option.selected');
     if (selected) showContinue();
   }
 
@@ -998,6 +1106,17 @@
         this.classList.add('selected');
         answers.bodyModifier = this.dataset.modifier;
       }
+    });
+  });
+
+  // ── Skin tone option clicks ──
+  document.querySelectorAll('.skin-option').forEach(opt => {
+    opt.addEventListener('click', function() {
+      document.querySelectorAll('.skin-option').forEach(o => o.classList.remove('selected'));
+      this.classList.add('selected');
+      answers.skinTone = this.dataset.value;
+      answers.undertone = this.dataset.undertone;
+      showContinue();
     });
   });
 

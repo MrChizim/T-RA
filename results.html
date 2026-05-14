@@ -658,6 +658,91 @@
       color: rgba(255,255,255,0.4);
     }
 
+    /* ── SKIN TONE SECTION ── */
+    .skin-results-section { padding: 96px 0; background: var(--white); }
+    .skin-undertone-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--grey-light);
+      border: 1px solid var(--grey-light);
+      margin-bottom: 48px;
+    }
+    .skin-info-panel {
+      background: var(--white);
+      padding: 44px 36px;
+    }
+    .skin-swatch-large {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      margin-bottom: 20px;
+    }
+    .skin-undertone-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--grey); margin-bottom: 8px;
+    }
+    .skin-tone-name { font-size: 28px; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.3px; }
+    .skin-tone-desc { font-size: 15px; font-weight: 300; line-height: 1.8; color: var(--grey-mid); }
+    .colour-panel { background: var(--black); padding: 44px 36px; }
+    .colour-panel-label { font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 20px; }
+    .colour-swatches { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 24px; }
+    .colour-chip { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .colour-dot { width: 40px; height: 40px; border-radius: 50%; }
+    .colour-name { font-size: 10px; font-weight: 500; color: rgba(255,255,255,0.4); letter-spacing: 0.5px; text-align: center; }
+    .metal-row { display: flex; gap: 12px; margin-top: 8px; }
+    .metal-tag {
+      font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; padding: 8px 16px;
+      border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.6);
+    }
+    .metal-tag.primary { border-color: rgba(255,255,255,0.6); color: var(--white); }
+
+    /* ── JEWELLERY & GLASSES RECS ── */
+    .accessories-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--grey-light);
+      border: 1px solid var(--grey-light);
+      margin-bottom: 48px;
+    }
+    .acc-result-card { background: var(--white); padding: 32px 26px; }
+    .acc-result-type { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--grey); margin-bottom: 12px; }
+    .acc-result-name { font-size: 18px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.2px; }
+    .acc-result-desc { font-size: 14px; font-weight: 300; line-height: 1.7; color: var(--grey-mid); margin-bottom: 16px; }
+    .acc-affiliate-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--black);
+      text-decoration: none; border-bottom: 1px solid var(--black);
+      padding-bottom: 2px; transition: opacity 0.2s;
+    }
+    .acc-affiliate-link:hover { opacity: 0.5; }
+
+    /* ── PRODUCT RECS (hair + body) ── */
+    .product-recs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--grey-light);
+      border: 1px solid var(--grey-light);
+      margin: 40px 0;
+    }
+    .product-card { background: var(--white); padding: 28px 24px; }
+    .product-img-wrap { aspect-ratio: 1/1; background: var(--grey-light); margin: -28px -24px 20px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .product-img-wrap img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%); }
+    .product-brand { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--grey); margin-bottom: 6px; }
+    .product-name { font-size: 15px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.2px; }
+    .product-why { font-size: 13px; font-weight: 300; line-height: 1.6; color: var(--grey-mid); margin-bottom: 14px; }
+    .product-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 10px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--black);
+      text-decoration: none; border-bottom: 1px solid var(--grey-light);
+      padding-bottom: 2px; transition: border-color 0.2s;
+    }
+    .product-link:hover { border-color: var(--black); }
+
     /* ── SCROLL REVEAL ── */
     .r { opacity: 0; transform: translateY(24px); transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1); }
     .r.in { opacity: 1; transform: none; }
@@ -682,6 +767,13 @@
       .hero-retake { right: 20px; bottom: 24px; }
       .drawer { padding: 0 24px; overflow-y: auto; justify-content: flex-start; padding-top: 80px; padding-bottom: 60px; }
       .outfit-img-block { grid-template-columns: 1fr; }
+      .skin-undertone-card { grid-template-columns: 1fr; }
+      .accessories-grid { grid-template-columns: 1fr 1fr; }
+      .product-recs-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 560px) {
+      .accessories-grid { grid-template-columns: 1fr; }
+      .product-recs-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 480px) {
       .style-recs-grid { grid-template-columns: 1fr; }
@@ -796,13 +888,42 @@
   </div>
 </section>
 
-<!-- SECTION 04 — PREMIUM GATE -->
+<!-- SECTION 04 — SKIN & STYLE -->
+<section class="skin-results-section" id="skinSection">
+  <div class="wrap">
+    <div class="section-header r">
+      <div class="section-number">04</div>
+      <div class="section-title-block">
+        <p class="section-label">Skin & Style</p>
+        <h2 class="section-title" id="skinSectionTitle">Your undertone profile</h2>
+      </div>
+    </div>
+    <div class="skin-undertone-card r d1" id="skinUndertoneCard">
+      <!-- filled by JS -->
+    </div>
+    <div class="accessories-grid r d2" id="accessoriesGrid">
+      <!-- filled by JS -->
+    </div>
+    <div class="section-header r" style="margin-top:64px;">
+      <div class="section-number" style="opacity:0.08;">05</div>
+      <div class="section-title-block">
+        <p class="section-label">Recommended Products</p>
+        <h2 class="section-title">For your hair type</h2>
+      </div>
+    </div>
+    <div class="product-recs-grid r d1" id="productRecsGrid">
+      <!-- filled by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 06 — PREMIUM GATE -->
 <div class="premium-section" id="premiumSection">
 
   <!-- Blurred preview content -->
   <div class="premium-blurred-content" id="premiumBlurred">
     <div class="section-header">
-      <div class="section-number">04</div>
+      <div class="section-number">06</div>
       <div class="section-title-block">
         <p class="section-label">Full Profile</p>
         <h2 class="section-title">Your complete style brief</h2>
@@ -1301,10 +1422,159 @@
     });
   }
 
+  // ── SKIN TONE DATA ──
+  const SKIN_DATA = {
+    light: { name: 'Light / Golden', undertone: 'Warm', swatch: '#C68642', desc: 'A warm, golden undertone runs beneath your skin. Yellow and peachy hues make you glow. Earth tones, terracottas, and warm browns are your natural territory.', colours: [{name:'Terracotta',hex:'#C4622D'},{name:'Warm Camel',hex:'#C19A6B'},{name:'Olive',hex:'#6B7645'},{name:'Mustard',hex:'#E1AD01'},{name:'Rust',hex:'#B7410E'},{name:'Chocolate',hex:'#3D1C02'}], metal: 'Gold', metalSecondary: 'Rose Gold' },
+    light_cool: { name: 'Light / Rosy', undertone: 'Cool', swatch: '#C49A6C', desc: 'A cool, rosy undertone sits beneath your skin. Jewel tones sharpen your complexion. Deep blues, emeralds, and purples make your skin pop rather than wash out.', colours: [{name:'Cobalt',hex:'#0047AB'},{name:'Emerald',hex:'#046307'},{name:'Burgundy',hex:'#800020'},{name:'Deep Purple',hex:'#4B0082'},{name:'Navy',hex:'#001F5B'},{name:'Teal',hex:'#008080'}], metal: 'Silver', metalSecondary: 'White Gold' },
+    medium_warm: { name: 'Medium / Warm', undertone: 'Warm', swatch: '#8D5524', desc: 'A warm, golden undertone on a medium-depth canvas. One of the most versatile combinations for colour. Earth tones ground you. Gold jewellery is your default.', colours: [{name:'Terracotta',hex:'#C4622D'},{name:'Burnt Orange',hex:'#D2691E'},{name:'Olive',hex:'#6B7645'},{name:'Warm Brown',hex:'#7B3F00'},{name:'Mustard',hex:'#E1AD01'},{name:'Camel',hex:'#C19A6B'}], metal: 'Gold', metalSecondary: 'Rose Gold' },
+    medium_cool: { name: 'Medium / Neutral', undertone: 'Neutral', swatch: '#7B4F3A', desc: 'A balanced, neutral undertone. Both warm and cool colour families work for you. The widest range of any undertone type — use your personal taste as the guide rather than strict rules.', colours: [{name:'Emerald',hex:'#046307'},{name:'Burgundy',hex:'#800020'},{name:'Camel',hex:'#C19A6B'},{name:'Navy',hex:'#001F5B'},{name:'Teal',hex:'#008080'},{name:'Deep Gold',hex:'#B8860B'}], metal: 'Rose Gold', metalSecondary: 'Gold or Silver' },
+    deep_warm: { name: 'Deep / Rich', undertone: 'Warm', swatch: '#4A2912', desc: 'A rich, warm undertone on a deep skin canvas. Bold colours with warm hues — terracotta, gold, burnt orange — create the strongest impact. You carry depth and warmth that most colour families simply cannot compete with.', colours: [{name:'Terracotta',hex:'#C4622D'},{name:'Burnt Orange',hex:'#D2691E'},{name:'Deep Gold',hex:'#B8860B'},{name:'Rust',hex:'#B7410E'},{name:'Warm Red',hex:'#C0392B'},{name:'Olive',hex:'#6B7645'}], metal: 'Gold', metalSecondary: 'Rose Gold' },
+    deep_cool: { name: 'Deep / Cool', undertone: 'Cool', swatch: '#2C1503', desc: 'A cool undertone on the deepest skin canvas. Jewel tones at full saturation — cobalt blue, emerald, deep purple — are your natural territory. Silver and white gold complement without clashing.', colours: [{name:'Cobalt',hex:'#0047AB'},{name:'Emerald',hex:'#046307'},{name:'Deep Purple',hex:'#4B0082'},{name:'Magenta',hex:'#C2185B'},{name:'Teal',hex:'#008080'},{name:'Navy',hex:'#001F5B'}], metal: 'Silver', metalSecondary: 'White Gold' }
+  };
+
+  const GLASSES_DATA = {
+    warm: { frames: 'Tortoiseshell, warm brown, gold acetate, amber', avoid: 'Cool grey metals, icy silver frames' },
+    cool: { frames: 'Black acetate, silver metal, gunmetal, clear frames', avoid: 'Warm tortoiseshell, yellow-gold frames' },
+    neutral: { frames: 'Almost anything — black, brown, tortoiseshell, or metal all work', avoid: 'Nothing strictly — let face shape guide you' }
+  };
+
+  const JEWELLERY_DATA = {
+    warm: [
+      { type: 'Necklace', name: 'Gold chain', desc: 'A medium-weight 14k or 18k gold chain sits naturally against warm skin. Cuban links or rope chains are the strongest choice.', link: 'https://www.jumia.com.ng/jewelry/' },
+      { type: 'Earrings', name: 'Gold hoops', desc: 'Gold hoops from small to oversized — all work on warm undertones. The larger the hoop, the more confident the statement.', link: 'https://www.jumia.com.ng/jewelry/' },
+      { type: 'Bracelet', name: 'Gold bangle', desc: 'Stacked gold bangles are a West African tradition for a reason. Warm skin makes the metal look intentional, not costume.', link: 'https://www.jumia.com.ng/jewelry/' }
+    ],
+    cool: [
+      { type: 'Necklace', name: 'Silver chain', desc: 'Sterling silver or white gold chains sharpen cool undertones. Delicate layered chains or a single statement piece both work.', link: 'https://www.jumia.com.ng/jewelry/' },
+      { type: 'Earrings', name: 'Silver hoops or studs', desc: 'Silver sits cleanly against cool undertones. Geometric silver earrings make a particularly strong impression.', link: 'https://www.jumia.com.ng/jewelry/' },
+      { type: 'Bracelet', name: 'Silver cuff', desc: 'A clean silver cuff or stacked thin silver bangles. Cool skin makes silver look expensive rather than cold.', link: 'https://www.jumia.com.ng/jewelry/' }
+    ],
+    neutral: [
+      { type: 'Necklace', name: 'Rose gold chain', desc: 'Rose gold is the most universally flattering metal for neutral African skin tones. It bridges warm and cool without committing to either.', link: 'https://www.jumia.com.ng/jewelry/' },
+      { type: 'Earrings', name: 'Mixed metal', desc: 'Neutral undertones can wear mixed metals without it looking unintentional. Layer gold and silver together freely.', link: 'https://www.jumia.com.ng/jewelry/' },
+      { type: 'Bracelet', name: 'Rose gold or gold bangle', desc: 'Both gold and rose gold work. Try stacking one of each — neutral undertones are the only type that pulls this off naturally.', link: 'https://www.jumia.com.ng/jewelry/' }
+    ]
+  };
+
+  const HAIR_PRODUCTS = {
+    '4c': [
+      { brand: 'Shea Moisture', name: 'Manuka Honey & Mafura Oil Masque', why: 'Deep moisture for the tightest coils. 4c hair loses moisture faster than any other type — this masque replaces what daily life strips away.', img: '', link: 'https://www.jumia.com.ng/' },
+      { brand: 'Mielle Organics', name: 'Rosemary Mint Scalp & Hair Oil', why: 'Stimulates the scalp and adds moisture without heaviness. One of the few oils that works as a daily scalp treatment for 4c hair.', img: '', link: 'https://www.jumia.com.ng/' },
+      { brand: 'Cantu', name: 'Shea Butter Leave-In Conditioning Cream', why: 'Seals in moisture after washing. Works on all porosity types for 4c hair and holds definition for twist-outs and braid-outs.', img: '', link: 'https://www.jumia.com.ng/' }
+    ],
+    '4b': [
+      { brand: 'Aunt Jackie\'s', name: 'Knot On My Watch Instant Detangler', why: '4b hair knots under your fingers without warning. This detangler cuts detangling time in half and reduces breakage significantly.', img: '', link: 'https://www.jumia.com.ng/' },
+      { brand: 'Shea Moisture', name: 'Jamaican Black Castor Oil Strengthen Masque', why: 'Strengthens the Z-coil pattern that 4b hair is prone to losing under stress. Use weekly as a treatment.', img: '', link: 'https://www.jumia.com.ng/' },
+      { brand: 'Eco Styler', name: 'Olive Oil Gel', why: 'Defines 4b coils for wash-and-gos and twist-outs. Lightweight, affordable, and widely available in Nigeria.', img: '', link: 'https://www.jumia.com.ng/' }
+    ],
+    '4a': [
+      { brand: 'Cantu', name: 'Define & Shine Custard', why: '4a coils hold definition well with the right product. This custard enhances the natural S-curl without crunch.', img: '', link: 'https://www.jumia.com.ng/' },
+      { brand: 'Shea Moisture', name: 'Coconut & Hibiscus Curl Enhancing Smoothie', why: 'Lightweight enough for 4a hair, which needs definition without the heaviness that weighs down tighter coils.', img: '', link: 'https://www.jumia.com.ng/' },
+      { brand: 'Mielle Organics', name: 'Pomegranate & Honey Leave-In Conditioner', why: 'Hydrates and defines simultaneously. 4a hair retains more moisture than 4b and 4c — a lighter leave-in is all it needs.', img: '', link: 'https://www.jumia.com.ng/' }
+    ],
+    '3c': [
+      { brand: 'Kinky Curly', name: 'Knot Today Leave-In Conditioner', why: '3c hair is prone to tangling despite having more visible definition. This leave-in detangles and defines in one step.', img: '', link: 'https://www.jumia.com.ng/' },
+      { brand: 'Shea Moisture', name: 'Curl & Style Milk', why: 'Defines the tight corkscrew pattern of 3c hair without frizz. Works in high humidity — relevant for Lagos and Accra.', img: '', link: 'https://www.jumia.com.ng/' },
+      { brand: 'Cantu', name: 'Wave Whip Curling Mousse', why: 'Lightweight hold for 3c curls. Keeps definition without the weight of heavier products that flatten the pattern.', img: '', link: 'https://www.jumia.com.ng/' }
+    ],
+    '3b': [
+      { brand: 'DevaCurl', name: 'One Condition Original', why: '3b curls need hydration more than hold. This conditioner keeps spirals soft and bouncy without buildup.', img: '', link: 'https://www.jumia.com.ng/' },
+      { brand: 'Shea Moisture', name: 'Coconut & Hibiscus Frizz-Free Curl Mousse', why: '3b hair frizzes in humidity. This mousse seals the cuticle and maintains definition through Lagos-level heat.', img: '', link: 'https://www.jumia.com.ng/' },
+      { brand: 'Cantu', name: 'Moisturizing Curl Activator Cream', why: 'Activates 3b curl definition after washing. Apply to soaking wet hair and scrunch upward for best results.', img: '', link: 'https://www.jumia.com.ng/' }
+    ],
+    '3a': [
+      { brand: 'Ouidad', name: 'Curl Quencher Moisturizing Shampoo', why: '3a coils need gentler cleansing to preserve the spiral pattern. Sulphate-free and lightweight.', img: '', link: 'https://www.jumia.com.ng/' },
+      { brand: 'Not Your Mother\'s', name: 'Curl Talk Frizz Control Curl Cream', why: '3a curls hold their pattern easily — a light cream is all you need. Anything heavier weighs them down.', img: '', link: 'https://www.jumia.com.ng/' },
+      { brand: 'Shea Moisture', name: 'Jamaican Black Castor Oil Leave-In Conditioner', why: 'Adds moisture and slip to 3a coils post-wash. Light enough to not flatten the pattern.', img: '', link: 'https://www.jumia.com.ng/' }
+    ]
+  };
+
+  // ── SECTION 04 — SKIN & STYLE ──
+  const skinKey = A.skinTone || 'medium_warm';
+  const undertoneKey = A.undertone || 'warm';
+  const skinData = SKIN_DATA[skinKey];
+  const glassesData = GLASSES_DATA[undertoneKey] || GLASSES_DATA['neutral'];
+  const jewelleryData = JEWELLERY_DATA[undertoneKey] || JEWELLERY_DATA['neutral'];
+
+  if (skinData) {
+    // Undertone card
+    const skinCard = document.getElementById('skinUndertoneCard');
+    skinCard.innerHTML = `
+      <div class="skin-info-panel">
+        <div class="skin-swatch-large" style="background:${skinData.swatch};"></div>
+        <div class="skin-undertone-label">${skinData.undertone} Undertone</div>
+        <div class="skin-tone-name">${skinData.name}</div>
+        <p class="skin-tone-desc">${skinData.desc}</p>
+      </div>
+      <div class="colour-panel">
+        <div class="colour-panel-label">Your colours</div>
+        <div class="colour-swatches">
+          ${skinData.colours.map(c => `
+            <div class="colour-chip">
+              <div class="colour-dot" style="background:${c.hex};" title="${c.name}"></div>
+              <div class="colour-name">${c.name}</div>
+            </div>
+          `).join('')}
+        </div>
+        <div class="colour-panel-label" style="margin-top:24px;">Your metal</div>
+        <div class="metal-row">
+          <div class="metal-tag primary">${skinData.metal}</div>
+          <div class="metal-tag">${skinData.metalSecondary}</div>
+        </div>
+      </div>
+    `;
+
+    // Accessories grid — jewellery + glasses
+    const accGrid = document.getElementById('accessoriesGrid');
+    const allAccItems = [
+      ...jewelleryData.map(j => ({
+        type: j.type, name: j.name, desc: j.desc, link: j.link
+      })),
+      {
+        type: 'Glasses frames',
+        name: glassesData.frames.split(',')[0],
+        desc: `For ${skinData.undertone.toLowerCase()} undertones: ${glassesData.frames}. Avoid: ${glassesData.avoid}.`,
+        link: 'https://www.jumia.com.ng/'
+      }
+    ];
+    accGrid.innerHTML = allAccItems.map(item => `
+      <div class="acc-result-card">
+        <div class="acc-result-type">${item.type}</div>
+        <div class="acc-result-name">${item.name}</div>
+        <p class="acc-result-desc">${item.desc}</p>
+        <a href="${item.link}" target="_blank" rel="noopener" class="acc-affiliate-link">
+          Find it <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    `).join('');
+  }
+
+  // ── PRODUCT RECS ──
+  const curlKeyForProducts = A.curlType || '4c';
+  const products = HAIR_PRODUCTS[curlKeyForProducts] || HAIR_PRODUCTS['4c'];
+  const productGrid = document.getElementById('productRecsGrid');
+  if (productGrid && products) {
+    productGrid.innerHTML = products.map(p => `
+      <div class="product-card">
+        <div class="product-img-wrap">
+          ${p.img ? `<img src="${p.img}" alt="${p.name}" onerror="this.parentElement.innerHTML='<div style=\\'padding:20px;text-align:center;color:var(--grey);font-size:11px;font-weight:700;letter-spacing:2px;\\'>${p.brand}</div>'">`
+          : `<div style="padding:20px;text-align:center;color:var(--grey);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;">${p.brand}</div>`}
+        </div>
+        <div class="product-brand">${p.brand}</div>
+        <div class="product-name">${p.name}</div>
+        <p class="product-why">${p.why}</p>
+        <a href="${p.link}" target="_blank" rel="noopener" class="product-link">
+          Shop on Jumia <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    `).join('');
+  }
+
   // ── PREMIUM section blurred brief title ──
   if (curlData && bodyData) {
+    const skinLabel = skinData ? skinData.name : '';
     document.getElementById('blurredBriefTitle').textContent =
-      `${curlData.name} · ${faceKey.charAt(0).toUpperCase() + faceKey.slice(1)} · ${bodyData.name}`;
+      `${curlData.name} · ${faceKey.charAt(0).toUpperCase() + faceKey.slice(1)} · ${bodyData.name}${skinLabel ? ' · ' + skinLabel : ''}`;
     document.getElementById('blurredBriefText').textContent =
       `Your ${curlData.label.toLowerCase()} hair, ${faceKey} face shape, and ${bodyData.name.toLowerCase()} frame create a specific set of style opportunities that most guides never address together. The notes below combine all three dimensions into one coherent styling direction — what to prioritise, what to avoid, and why the combination you have works the way it does. This section also includes your personalised fragrance family ranking for ${scentData ? scentData.city : 'your climate'} and a curated lookbook for your exact archetype.`;
   }

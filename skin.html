@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Skin Tone Guide — Undertones, Colours & Metals for Black Skin | TÓRA</title>
+  <meta name="description" content="A skin tone guide built for Black and African people. Understand your undertone — warm, cool, or neutral — and discover the colours, metals, and frames that work for you." />
+  <meta name="keywords" content="skin undertone Black women, warm cool neutral undertone African skin, best colours Black skin, gold silver undertone, TÓRA skin guide" />
+  <meta name="author" content="TÓRA" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://mrchizim.github.io/T-RA/skin.html" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://mrchizim.github.io/T-RA/skin.html" />
+  <meta property="og:title" content="Skin Tone Guide — Undertones, Colours & Metals for Black Skin | TÓRA" />
+  <meta property="og:description" content="Understand your undertone and find the colours, metals, and frames that work for African skin. Most guides use the wrong language. This one doesn't." />
+  <meta property="og:site_name" content="TÓRA" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Skin Tone Guide — Undertones, Colours & Metals for Black Skin | TÓRA" />
+  <meta name="twitter:description" content="Understand your undertone and find the colours, metals, and frames that work for African skin." />
+
+  <link rel="icon" type="image/png" href="images/favicon.png" />
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;0,9..40,900;1,9..40,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --black: #000;
+      --white: #fff;
+      --grey: #888;
+      --grey-light: #eee;
+      --grey-mid: #444;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--black); overflow-x: hidden; }
+
+    /* ── NAV ── */
+    .site-logo {
+      position: fixed; top: 28px; left: 36px; z-index: 500;
+      font-size: 18px; font-weight: 900; letter-spacing: 6px;
+      text-transform: uppercase; color: var(--black); text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    .hamburger {
+      position: fixed; top: 28px; right: 28px; z-index: 500;
+      display: flex; flex-direction: column; gap: 6px;
+      background: none; border: none; cursor: pointer; padding: 6px;
+    }
+    .hamburger span {
+      display: block; width: 28px; height: 1.5px; background: var(--black);
+      transition: transform 0.3s ease, opacity 0.3s ease, background 0.3s ease;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+    .hamburger.open span { background: var(--black) !important; }
+
+    .drawer {
+      position: fixed; inset: 0; background: var(--white); z-index: 400;
+      display: flex; flex-direction: column; justify-content: center; padding: 0 48px;
+      transform: translateY(-100%); transition: transform 0.5s cubic-bezier(0.76,0,0.24,1);
+    }
+    .drawer.open { transform: translateY(0); }
+    .drawer-nav { list-style: none; border-top: 1px solid var(--grey-light); }
+    .drawer-nav li { border-bottom: 1px solid var(--grey-light); }
+    .drawer-nav a {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 0; font-size: clamp(18px, 3.5vw, 28px); font-weight: 700;
+      color: var(--black); text-decoration: none; text-transform: uppercase; letter-spacing: 1px;
+      transition: color 0.2s;
+    }
+    .drawer-nav a:hover { color: var(--grey); }
+    .drawer-nav .current {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 0; font-size: clamp(18px, 3.5vw, 28px); font-weight: 700;
+      color: var(--grey); text-transform: uppercase; letter-spacing: 1px;
+      cursor: default;
+    }
+    .d-arrow { font-size: 18px; opacity: 0; transition: opacity 0.2s, transform 0.2s; transform: translateX(-8px); }
+    .drawer-nav a:hover .d-arrow { opacity: 1; transform: translateX(0); }
+    .drawer-footer {
+      position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+      font-size: 11px; font-weight: 500; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--grey); white-space: nowrap;
+    }
+
+    /* ── PAGE HERO ── */
+    .page-hero {
+      background: var(--black);
+      padding: 160px 36px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero-inner { max-width: 1080px; margin: 0 auto; position: relative; z-index: 1; }
+    .breadcrumb {
+      font-size: 11px; font-weight: 600; letter-spacing: 3px;
+      text-transform: uppercase; color: rgba(255,255,255,0.35);
+      margin-bottom: 24px; display: flex; align-items: center; gap: 10px;
+    }
+    .breadcrumb a { color: rgba(255,255,255,0.35); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: var(--white); }
+    .page-title {
+      font-size: clamp(56px, 12vw, 120px); font-weight: 900;
+      text-transform: uppercase; letter-spacing: -3px;
+      line-height: 0.9; color: var(--white); margin-bottom: 28px;
+    }
+    .page-desc {
+      font-size: 18px; font-weight: 300; line-height: 1.8;
+      color: rgba(255,255,255,0.5); max-width: 560px;
+    }
+
+    /* ── SHARED ── */
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 36px; }
+    .sec-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--grey); margin-bottom: 16px;
+    }
+
+    /* ── SECTION HEADINGS ── */
+    .section-intro { max-width: 660px; margin-bottom: 56px; }
+    .section-intro h2 {
+      font-size: clamp(28px, 4vw, 44px); font-weight: 700;
+      color: var(--black); line-height: 1.1; margin-bottom: 16px; letter-spacing: -0.5px;
+    }
+    .section-intro p {
+      font-size: 16px; font-weight: 300; line-height: 1.85; color: var(--grey-mid);
+    }
+    .section-intro-dark h2 { color: var(--white); }
+    .section-intro-dark p { color: rgba(255,255,255,0.45); }
+    .section-intro-dark .sec-label { color: rgba(255,255,255,0.3); }
+
+    /* ── SECTION 1 — UNDERTONES (white) ── */
+    #undertones { padding: 96px 0; background: var(--white); }
+
+    .undertone-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--grey-light);
+      border: 1px solid var(--grey-light);
+    }
+    .undertone-card {
+      background: var(--white);
+      padding: 36px 28px;
+      transition: background 0.2s;
+    }
+    .undertone-card:hover { background: #fafafa; }
+
+    .ut-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--grey); margin-bottom: 10px;
+    }
+    .ut-headline {
+      font-size: 22px; font-weight: 700; color: var(--black);
+      letter-spacing: -0.3px; line-height: 1.15; margin-bottom: 14px;
+    }
+    .ut-desc {
+      font-size: 14px; font-weight: 300; line-height: 1.75; color: var(--grey-mid);
+      margin-bottom: 20px;
+    }
+    .ut-signs-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--grey); margin-bottom: 10px;
+    }
+    .ut-signs { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+    .ut-signs li {
+      font-size: 13px; font-weight: 300; color: var(--grey-mid);
+      padding-left: 14px; position: relative; line-height: 1.4;
+    }
+    .ut-signs li::before { content: '—'; position: absolute; left: 0; color: var(--grey-light); }
+
+    /* ── SECTION 2 — HOW TO FIND YOURS (black) ── */
+    #find-undertone { padding: 96px 0; background: var(--black); }
+
+    .method-list {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      margin-bottom: 40px;
+    }
+    .method-row {
+      display: grid; grid-template-columns: 48px 1fr;
+      gap: 20px; padding: 28px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      align-items: start;
+    }
+    .method-num {
+      font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.2);
+      padding-top: 2px; letter-spacing: 1px;
+    }
+    .method-body {}
+    .method-title {
+      font-size: 16px; font-weight: 700; color: var(--white);
+      margin-bottom: 6px; letter-spacing: -0.2px;
+    }
+    .method-desc {
+      font-size: 14px; font-weight: 300; line-height: 1.75; color: rgba(255,255,255,0.45);
+    }
+    .method-note {
+      font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.3);
+      font-style: italic;
+      border-left: 2px solid rgba(255,255,255,0.1);
+      padding-left: 16px;
+      line-height: 1.6;
+    }
+
+    /* ── SECTION 3 — COLOURS (white) ── */
+    #colours { padding: 96px 0; background: var(--white); }
+
+    .colours-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      margin-bottom: 32px;
+    }
+    .colour-col-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--grey); margin-bottom: 24px;
+    }
+    .swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+    .swatch-item {
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+    }
+    .swatch-circle {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .swatch-name {
+      font-size: 11px; font-weight: 500; color: var(--grey-mid);
+      text-align: center; line-height: 1.3;
+    }
+    .swatch-power {
+      font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--grey);
+      text-align: center;
+    }
+    .neutral-note {
+      font-size: 14px; font-weight: 300; color: var(--grey);
+      font-style: italic;
+      border-left: 2px solid var(--grey-light); padding-left: 16px; line-height: 1.6;
+      margin-top: 8px;
+    }
+
+    /* ── SECTION 4 — METALS (black) ── */
+    #metals { padding: 96px 0; background: var(--black); }
+
+    .metals-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.07);
+      margin-bottom: 36px;
+    }
+    .metal-card {
+      background: var(--black);
+      padding: 36px 28px;
+      transition: background 0.2s;
+    }
+    .metal-card:hover { background: #0d0d0d; }
+    .metal-name {
+      font-size: 20px; font-weight: 700; color: var(--white);
+      margin-bottom: 6px; letter-spacing: -0.3px;
+    }
+    .metal-sub {
+      font-size: 10px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: rgba(255,255,255,0.25);
+      margin-bottom: 20px;
+    }
+    .metal-points { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .metal-points li {
+      font-size: 14px; font-weight: 300; color: rgba(255,255,255,0.45);
+      padding-left: 14px; position: relative; line-height: 1.5;
+    }
+    .metal-points li::before { content: '—'; position: absolute; left: 0; color: rgba(255,255,255,0.2); }
+    .metal-points li.avoid { color: rgba(255,255,255,0.25); }
+    .metal-points li.avoid::before { color: rgba(255,255,255,0.1); }
+
+    .metals-note {
+      font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.3);
+      font-style: italic;
+      border-left: 2px solid rgba(255,255,255,0.1);
+      padding-left: 16px; line-height: 1.6;
+    }
+
+    /* ── SECTION 5 — GLASSES (white) ── */
+    #glasses { padding: 96px 0; background: var(--white); }
+
+    .frames-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--grey-light);
+      border: 1px solid var(--grey-light);
+      margin-bottom: 48px;
+    }
+    .frame-card {
+      background: var(--white);
+      padding: 36px 28px;
+      transition: background 0.2s;
+    }
+    .frame-card:hover { background: #fafafa; }
+    .frame-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--grey); margin-bottom: 10px;
+    }
+    .frame-title {
+      font-size: 20px; font-weight: 700; color: var(--black);
+      margin-bottom: 14px; letter-spacing: -0.2px;
+    }
+    .frame-items { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+    .frame-items li {
+      font-size: 14px; font-weight: 300; color: var(--grey-mid);
+      padding-left: 14px; position: relative; line-height: 1.4;
+    }
+    .frame-items li::before { content: '—'; position: absolute; left: 0; color: var(--grey-light); }
+
+    .face-shapes-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--grey); margin-bottom: 20px;
+    }
+    .face-shape-list { border-top: 1px solid var(--grey-light); margin-bottom: 24px; }
+    .face-shape-row {
+      display: grid; grid-template-columns: 160px 1fr;
+      gap: 24px; padding: 16px 0;
+      border-bottom: 1px solid var(--grey-light);
+      align-items: baseline;
+    }
+    .face-shape-name {
+      font-size: 14px; font-weight: 700; color: var(--black);
+    }
+    .face-shape-rec {
+      font-size: 14px; font-weight: 300; color: var(--grey-mid); line-height: 1.5;
+    }
+    .glasses-note {
+      font-size: 13px; font-weight: 300; color: var(--grey);
+      font-style: italic;
+      border-left: 2px solid var(--grey-light); padding-left: 16px; line-height: 1.6;
+    }
+
+    /* ── SECTION 6 — CTA (black) ── */
+    .cta-block {
+      background: var(--black); padding: 96px 36px; text-align: center;
+    }
+    .cta-block h2 {
+      font-size: clamp(26px, 4vw, 44px); font-weight: 700; color: var(--white);
+      margin-bottom: 16px; letter-spacing: -0.5px;
+    }
+    .cta-block p {
+      font-size: 16px; font-weight: 300; color: rgba(255,255,255,0.45);
+      margin-bottom: 36px; max-width: 480px;
+      margin-left: auto; margin-right: auto; line-height: 1.75;
+    }
+    .cta-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--white); color: var(--black);
+      font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase;
+      text-decoration: none; padding: 15px 30px; transition: background 0.2s;
+    }
+    .cta-btn:hover { background: var(--grey-light); }
+
+    /* ── SIMPLE PAGE FOOTER ── */
+    .page-footer {
+      background: var(--black);
+      border-top: 1px solid rgba(255,255,255,0.07);
+      padding: 36px;
+      text-align: center;
+    }
+    .page-footer p {
+      font-size: 11px; font-weight: 500; letter-spacing: 3px;
+      text-transform: uppercase; color: rgba(255,255,255,0.2);
+    }
+
+    /* ── SCROLL REVEAL ── */
+    .r { opacity: 0; transform: translateY(24px); transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1); }
+    .r.in { opacity: 1; transform: none; }
+    .d1 { transition-delay: 0.08s; } .d2 { transition-delay: 0.15s; } .d3 { transition-delay: 0.22s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 800px) {
+      .wrap { padding: 0 20px; }
+      .drawer { padding: 0 24px; overflow-y: auto; justify-content: flex-start; padding-top: 80px; padding-bottom: 60px; }
+      .drawer-footer { left: 50%; transform: translateX(-50%); white-space: nowrap; }
+      .page-hero { padding: 140px 20px 60px; }
+      .undertone-grid { grid-template-columns: 1fr; }
+      .metals-grid { grid-template-columns: 1fr; }
+      .frames-grid { grid-template-columns: 1fr; }
+      .colours-grid { grid-template-columns: 1fr; gap: 40px; }
+      .face-shape-row { grid-template-columns: 1fr; gap: 4px; }
+      #undertones, #find-undertone, #colours, #metals, #glasses { padding: 72px 0; }
+      .site-logo { left: 20px; }
+      .hamburger { right: 20px; top: 20px; }
+    }
+    @media (max-width: 600px) {
+      .swatch-grid { grid-template-columns: repeat(4, 1fr); gap: 12px; }
+      .swatch-circle { width: 32px; height: 32px; }
+      .swatch-name { font-size: 10px; }
+    }
+    @media (max-width: 440px) {
+      .swatch-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<a href="index.html" class="site-logo">TÓRA</a>
+<button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+
+<div class="drawer" id="drawer">
+  <ul class="drawer-nav">
+    <li><a href="index.html">Home <span class="d-arrow">→</span></a></li>
+    <li><a href="hair.html">Hair <span class="d-arrow">→</span></a></li>
+    <li><a href="body.html">Body <span class="d-arrow">→</span></a></li>
+    <li><a href="scent.html">Scent <span class="d-arrow">→</span></a></li>
+    <li><span class="current">Skin</span></li>
+    <li><a href="quiz.html">Style Quiz <span class="d-arrow">→</span></a></li>
+  </ul>
+  <div class="drawer-footer">Hair · Body · Scent</div>
+</div>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <p class="breadcrumb"><a href="index.html">TÓRA</a> / Skin</p>
+    <h1 class="page-title">SKIN</h1>
+    <p class="page-desc">Understanding your undertone changes everything — from which colours you wear to which metals you reach for. Most guides use the wrong language for African skin. This one doesn't.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     SECTION 1 — UNDERTONES
+══════════════════════════════ -->
+<section id="undertones">
+  <div class="wrap">
+    <div class="section-intro r">
+      <p class="sec-label">Undertones</p>
+      <h2>It's not about how dark or light you are.</h2>
+      <p>Undertone is about the hue beneath your skin — warm, cool, or neutral. Two women with the same deep skin tone can have completely different undertones. Undertone determines which colours, metals, and makeup shades work for you. Depth (how light or dark you are) is separate.</p>
+    </div>
+
+    <div class="undertone-grid r d1">
+
+      <div class="undertone-card">
+        <div class="ut-label">Warm</div>
+        <div class="ut-headline">Gold, earth, and sun</div>
+        <div class="ut-desc">Yellow, golden, or peachy hues beneath the skin. Very common across West and Central Africa. The skin looks brightest in earthy tones — terracotta, rust, olive, warm browns — and in gold jewellery. Looks washed out in very cool blues and stark silver.</div>
+        <div class="ut-signs-label">Signs</div>
+        <ul class="ut-signs">
+          <li>Veins appear greenish on the inside of the wrist</li>
+          <li>Gold jewellery looks more natural than silver on the skin</li>
+          <li>Warm beiges and browns complement rather than clash</li>
+        </ul>
+      </div>
+
+      <div class="undertone-card">
+        <div class="ut-label">Cool</div>
+        <div class="ut-headline">Blue, berry, and ash</div>
+        <div class="ut-desc">Pink, red, or bluish hues beneath the skin. Common in East African skin tones and some deeper West African complexions. The skin looks sharpest in jewel tones — deep blues, purples, emerald green — and in silver and white gold jewellery.</div>
+        <div class="ut-signs-label">Signs</div>
+        <ul class="ut-signs">
+          <li>Veins appear more blue or purple on the wrist</li>
+          <li>Silver sits naturally against the skin</li>
+          <li>Bright cool colours pop without washing out</li>
+        </ul>
+      </div>
+
+      <div class="undertone-card">
+        <div class="ut-label">Neutral</div>
+        <div class="ut-headline">Both work. Most things work.</div>
+        <div class="ut-desc">A balance of warm and cool, or neither distinctly. The most forgiving undertone — both gold and silver look good, a wide range of colours work. Common in medium-depth African skin tones. If you genuinely can't decide between warm and cool, you're probably neutral.</div>
+        <div class="ut-signs-label">Signs</div>
+        <ul class="ut-signs">
+          <li>Veins appear blue-green — not clearly one or the other</li>
+          <li>Both metals look good without one obviously winning</li>
+          <li>Most colour families are flattering</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     SECTION 2 — HOW TO FIND YOURS
+══════════════════════════════ -->
+<section id="find-undertone">
+  <div class="wrap">
+    <div class="section-intro section-intro-dark r">
+      <p class="sec-label">Method</p>
+      <h2>How to find your undertone</h2>
+    </div>
+
+    <div class="method-list r d1">
+
+      <div class="method-row">
+        <div class="method-num">01</div>
+        <div class="method-body">
+          <div class="method-title">The vein test</div>
+          <div class="method-desc">Look at the veins on the inside of your wrist in natural light. Green-ish = warm. Blue or purple = cool. Blue-green = neutral. Works best in daylight, not artificial light.</div>
+        </div>
+      </div>
+
+      <div class="method-row">
+        <div class="method-num">02</div>
+        <div class="method-body">
+          <div class="method-title">The white paper test</div>
+          <div class="method-desc">Hold a plain white sheet next to your bare face. If your skin looks more yellowish or golden against the white = warm. More pink or rosy = cool. Neither clearly = neutral.</div>
+        </div>
+      </div>
+
+      <div class="method-row">
+        <div class="method-num">03</div>
+        <div class="method-body">
+          <div class="method-title">The metal test</div>
+          <div class="method-desc">Hold a gold piece of jewellery against your skin, then silver. If gold makes your skin glow and silver dulls it = warm. If silver looks natural and gold looks brassy = cool. Both look fine = neutral.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="method-note r d2">Most African women test as warm or neutral. Pure cool undertones are less common in West African skin but more common in East African complexions.</p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     SECTION 3 — COLOURS BY UNDERTONE
+══════════════════════════════ -->
+<section id="colours">
+  <div class="wrap">
+    <div class="section-intro r">
+      <p class="sec-label">Colour</p>
+      <h2>The colours that work for you</h2>
+    </div>
+
+    <div class="colours-grid r d1">
+
+      <!-- WARM -->
+      <div>
+        <div class="colour-col-label">Warm undertone</div>
+        <div class="swatch-grid">
+          <div class="swatch-item">
+            <div class="swatch-circle" style="background:#C4622D;"></div>
+            <div class="swatch-name">Terracotta</div>
+            <div class="swatch-power">Power colour</div>
+          </div>
+          <div class="swatch-item">
+            <div class="swatch-circle" style="background:#D2691E;"></div>
+            <div class="swatch-name">Burnt orange</div>
+          </div>
+          <div class="swatch-item">
+            <div class="swatch-circle" style="background:#6B7645;"></div>
+            <div class="swatch-name">Olive green</div>
+          </div>
+          <div class="swatch-item">
+            <div class="swatch-circle" style="background:#C19A6B;"></div>
+            <div class="swatch-name">Warm camel</div>
+          </div>
+          <div class="swatch-item">
+            <div class="swatch-circle" style="background:#B7410E;"></div>
+            <div class="swatch-name">Rust</div>
+          </div>
+          <div class="swatch-item">
+            <div class="swatch-circle" style="background:#B8860B;"></div>
+            <div class="swatch-name">Deep gold</div>
+          </div>
+          <div class="swatch-item">
+            <div class="swatch-circle" style="background:#3D1C02;"></div>
+            <div class="swatch-name">Chocolate brown</div>
+          </div>
+          <div class="swatch-item">
+            <div class="swatch-circle" style="background:#E1AD01;"></div>
+            <div class="swatch-name">Mustard</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COOL -->
+      <div>
+        <div class="colour-col-label">Cool undertone</div>
+        <div class="swatch-grid">
+          <div class="swatch-item">
+            <div class="swatch-circle" style="background:#0047AB;"></div>
+            <div class="swatch-name">Cobalt blue</div>
+            <div class="swatch-power">Power colour</div>
+          </div>
+          <div class="swatch-item">
+            <div class="swatch-circle" style="background:#046307;"></div>
+            <div class="swatch-name">Emerald green</div>
+          </div>
+          <div class="swatch-item">
+            <div class="swatch-circle" style="background:#4B0082;"></div>
+            <div class="swatch-name">Deep purple</div>
+          </div>
+          <div class="swatch-item">
+            <div class="swatch-circle" style="background:#800020;"></div>
+            <div class="swatch-name">Burgundy</div>
+          </div>
+          <div class="swatch-item">
+            <div class="swatch-circle" style="background:#C2185B;"></div>
+            <div class="swatch-name">Magenta</div>
+          </div>
+          <div class="swatch-item">
+            <div class="swatch-circle" style="background:#001F5B;"></div>
+            <div class="swatch-name">Navy</div>
+          </div>
+          <div class="swatch-item">
+            <div class="swatch-circle" style="background:#B39DDB;"></div>
+            <div class="swatch-name">Icy lavender</div>
+          </div>
+          <div class="swatch-item">
+            <div class="swatch-circle" style="background:#008080;"></div>
+            <div class="swatch-name">Teal</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="neutral-note r d2">Neutral undertones — most of the above work. Trust your eye over the rule.</p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     SECTION 4 — METALS & JEWELLERY
+══════════════════════════════ -->
+<section id="metals">
+  <div class="wrap">
+    <div class="section-intro section-intro-dark r">
+      <p class="sec-label">Jewellery</p>
+      <h2>Gold, silver, or rose gold — which is yours</h2>
+    </div>
+
+    <div class="metals-grid r d1">
+
+      <div class="metal-card">
+        <div class="metal-name">Gold</div>
+        <div class="metal-sub">Warm undertones</div>
+        <ul class="metal-points">
+          <li>14k and 18k yellow gold sits naturally against warm skin</li>
+          <li>Heavy chains, gold hoops, stacked bangles all work</li>
+          <li class="avoid">Avoid: pure silver as the main piece — creates visual contrast that dulls the skin</li>
+        </ul>
+      </div>
+
+      <div class="metal-card">
+        <div class="metal-name">Silver</div>
+        <div class="metal-sub">Cool undertones</div>
+        <ul class="metal-points">
+          <li>Sterling silver and white gold are your metals</li>
+          <li>Thin silver chains, hooped earrings in silver, stacked silver rings</li>
+          <li class="avoid">Avoid: yellow gold as the main piece — reads brassy against cool undertones</li>
+        </ul>
+      </div>
+
+      <div class="metal-card">
+        <div class="metal-name">Rose Gold</div>
+        <div class="metal-sub">Neutral / versatile</div>
+        <ul class="metal-points">
+          <li>Works across undertones but especially flattering on medium-depth neutral skin</li>
+          <li>Blends warm and cool — the most versatile metal for African skin</li>
+          <li>A safe starting point if you're still unsure of your undertone</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <p class="metals-note r d2">Nigerian jewellery tradition is predominantly gold. If you have cool undertones, lean into statement silver pieces — they're less common and more distinctive.</p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     SECTION 5 — GLASSES & FRAMES
+══════════════════════════════ -->
+<section id="glasses">
+  <div class="wrap">
+    <div class="section-intro r">
+      <p class="sec-label">Glasses</p>
+      <h2>Frame colours that work with your skin</h2>
+    </div>
+
+    <div class="frames-grid r d1">
+
+      <div class="frame-card">
+        <div class="frame-label">Warm undertone</div>
+        <div class="frame-title">Earth &amp; amber frames</div>
+        <ul class="frame-items">
+          <li>Tortoiseshell — the classic warm-skin frame</li>
+          <li>Brown and cognac acetate</li>
+          <li>Gold metal frames</li>
+          <li>Warm olive and amber tones</li>
+          <li>Honey and caramel shades</li>
+        </ul>
+      </div>
+
+      <div class="frame-card">
+        <div class="frame-label">Cool undertone</div>
+        <div class="frame-title">Sharp &amp; cool frames</div>
+        <ul class="frame-items">
+          <li>Black frames — work extremely well on cool skin</li>
+          <li>Silver and gunmetal metal frames</li>
+          <li>Deep navy acetate</li>
+          <li>Clear acetate — clean and modern</li>
+          <li>Dark grey and charcoal tones</li>
+        </ul>
+      </div>
+
+      <div class="frame-card">
+        <div class="frame-label">Neutral undertone</div>
+        <div class="frame-title">Almost anything — use face shape</div>
+        <ul class="frame-items">
+          <li>Both warm and cool frames sit well</li>
+          <li>Use face shape as the primary guide</li>
+          <li>Try both tortoiseshell and black before deciding</li>
+          <li>Bold statement frames work especially well</li>
+          <li>The most freedom of any undertone group</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="r d2">
+      <p class="face-shapes-label">Frame shapes by face shape</p>
+      <div class="face-shape-list">
+        <div class="face-shape-row">
+          <div class="face-shape-name">Oval</div>
+          <div class="face-shape-rec">Any frame works — try bold oversized for impact</div>
+        </div>
+        <div class="face-shape-row">
+          <div class="face-shape-name">Round</div>
+          <div class="face-shape-rec">Rectangular and angular frames add definition and length</div>
+        </div>
+        <div class="face-shape-row">
+          <div class="face-shape-name">Square</div>
+          <div class="face-shape-rec">Round and oval frames soften the jaw and reduce angularity</div>
+        </div>
+        <div class="face-shape-row">
+          <div class="face-shape-name">Oblong</div>
+          <div class="face-shape-rec">Wide frames with decorative temples to add horizontal width</div>
+        </div>
+        <div class="face-shape-row">
+          <div class="face-shape-name">Diamond</div>
+          <div class="face-shape-rec">Oval and rimless frames — avoid narrow frames that emphasise cheekbone width</div>
+        </div>
+        <div class="face-shape-row">
+          <div class="face-shape-name">Heart</div>
+          <div class="face-shape-rec">Bottom-heavy frames and aviators — add weight to the lower face</div>
+        </div>
+      </div>
+      <p class="glasses-note">Sunglasses follow the same logic but you have more freedom — dark lenses reduce the impact of frame colour on undertone.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     SECTION 6 — CTA
+══════════════════════════════ -->
+<div class="cta-block">
+  <h2>Add your skin tone to your TÓRA profile</h2>
+  <p>Take the style quiz to get personalised colour, jewellery, and accessory recommendations built around your undertone, face shape, and body type together.</p>
+  <a href="quiz.html" class="cta-btn">Take the Quiz →</a>
+</div>
+
+<div class="page-footer">
+  <p>Hair · Body · Scent &nbsp;·&nbsp; © TÓRA</p>
+</div>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const drawer    = document.getElementById('drawer');
+
+  function setDrawer(open) {
+    hamburger.classList.toggle('open', open);
+    drawer.classList.toggle('open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  }
+
+  hamburger.addEventListener('click', e => {
+    e.stopPropagation();
+    setDrawer(!drawer.classList.contains('open'));
+  });
+
+  drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setDrawer(false)));
+
+  document.addEventListener('click', e => {
+    if (!hamburger.contains(e.target) && !drawer.contains(e.target)) setDrawer(false);
+  });
+
+  /* ── Scroll reveal ── */
+  const rEls = document.querySelectorAll('.r');
+  const obs  = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.08 });
+  rEls.forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

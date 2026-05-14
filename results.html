@@ -763,7 +763,7 @@
     /* ── JEWELLERY & GLASSES RECS ── */
     .accessories-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       gap: 1px;
       background: var(--grey-light);
       border: 1px solid var(--grey-light);
@@ -853,11 +853,11 @@
       .outfit-img-block { grid-template-columns: 1fr; }
       .skin-undertone-card { grid-template-columns: 1fr; }
       .skin-ref-img-wrap { min-height: 200px; aspect-ratio: 16/9; }
-      .accessories-grid { grid-template-columns: 1fr 1fr 1fr 1fr; }
+      .accessories-grid { grid-template-columns: repeat(3, 1fr); }
       .product-recs-grid { grid-template-columns: 1fr 1fr; }
     }
     @media (max-width: 560px) {
-      .accessories-grid { grid-template-columns: 1fr 1fr; }
+      .accessories-grid { grid-template-columns: 1fr 1fr 1fr; }
       .product-recs-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 480px) {
@@ -1604,11 +1604,27 @@
     deep_cool: { name: 'Onyx', undertone: 'Cool', swatch: '#2C1503', desc: 'A cool undertone on the deepest skin canvas.', colours: [{name:'Cobalt',hex:'#0047AB'},{name:'Emerald',hex:'#046307'},{name:'Deep Purple',hex:'#4B0082'},{name:'Magenta',hex:'#C2185B'},{name:'Teal',hex:'#008080'},{name:'Navy',hex:'#001F5B'}], metal: 'Silver', metalSecondary: 'White Gold' }
   };
 
-  const GLASSES_DATA = {
-    warm: { frames: 'Tortoiseshell, warm brown, gold acetate, amber', avoid: 'Cool grey metals, icy silver frames', img: 'images/glasses_warm.png', imgAlt: 'Tortoiseshell frames' },
-    cool: { frames: 'Black acetate, silver metal, gunmetal, clear frames', avoid: 'Warm tortoiseshell, yellow-gold frames', img: 'images/glasses_cool.png', imgAlt: 'Black acetate frames' },
-    neutral: { frames: 'Almost anything — black, brown, tortoiseshell, or metal all work', avoid: 'Nothing strictly — let face shape guide you', img: 'images/glasses_neutral.png', imgAlt: 'Mixed frame options' }
+  // Frame shape by face shape, colour/material by undertone
+  const GLASSES_SHAPE = {
+    oval:     { shape: 'Almost any frame shape works — oval is the most versatile face shape for glasses', rec: 'Use undertone to guide colour and material rather than shape' },
+    round:    { shape: 'Angular frames — square, rectangular, or geometric', rec: 'Angular frames add structure and contrast to soften round faces' },
+    square:   { shape: 'Round or oval frames', rec: 'Curved frames soften the strong jawline and angular bone structure' },
+    oblong:   { shape: 'Wide frames — oversized, square, or aviator', rec: 'Width at the temples balances the length of an oblong face' },
+    diamond:  { shape: 'Oval or rimless frames', rec: 'Avoid very wide or very narrow — oval sits cleanly on high cheekbones' },
+    heart:    { shape: 'Bottom-heavy or rimless frames — round or oval', rec: 'Weight at the lower frame balances a wide forehead and narrow chin' }
   };
+
+  const GLASSES_COLOUR = {
+    warm:    { material: 'Tortoiseshell, warm brown acetate, or gold metal', avoid: 'Cool grey metals or icy silver frames', img: 'images/glasses_warm.png' },
+    cool:    { material: 'Black acetate, silver metal, or gunmetal', avoid: 'Warm tortoiseshell or yellow-gold frames', img: 'images/glasses_cool.png' },
+    neutral: { material: 'Rose gold metal, black, or tortoiseshell — all work', avoid: 'Nothing strictly — face shape is your primary guide', img: 'images/glasses_neutral.png' }
+  };
+
+  function getGlassesRec(faceKey, undertoneKey) {
+    const shape = GLASSES_SHAPE[faceKey] || GLASSES_SHAPE['oval'];
+    const colour = GLASSES_COLOUR[undertoneKey] || GLASSES_COLOUR['neutral'];
+    return { shape, colour };
+  }
 
   const JEWELLERY_DATA = {
     warm: [
@@ -1665,7 +1681,7 @@
   const skinKey = A.skinTone || 'brown';
   const undertoneKey = A.undertone || 'warm';
   const skinData = SKIN_DATA[skinKey];
-  const glassesData = GLASSES_DATA[undertoneKey] || GLASSES_DATA['neutral'];
+  const glassesRec = getGlassesRec(faceKey, undertoneKey);
   const jewelleryData = JEWELLERY_DATA[undertoneKey] || JEWELLERY_DATA['neutral'];
 
   if (skinData) {
@@ -1707,10 +1723,17 @@
         type: j.type, name: j.name, desc: j.desc, img: j.img, link: j.link
       })),
       {
-        type: 'Glasses frames',
-        name: glassesData.frames.split(',')[0].trim(),
-        desc: `${glassesData.frames}. Avoid: ${glassesData.avoid}.`,
-        img: glassesData.img,
+        type: 'Glasses — Frame Shape',
+        name: glassesRec.shape.shape.split(' —')[0],
+        desc: `${glassesRec.shape.shape}. ${glassesRec.shape.rec}.`,
+        img: glassesRec.colour.img,
+        link: 'https://www.jumia.com.ng/'
+      },
+      {
+        type: 'Glasses — Colour & Material',
+        name: glassesRec.colour.material.split(',')[0].trim(),
+        desc: `${glassesRec.colour.material}. Avoid: ${glassesRec.colour.avoid}.`,
+        img: glassesRec.colour.img,
         link: 'https://www.jumia.com.ng/'
       }
     ];

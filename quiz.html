@@ -9,6 +9,125 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;0,9..40,900;1,9..40,300&display=swap" rel="stylesheet" />
+
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+    import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+    const firebaseConfig = {
+      apiKey: "REPLACE_WITH_YOUR_API_KEY",
+      authDomain: "REPLACE_WITH_YOUR_AUTH_DOMAIN",
+      projectId: "REPLACE_WITH_YOUR_PROJECT_ID",
+      storageBucket: "REPLACE_WITH_YOUR_STORAGE_BUCKET",
+      messagingSenderId: "REPLACE_WITH_YOUR_MESSAGING_SENDER_ID",
+      appId: "REPLACE_WITH_YOUR_APP_ID"
+    };
+
+    const app    = initializeApp(firebaseConfig);
+    const auth   = getAuth(app);
+    const db     = getFirestore(app);
+    const gProv  = new GoogleAuthProvider();
+
+    async function recordUser(user) {
+      const ref = doc(db, 'users', user.uid);
+      const snap = await getDoc(ref);
+      if (!snap.exists()) {
+        await setDoc(ref, {
+          email: user.email,
+          displayName: user.displayName || '',
+          createdAt: serverTimestamp(),
+          paid: false
+        });
+      }
+      // expose globally for quiz save step
+      window.__toraUser = user;
+    }
+
+    // Check auth on load — if already signed in, go straight to quiz
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        recordUser(user).then(() => window.dispatchEvent(new Event('tora:authed')));
+      }
+    });
+
+    // Google sign-in
+    window.signInWithGoogle = async () => {
+      try {
+        setAuthError('');
+        setAuthLoading(true);
+        const result = await signInWithPopup(auth, gProv);
+        await recordUser(result.user);
+        window.dispatchEvent(new Event('tora:authed'));
+      } catch (e) {
+        setAuthError(friendlyError(e.code));
+        setAuthLoading(false);
+      }
+    };
+
+    // Email sign-up
+    window.signUpEmail = async (email, password) => {
+      try {
+        setAuthError('');
+        setAuthLoading(true);
+        const result = await createUserWithEmailAndPassword(auth, email, password);
+        await recordUser(result.user);
+        window.dispatchEvent(new Event('tora:authed'));
+      } catch (e) {
+        setAuthError(friendlyError(e.code));
+        setAuthLoading(false);
+      }
+    };
+
+    // Email sign-in
+    window.signInEmail = async (email, password) => {
+      try {
+        setAuthError('');
+        setAuthLoading(true);
+        const result = await signInWithEmailAndPassword(auth, email, password);
+        await recordUser(result.user);
+        window.dispatchEvent(new Event('tora:authed'));
+      } catch (e) {
+        setAuthError(friendlyError(e.code));
+        setAuthLoading(false);
+      }
+    };
+
+    // Save answers to Firestore when quiz completes
+    window.saveQuizToFirestore = async (answers) => {
+      if (!window.__toraUser) return;
+      await setDoc(doc(db, 'users', window.__toraUser.uid), {
+        answers,
+        quizCompletedAt: serverTimestamp()
+      }, { merge: true });
+    };
+
+    function setAuthLoading(on) {
+      const btn = document.getElementById('googleBtn');
+      const sub = document.getElementById('emailSubmitBtn');
+      if (btn) btn.disabled = on;
+      if (sub) sub.disabled = on;
+    }
+    function setAuthError(msg) {
+      const el = document.getElementById('authError');
+      if (el) { el.textContent = msg; el.style.display = msg ? 'block' : 'none'; }
+    }
+    function friendlyError(code) {
+      const map = {
+        'auth/email-already-in-use': 'An account with this email already exists. Try signing in.',
+        'auth/invalid-email': 'That email address doesn\'t look right.',
+        'auth/weak-password': 'Password must be at least 6 characters.',
+        'auth/user-not-found': 'No account found with that email.',
+        'auth/wrong-password': 'Incorrect password.',
+        'auth/invalid-credential': 'Email or password is incorrect.',
+        'auth/popup-closed-by-user': 'Sign-in was cancelled.',
+        'auth/network-request-failed': 'Network error — check your connection.',
+      };
+      return map[code] || 'Something went wrong. Please try again.';
+    }
+  </script>
+
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
@@ -25,6 +144,119 @@
       overflow: hidden;
       height: 100%;
       width: 100%;
+    }
+
+    /* ── AUTH GATE ── */
+    .auth-gate {
+      position: fixed;
+      inset: 0;
+      background: var(--black);
+      z-index: 700;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+      opacity: 1;
+      transition: opacity 0.5s ease;
+    }
+    .auth-gate.hidden { opacity: 0; pointer-events: none; }
+
+    .auth-logo {
+      font-size: 18px; font-weight: 900; letter-spacing: 6px;
+      text-transform: uppercase; color: var(--white);
+      margin-bottom: 56px;
+    }
+    .auth-box {
+      width: 100%; max-width: 400px;
+    }
+    .auth-eyebrow {
+      font-size: 10px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: rgba(255,255,255,0.3);
+      margin-bottom: 16px;
+    }
+    .auth-title {
+      font-size: clamp(24px, 5vw, 36px); font-weight: 700;
+      color: var(--white); line-height: 1.1; letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+    .auth-sub {
+      font-size: 14px; font-weight: 300; color: rgba(255,255,255,0.4);
+      line-height: 1.6; margin-bottom: 40px;
+    }
+
+    .google-btn {
+      width: 100%;
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+      background: var(--white); color: var(--black);
+      border: none; font-family: 'DM Sans', sans-serif;
+      font-size: 13px; font-weight: 700; letter-spacing: 0.5px;
+      padding: 16px 24px; cursor: pointer;
+      transition: background 0.2s, opacity 0.2s;
+      margin-bottom: 20px;
+    }
+    .google-btn:hover { background: #f0f0f0; }
+    .google-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .auth-divider {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+    }
+    .auth-divider-line { flex: 1; height: 1px; background: rgba(255,255,255,0.1); }
+    .auth-divider-text {
+      font-size: 11px; font-weight: 500; letter-spacing: 1px;
+      text-transform: uppercase; color: rgba(255,255,255,0.25);
+    }
+
+    .auth-field {
+      width: 100%; margin-bottom: 10px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--white); font-family: 'DM Sans', sans-serif;
+      font-size: 14px; font-weight: 300; padding: 14px 16px;
+      outline: none; transition: border-color 0.2s;
+    }
+    .auth-field::placeholder { color: rgba(255,255,255,0.25); }
+    .auth-field:focus { border-color: rgba(255,255,255,0.4); }
+
+    .auth-submit-btn {
+      width: 100%;
+      background: var(--white); color: var(--black);
+      border: none; font-family: 'DM Sans', sans-serif;
+      font-size: 11px; font-weight: 700; letter-spacing: 2.5px;
+      text-transform: uppercase; padding: 16px;
+      cursor: pointer; transition: background 0.2s, opacity 0.2s;
+      margin-top: 4px;
+    }
+    .auth-submit-btn:hover { background: #e8e8e8; }
+    .auth-submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .auth-toggle {
+      text-align: center; margin-top: 20px;
+      font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.35);
+    }
+    .auth-toggle button {
+      background: none; border: none; cursor: pointer;
+      font-family: 'DM Sans', sans-serif; font-size: 13px;
+      font-weight: 600; color: var(--white);
+      text-decoration: underline; padding: 0;
+      transition: opacity 0.2s;
+    }
+    .auth-toggle button:hover { opacity: 0.7; }
+
+    .auth-error {
+      display: none;
+      background: rgba(255,60,60,0.12);
+      border: 1px solid rgba(255,60,60,0.3);
+      color: rgba(255,120,120,1);
+      font-size: 13px; font-weight: 400; padding: 12px 14px;
+      margin-bottom: 12px; line-height: 1.5;
+    }
+
+    .auth-loading {
+      display: none;
+      text-align: center; padding: 16px;
+      font-size: 12px; font-weight: 500; letter-spacing: 2px;
+      text-transform: uppercase; color: rgba(255,255,255,0.3);
     }
 
     /* ── NAV (logo only, no hamburger) ── */
@@ -136,13 +368,14 @@
       inset: 0;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-start;
       align-items: flex-start;
       padding: 100px 36px 120px;
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
       overflow-y: auto;
+      overflow-x: hidden;
     }
     .quiz-step.active {
       opacity: 1;
@@ -155,7 +388,11 @@
     .step-inner {
       width: 100%;
       max-width: 1080px;
-      margin: 0 auto;
+      margin: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     /* Step number */
@@ -400,52 +637,89 @@
     .skin-tone-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      max-width: 600px;
-      margin: 40px auto 24px;
+      gap: 2px;
+      max-width: 720px;
+      margin: 40px 0 24px;
     }
     .skin-option {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
+      position: relative;
       cursor: pointer;
-      padding: 20px 12px;
-      border: 1px solid var(--grey-light);
-      transition: border-color 0.2s, background 0.2s;
+      overflow: hidden;
+      border: 2px solid transparent;
+      transition: border-color 0.2s;
+      aspect-ratio: 3/4;
+      background: var(--grey-light);
     }
-    .skin-option:hover { border-color: var(--grey); }
-    .skin-option.selected { border-color: var(--black); background: #fafafa; }
-    .skin-swatch {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      transition: transform 0.2s;
+    .skin-option:hover { border-color: #ccc; }
+    .skin-option.selected { border-color: var(--black); }
+    .skin-option-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      filter: grayscale(100%);
+      transition: transform 0.4s ease;
     }
-    .skin-option.selected .skin-swatch { transform: scale(1.1); }
-    .skin-option.selected::after {
-      content: '✓';
+    .skin-option:hover .skin-option-img { transform: scale(1.03); }
+    .skin-swatch-bar {
       position: absolute;
-      font-size: 18px;
-      color: var(--black);
+      bottom: 0; left: 0; right: 0;
+      height: 6px;
     }
-    .skin-option { position: relative; }
+    .skin-check-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.25s;
+      pointer-events: none;
+    }
+    .skin-option.selected .skin-check-overlay { background: rgba(0,0,0,0.45); }
+    .skin-check-icon {
+      width: 36px; height: 36px;
+      border: 2px solid var(--white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: scale(0.6);
+      transition: opacity 0.25s, transform 0.25s;
+    }
+    .skin-option.selected .skin-check-icon { opacity: 1; transform: scale(1); }
+    .skin-info {
+      position: absolute;
+      bottom: 6px; left: 0; right: 0;
+      padding: 28px 12px 10px;
+      background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+    }
     .skin-label {
       font-size: 13px;
       font-weight: 700;
-      color: var(--black);
+      color: var(--white);
       letter-spacing: 0.5px;
+      margin-bottom: 2px;
     }
     .skin-sub {
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 400;
-      color: var(--grey);
-      letter-spacing: 0.3px;
-      text-align: center;
+      color: rgba(255,255,255,0.6);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    /* Fallback swatch bar (if images fail to load) */
+    .skin-swatch-fallback {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .skin-guide-link {
-      display: block;
-      text-align: center;
+      display: inline-block;
       font-size: 12px;
       font-weight: 500;
       color: var(--grey);
@@ -456,7 +730,7 @@
     }
     .skin-guide-link:hover { color: var(--black); }
     @media (max-width: 480px) {
-      .skin-tone-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .skin-tone-grid { grid-template-columns: repeat(2, 1fr); gap: 2px; }
     }
 
     /* ── RESPONSIVE ── */
@@ -477,6 +751,40 @@
   </style>
 </head>
 <body>
+
+<!-- Auth Gate -->
+<div class="auth-gate" id="authGate">
+  <div class="auth-logo">TÓRA</div>
+  <div class="auth-box">
+    <p class="auth-eyebrow">Style Quiz</p>
+    <h1 class="auth-title" id="authTitle">Create your account</h1>
+    <p class="auth-sub" id="authSub">Free to join. Your profile is saved so you can always come back to it.</p>
+
+    <div id="authError" class="auth-error"></div>
+
+    <button class="google-btn" id="googleBtn" onclick="window.signInWithGoogle()">
+      <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      Continue with Google
+    </button>
+
+    <div class="auth-divider">
+      <div class="auth-divider-line"></div>
+      <span class="auth-divider-text">or</span>
+      <div class="auth-divider-line"></div>
+    </div>
+
+    <input class="auth-field" id="authEmail" type="email" placeholder="Email address" autocomplete="email" />
+    <input class="auth-field" id="authPassword" type="password" placeholder="Password (min. 6 characters)" autocomplete="new-password" />
+    <button class="auth-submit-btn" id="emailSubmitBtn">
+      <span id="emailSubmitLabel">Create Account</span>
+    </button>
+
+    <div class="auth-toggle">
+      <span id="authToggleText">Already have an account?</span>
+      <button id="authToggleBtn" onclick="toggleAuthMode()"> Sign in</button>
+    </div>
+  </div>
+</div>
 
 <!-- Fixed nav elements -->
 <div class="progress-rail" id="progressRail">
@@ -626,37 +934,6 @@
           <img src="images/face_heart.png" alt="Heart face shape" loading="eager">
           <div class="img-check-overlay"><div class="img-check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
           <div class="img-option-label">Heart</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- STEP 3M: Face Shape (Men) -->
-  <div class="quiz-step dark" id="step-3m" data-step="3">
-    <div class="step-inner">
-      <p class="step-num">Step 03</p>
-      <h2 class="step-question">What is your face shape?</h2>
-      <p class="step-sub">Your face shape determines which cuts and styles work for you.</p>
-      <div class="img-options cols-4" id="faceOptionsM">
-        <div class="img-option" data-value="oval">
-          <img src="images/face_oval.png" alt="Oval face shape" loading="eager">
-          <div class="img-check-overlay"><div class="img-check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
-          <div class="img-option-label">Oval</div>
-        </div>
-        <div class="img-option" data-value="round">
-          <img src="images/face_round.png" alt="Round face shape" loading="eager">
-          <div class="img-check-overlay"><div class="img-check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
-          <div class="img-option-label">Round</div>
-        </div>
-        <div class="img-option" data-value="square">
-          <img src="images/face_square.png" alt="Square face shape" loading="eager">
-          <div class="img-check-overlay"><div class="img-check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
-          <div class="img-option-label">Square</div>
-        </div>
-        <div class="img-option" data-value="oblong">
-          <img src="images/face_oblong.png" alt="Oblong face shape" loading="eager">
-          <div class="img-check-overlay"><div class="img-check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
-          <div class="img-option-label">Oblong</div>
         </div>
       </div>
     </div>
@@ -866,47 +1143,157 @@
     <div class="step-inner">
       <p class="step-num">Step 07</p>
       <h2 class="step-question">What is your skin tone?</h2>
-      <p class="step-sub">We use this for colour, jewellery, and accessory recommendations.</p>
+      <p class="step-sub">Pick the shade closest to yours. We use this for colour, jewellery, and accessory recommendations.</p>
       <div class="skin-tone-grid" id="skinToneOptions">
-        <!-- 6 skin tone swatches -->
-        <div class="skin-option" data-value="light" data-undertone="warm">
-          <div class="skin-swatch" style="background:#C68642;"></div>
-          <div class="skin-label">Light</div>
-          <div class="skin-sub">Golden / warm</div>
+
+        <!-- Honey / Light warm -->
+        <div class="skin-option" data-value="honey" data-undertone="warm">
+          <img class="skin-option-img" src="images/skin_honey.png" alt="Honey skin tone" loading="eager"
+               onerror="this.style.display='none';this.closest('.skin-option').style.background='#C68642'">
+          <div class="skin-swatch-bar" style="background:#C68642;"></div>
+          <div class="skin-check-overlay">
+            <div class="skin-check-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+          </div>
+          <div class="skin-info">
+            <div class="skin-label">Honey</div>
+            <div class="skin-sub">Warm · Golden</div>
+          </div>
         </div>
-        <div class="skin-option" data-value="light_cool" data-undertone="cool">
-          <div class="skin-swatch" style="background:#C49A6C;"></div>
-          <div class="skin-label">Light</div>
-          <div class="skin-sub">Rosy / cool</div>
+
+        <!-- Caramel / Light-medium warm -->
+        <div class="skin-option" data-value="caramel" data-undertone="warm">
+          <img class="skin-option-img" src="images/skin_caramel.png" alt="Caramel skin tone" loading="eager"
+               onerror="this.style.display='none';this.closest('.skin-option').style.background='#A0522D'">
+          <div class="skin-swatch-bar" style="background:#A0522D;"></div>
+          <div class="skin-check-overlay">
+            <div class="skin-check-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+          </div>
+          <div class="skin-info">
+            <div class="skin-label">Caramel</div>
+            <div class="skin-sub">Warm · Tan</div>
+          </div>
         </div>
-        <div class="skin-option" data-value="medium_warm" data-undertone="warm">
-          <div class="skin-swatch" style="background:#8D5524;"></div>
-          <div class="skin-label">Medium</div>
-          <div class="skin-sub">Warm / golden</div>
+
+        <!-- Brown / Medium cool -->
+        <div class="skin-option" data-value="brown" data-undertone="cool">
+          <img class="skin-option-img" src="images/skin_brown.png" alt="Brown skin tone" loading="eager"
+               onerror="this.style.display='none';this.closest('.skin-option').style.background='#7B4F3A'">
+          <div class="skin-swatch-bar" style="background:#7B4F3A;"></div>
+          <div class="skin-check-overlay">
+            <div class="skin-check-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+          </div>
+          <div class="skin-info">
+            <div class="skin-label">Brown</div>
+            <div class="skin-sub">Cool · Neutral</div>
+          </div>
         </div>
-        <div class="skin-option" data-value="medium_cool" data-undertone="cool">
-          <div class="skin-swatch" style="background:#7B4F3A;"></div>
-          <div class="skin-label">Medium</div>
-          <div class="skin-sub">Cool / neutral</div>
+
+        <!-- Chestnut / Medium-deep warm -->
+        <div class="skin-option" data-value="chestnut" data-undertone="warm">
+          <img class="skin-option-img" src="images/skin_chestnut.png" alt="Chestnut skin tone" loading="eager"
+               onerror="this.style.display='none';this.closest('.skin-option').style.background='#6B3A2A'">
+          <div class="skin-swatch-bar" style="background:#6B3A2A;"></div>
+          <div class="skin-check-overlay">
+            <div class="skin-check-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+          </div>
+          <div class="skin-info">
+            <div class="skin-label">Chestnut</div>
+            <div class="skin-sub">Warm · Deep Brown</div>
+          </div>
         </div>
-        <div class="skin-option" data-value="deep_warm" data-undertone="warm">
-          <div class="skin-swatch" style="background:#4A2912;"></div>
-          <div class="skin-label">Deep</div>
-          <div class="skin-sub">Rich / warm</div>
+
+        <!-- Ebony / Deep cool -->
+        <div class="skin-option" data-value="ebony" data-undertone="cool">
+          <img class="skin-option-img" src="images/skin_ebony.png" alt="Ebony skin tone" loading="eager"
+               onerror="this.style.display='none';this.closest('.skin-option').style.background='#3B1F10'">
+          <div class="skin-swatch-bar" style="background:#3B1F10;"></div>
+          <div class="skin-check-overlay">
+            <div class="skin-check-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+          </div>
+          <div class="skin-info">
+            <div class="skin-label">Ebony</div>
+            <div class="skin-sub">Cool · Deep</div>
+          </div>
         </div>
-        <div class="skin-option" data-value="deep_cool" data-undertone="cool">
-          <div class="skin-swatch" style="background:#2C1503;"></div>
-          <div class="skin-label">Deep</div>
-          <div class="skin-sub">Cool / ashy</div>
+
+        <!-- Onyx / Deep dark cool -->
+        <div class="skin-option" data-value="onyx" data-undertone="cool">
+          <img class="skin-option-img" src="images/skin_onyx.png" alt="Onyx skin tone" loading="eager"
+               onerror="this.style.display='none';this.closest('.skin-option').style.background='#1A0D06'">
+          <div class="skin-swatch-bar" style="background:#1A0D06;"></div>
+          <div class="skin-check-overlay">
+            <div class="skin-check-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+          </div>
+          <div class="skin-info">
+            <div class="skin-label">Onyx</div>
+            <div class="skin-sub">Cool · Dark</div>
+          </div>
         </div>
+
       </div>
-      <a href="skin.html" class="skin-guide-link">Not sure? Read the undertone guide →</a>
+      <a href="skin.html" class="skin-guide-link">Not sure which shade? Read the undertone guide →</a>
     </div>
   </div>
 
 </div><!-- end quiz-stage -->
 
 <script>
+  // ── Auth gate ──
+  const authGate = document.getElementById('authGate');
+  let authMode = 'signup'; // 'signup' | 'signin'
+
+  function toggleAuthMode() {
+    authMode = authMode === 'signup' ? 'signin' : 'signup';
+    const isSignup = authMode === 'signup';
+    document.getElementById('authTitle').textContent       = isSignup ? 'Create your account' : 'Welcome back';
+    document.getElementById('authSub').textContent         = isSignup ? 'Free to join. Your profile is saved so you can always come back to it.' : 'Sign in to continue your profile.';
+    document.getElementById('emailSubmitLabel').textContent = isSignup ? 'Create Account' : 'Sign In';
+    document.getElementById('authToggleText').textContent  = isSignup ? 'Already have an account?' : 'Don\'t have an account?';
+    document.getElementById('authToggleBtn').textContent   = isSignup ? ' Sign in' : ' Create one';
+    document.getElementById('authPassword').placeholder    = isSignup ? 'Password (min. 6 characters)' : 'Password';
+    document.getElementById('authPassword').autocomplete   = isSignup ? 'new-password' : 'current-password';
+    document.getElementById('authError').style.display     = 'none';
+  }
+
+  document.getElementById('emailSubmitBtn').addEventListener('click', () => {
+    const email    = document.getElementById('authEmail').value.trim();
+    const password = document.getElementById('authPassword').value;
+    if (!email || !password) {
+      document.getElementById('authError').textContent = 'Please enter your email and password.';
+      document.getElementById('authError').style.display = 'block';
+      return;
+    }
+    if (authMode === 'signup') {
+      window.signUpEmail(email, password);
+    } else {
+      window.signInEmail(email, password);
+    }
+  });
+
+  // Allow Enter key to submit
+  document.getElementById('authPassword').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('emailSubmitBtn').click();
+  });
+
+  // When auth resolves (from Firebase module), dismiss gate and start quiz
+  window.addEventListener('tora:authed', () => {
+    authGate.classList.add('hidden');
+    setTimeout(() => { authGate.style.display = 'none'; }, 500);
+    showStep('step-1');
+  });
+
   // ── Quiz state ──
   const answers = {
     gender: null,
@@ -940,7 +1327,7 @@
     if (g === 'women') {
       return ['step-1','step-2w','step-3w','step-4w','step-5w','step-6w','step-7'];
     } else {
-      return ['step-1','step-2m','step-3m','step-4m','step-5m','step-6m','step-7'];
+      return ['step-1','step-2m','step-4m','step-5m','step-6m','step-7'];
     }
   }
 
@@ -957,6 +1344,7 @@
     const el = document.getElementById(stepId);
     if (!el) return;
     el.classList.add('active');
+    el.style.pointerEvents = '';
 
     // Update nav color
     const isDark = el.classList.contains('dark');
@@ -983,11 +1371,23 @@
       stepCounter.textContent = stepIndex + ' / ' + (stepSequence.length - 1);
     }
 
+    // Update the step-num label to match actual position in this path
+    const stepNumEl = el.querySelector('.step-num');
+    if (stepNumEl && stepIndex > 0) {
+      stepNumEl.textContent = 'Step ' + String(stepIndex).padStart(2, '0');
+    }
+
+    // Reset scroll position
+    el.scrollTop = 0;
+
     // Reset continue button
     hideContinue();
   }
 
+  let hideContinueTimer = null;
+
   function showContinue() {
+    if (hideContinueTimer) { clearTimeout(hideContinueTimer); hideContinueTimer = null; }
     continueBtn.classList.add('visible');
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
@@ -998,7 +1398,10 @@
 
   function hideContinue() {
     continueBtn.classList.remove('shown');
-    setTimeout(() => continueBtn.classList.remove('visible'), 400);
+    hideContinueTimer = setTimeout(() => {
+      continueBtn.classList.remove('visible');
+      hideContinueTimer = null;
+    }, 400);
   }
 
   // ── Navigation ──
@@ -1114,7 +1517,7 @@
     opt.addEventListener('click', function() {
       document.querySelectorAll('.skin-option').forEach(o => o.classList.remove('selected'));
       this.classList.add('selected');
-      answers.skinTone = this.dataset.value;
+      answers.skinTone  = this.dataset.value;
       answers.undertone = this.dataset.undertone;
       showContinue();
     });
@@ -1151,15 +1554,16 @@
   // ── Save and redirect ──
   function saveAndRedirect() {
     localStorage.setItem('tora_quiz', JSON.stringify(answers));
-    // Brief delay for final visual satisfaction
+    // Save to Firestore if user is signed in
+    if (window.saveQuizToFirestore) window.saveQuizToFirestore(answers);
     document.getElementById(stepSequence[stepIndex]).style.opacity = '0';
     setTimeout(() => {
       window.location.href = 'results.html';
     }, 400);
   }
 
-  // ── Init ──
-  showStep('step-1');
+  // ── Init — gate is shown by default, quiz starts after tora:authed fires ──
+  // showStep is called from the tora:authed event handler above
 </script>
 </body>
 </html>

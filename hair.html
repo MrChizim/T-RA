@@ -267,6 +267,149 @@
     .damage-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
     .damage-tag { font-size: 11px; font-weight: 500; color: var(--grey); border: 1px solid var(--grey-light); padding: 4px 10px; }
 
+    /* ── NATURAL HAIR JOURNEY SECTION ── */
+    #natural-journey { padding: 96px 0; background: var(--black); }
+    .journey-header { max-width: 640px; margin-bottom: 72px; }
+    .journey-header h2 {
+      font-size: clamp(30px, 4vw, 48px); font-weight: 700;
+      color: var(--white); line-height: 1.1; margin-bottom: 16px; letter-spacing: -0.5px;
+    }
+    .journey-header p { font-size: 16px; font-weight: 300; line-height: 1.85; color: rgba(255,255,255,0.45); }
+
+    .journey-compare {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.06);
+      margin-bottom: 64px;
+    }
+    .journey-compare-card { position: relative; overflow: hidden; aspect-ratio: 3/4; background: #111; }
+    .journey-compare-card img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center top;
+      display: block; filter: grayscale(100%);
+      transition: transform 0.6s ease;
+    }
+    .journey-compare-card.enhance img {
+      filter: grayscale(100%) contrast(1.3) brightness(1.25);
+    }
+    .journey-compare-card:hover img { transform: scale(1.03); }
+    .journey-compare-label {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 32px 20px 20px;
+      background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+      font-size: 10px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: rgba(255,255,255,0.6);
+    }
+
+    .journey-why-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.06);
+      margin-bottom: 64px;
+    }
+    .journey-why-card {
+      background: #0a0a0a; padding: 36px 32px;
+    }
+    .journey-why-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: rgba(255,255,255,0.25); margin-bottom: 14px;
+    }
+    .journey-why-title {
+      font-size: 18px; font-weight: 700; color: var(--white);
+      margin-bottom: 12px; letter-spacing: -0.2px;
+    }
+    .journey-why-body {
+      font-size: 14px; font-weight: 300; line-height: 1.8; color: rgba(255,255,255,0.45);
+    }
+
+    .journey-divider {
+      border: none; border-top: 1px solid rgba(255,255,255,0.06);
+      margin: 64px 0;
+    }
+
+    .journey-sub-h {
+      font-size: clamp(24px, 3.5vw, 40px); font-weight: 700;
+      color: var(--white); line-height: 1.1; letter-spacing: -0.4px;
+      margin-bottom: 16px;
+    }
+    .journey-sub-p {
+      font-size: 15px; font-weight: 300; line-height: 1.85;
+      color: rgba(255,255,255,0.45); max-width: 600px; margin-bottom: 40px;
+    }
+
+    /* Damage + restore list — reused pattern, white-on-dark */
+    .journey-list { border-top: 1px solid rgba(255,255,255,0.06); margin-bottom: 64px; }
+    .journey-row {
+      display: grid; grid-template-columns: 220px 1fr;
+      gap: 40px; padding: 28px 0; border-bottom: 1px solid rgba(255,255,255,0.06);
+      align-items: start;
+    }
+    .journey-row-num {
+      font-size: 11px; font-weight: 700; letter-spacing: 2px;
+      color: rgba(255,255,255,0.18); padding-top: 3px;
+    }
+    .journey-row-label {
+      font-size: 15px; font-weight: 700; color: var(--white);
+      margin-bottom: 6px; letter-spacing: -0.1px;
+    }
+    .journey-row-body {
+      font-size: 14px; font-weight: 300; line-height: 1.8; color: rgba(255,255,255,0.45);
+    }
+
+    /* Big Chop callout block */
+    .bigchop-block {
+      background: var(--white); color: var(--black);
+      padding: 48px 40px; margin-bottom: 64px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start;
+    }
+    .bigchop-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--grey); margin-bottom: 14px;
+    }
+    .bigchop-title {
+      font-size: clamp(22px, 3vw, 34px); font-weight: 700;
+      line-height: 1.15; letter-spacing: -0.4px; margin-bottom: 16px;
+    }
+    .bigchop-body {
+      font-size: 15px; font-weight: 300; line-height: 1.85; color: var(--grey-mid);
+    }
+    .bigchop-benefits { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .bigchop-benefits li {
+      display: flex; gap: 12px; align-items: flex-start;
+      font-size: 14px; font-weight: 300; color: var(--grey-mid); line-height: 1.5;
+    }
+    .bigchop-benefits li::before {
+      content: '—'; flex-shrink: 0; color: var(--grey); font-weight: 700;
+    }
+
+    /* Care tips grid */
+    .care-tips-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.06);
+    }
+    .care-tip-card { background: #0a0a0a; padding: 32px 28px; }
+    .care-tip-num {
+      font-size: 13px; font-weight: 700; letter-spacing: 2px;
+      color: rgba(255,255,255,0.15); margin-bottom: 14px;
+    }
+    .care-tip-title {
+      font-size: 15px; font-weight: 700; color: var(--white);
+      margin-bottom: 8px; letter-spacing: -0.1px;
+    }
+    .care-tip-body {
+      font-size: 13px; font-weight: 300; line-height: 1.75; color: rgba(255,255,255,0.4);
+    }
+
+    @media (max-width: 800px) {
+      #natural-journey { padding: 72px 0; }
+      .journey-compare { grid-template-columns: 1fr 1fr; }
+      .journey-why-grid { grid-template-columns: 1fr; }
+      .journey-row { grid-template-columns: 1fr; gap: 6px; }
+      .bigchop-block { grid-template-columns: 1fr; gap: 28px; padding: 32px 24px; }
+      .care-tips-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 560px) {
+      .care-tips-grid { grid-template-columns: 1fr; }
+    }
+
     /* ── MEN'S SECTION ── */
     #mens { padding: 96px 0; background: #0a0a0a; }
     .mens-header { margin-bottom: 64px; }
@@ -418,7 +561,7 @@
       .face-grid { grid-template-columns: 1fr 1fr; }
       .head-grid { grid-template-columns: 1fr; }
       .acc-grid { grid-template-columns: 1fr 1fr; }
-      #curl-types, #porosity, #damage, #mens, #beards, #face-shapes, #head-shapes, #accessories { padding: 72px 0; }
+      #curl-types, #porosity, #damage, #natural-journey, #mens, #beards, #face-shapes, #head-shapes, #accessories { padding: 72px 0; }
       .site-logo { left: 20px; } .hamburger { right: 20px; top: 20px; }
     }
     @media (max-width: 560px) {
@@ -666,6 +809,204 @@
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- NATURAL HAIR JOURNEY -->
+<section id="natural-journey" data-gender="w" data-nav="dark">
+  <div class="wrap">
+
+    <div class="journey-header r">
+      <p class="sec-label" style="color:rgba(255,255,255,0.3)">The Journey</p>
+      <h2>The shift from relaxed hair to natural hair</h2>
+      <p>For many years, relaxed hair was the norm across Black communities — often because straighter hair was seen as more acceptable, easier to manage, or simply what everyone around you did. Over time, that started to change. Understanding why relaxers were so common, and what the shift away from them looks like, is the foundation of any honest natural hair guide.</p>
+    </div>
+
+    <div class="journey-compare r d1">
+      <div class="journey-compare-card">
+        <img src="images/relaxed hair.PNG" alt="Relaxed hair" loading="lazy">
+        <div class="journey-compare-label">Relaxed</div>
+      </div>
+      <div class="journey-compare-card enhance">
+        <img src="images/natural hair.PNG" alt="Natural hair" loading="lazy">
+        <div class="journey-compare-label">Natural</div>
+      </div>
+    </div>
+
+    <div class="journey-why-grid r d2">
+      <div class="journey-why-card">
+        <div class="journey-why-label">Reason 01</div>
+        <div class="journey-why-title">Beauty standards and social pressure</div>
+        <div class="journey-why-body">Straighter hair was consistently held up by schools, workplaces, and mainstream media as more attractive and professional. That kind of repeated messaging creates real pressure — especially for young girls who had no representation of their natural texture being celebrated.</div>
+      </div>
+      <div class="journey-why-card">
+        <div class="journey-why-label">Reason 02</div>
+        <div class="journey-why-title">Convenience at a time of limited options</div>
+        <div class="journey-why-body">Relaxed hair was genuinely easier to manage when there were fewer products, tutorials, and salons built for natural textures. Detangling was simpler, styling time was shorter, and the routine felt predictable. That gap has closed significantly — but it was real.</div>
+      </div>
+      <div class="journey-why-card">
+        <div class="journey-why-label">Reason 03</div>
+        <div class="journey-why-title">It was just what everyone did</div>
+        <div class="journey-why-body">Many Black girls grew up watching their mothers, sisters, and aunties relax their hair. It became a normal part of the beauty routine before anyone questioned it. Normalisation is powerful — when something is all you've ever seen, it doesn't feel like a choice.</div>
+      </div>
+      <div class="journey-why-card">
+        <div class="journey-why-label">Reason 04</div>
+        <div class="journey-why-title">Avoiding judgment and discrimination</div>
+        <div class="journey-why-body">Some people relaxed their hair specifically to avoid negative comments about their natural texture — at school, at work, or in relationships. The decision was often less about preference and more about protection from environments that hadn't yet learned to accept textured hair.</div>
+      </div>
+    </div>
+
+    <hr class="journey-divider">
+
+    <div class="r">
+      <p class="sec-label" style="color:rgba(255,255,255,0.3)">The Hidden Cost</p>
+      <h3 class="journey-sub-h">What repeated relaxing does to your hair</h3>
+      <p class="journey-sub-p">Relaxed hair being a cultural norm doesn't mean it was without cost. Frequent chemical relaxers, heat styling, and overlapping applications — done over years — leave real damage. Most people don't see it building until it's significant.</p>
+    </div>
+
+    <div class="journey-list r d1">
+      <div class="journey-row">
+        <div>
+          <div class="journey-row-num">01</div>
+          <div class="journey-row-label">Breakage and thinning</div>
+        </div>
+        <div class="journey-row-body">The chemical bonds in the hair are permanently changed by relaxers. Overlapping fresh relaxer over previously processed sections — the most common mistake — breaks the hair at its weakest point. The edges and nape go first because the hair there is already finer.</div>
+      </div>
+      <div class="journey-row">
+        <div>
+          <div class="journey-row-num">02</div>
+          <div class="journey-row-label">Scalp damage and sensitivity</div>
+        </div>
+        <div class="journey-row-body">Chemical relaxers are alkaline — they work by breaking down the disulfide bonds in the hair shaft. That same chemistry can irritate or chemically burn the scalp if left on too long or applied too frequently. Repeated exposure weakens the scalp environment that the follicle depends on.</div>
+      </div>
+      <div class="journey-row">
+        <div>
+          <div class="journey-row-num">03</div>
+          <div class="journey-row-label">Loss of natural curl pattern</div>
+        </div>
+        <div class="journey-row-body">Long-term relaxing can make the natural curl pattern difficult or impossible to recover — even after stopping. The structural change is often permanent in the treated section. What you grow out from the root is still natural, but the relaxed ends are chemically altered for good.</div>
+      </div>
+      <div class="journey-row">
+        <div>
+          <div class="journey-row-num">04</div>
+          <div class="journey-row-label">Chronic dryness</div>
+        </div>
+        <div class="journey-row-body">Chemical processing raises the cuticle and makes it harder for the hair to retain moisture. Relaxed hair requires more product, more maintenance, and more frequent moisture replenishment than healthy natural hair — though many people don't realise the dryness is coming from the chemical process itself.</div>
+      </div>
+    </div>
+
+    <hr class="journey-divider">
+
+    <div class="r">
+      <p class="sec-label" style="color:rgba(255,255,255,0.3)">Restoring</p>
+      <h3 class="journey-sub-h">How to restore damaged natural hair</h3>
+      <p class="journey-sub-p">There is no fast fix for chemical or heat damage. But there is a clear process — and the hair that grows from healthy follicles, with the right care, will be healthier than what came before.</p>
+    </div>
+
+    <div class="journey-list r d1">
+      <div class="journey-row">
+        <div><div class="journey-row-num">01</div><div class="journey-row-label">Stop the processing</div></div>
+        <div class="journey-row-body">The first step is the most obvious one: stop the thing causing the damage. No more relaxers, no more overlapping applications, no more heat on compromised strands. The scalp and follicle need time to stabilise before anything else makes a difference.</div>
+      </div>
+      <div class="journey-row">
+        <div><div class="journey-row-num">02</div><div class="journey-row-label">Trim regularly</div></div>
+        <div class="journey-row-body">Damaged ends don't repair. They travel up the strand and cause more breakage the longer they stay. Regular trims — even small ones — remove the worst of it and let the healthy new growth become the majority of what's left.</div>
+      </div>
+      <div class="journey-row">
+        <div><div class="journey-row-num">03</div><div class="journey-row-label">Build around moisture</div></div>
+        <div class="journey-row-body">Deep conditioners, leave-in creams, and sealing oils should anchor your routine. Damaged hair has a lifted cuticle — it drinks moisture in quickly and loses it just as fast. The LOC method (liquid, oil, cream) was built for exactly this.</div>
+      </div>
+      <div class="journey-row">
+        <div><div class="journey-row-num">04</div><div class="journey-row-label">Use protein carefully</div></div>
+        <div class="journey-row-body">Protein treatments can temporarily patch the gaps in damaged hair structure. Carefully — too much protein without moisture makes hair stiff and prone to snapping. Use a protein treatment once a month and follow it immediately with a deep moisturising conditioner.</div>
+      </div>
+      <div class="journey-row">
+        <div><div class="journey-row-num">05</div><div class="journey-row-label">Wear protective styles</div></div>
+        <div class="journey-row-body">Braids, twists, buns, and tucked styles reduce daily manipulation and let the hair rest. They also protect the ends — where most breakage starts. Make sure the style isn't tight enough to pull at the edges.</div>
+      </div>
+      <div class="journey-row">
+        <div><div class="journey-row-num">06</div><div class="journey-row-label">Be patient with the timeline</div></div>
+        <div class="journey-row-body">Hair grows roughly 1.5cm a month. Significant damage takes months or years to fully grow out depending on how long it's been accumulating. Set honest expectations and track progress in six-month windows, not weeks.</div>
+      </div>
+    </div>
+
+    <hr class="journey-divider">
+
+    <!-- Big Chop callout -->
+    <div class="bigchop-block r">
+      <div>
+        <div class="bigchop-label">The Option</div>
+        <h3 class="bigchop-title">The big chop — a fresh start</h3>
+        <p class="bigchop-body">For many people transitioning from relaxed to natural hair, the big chop is the clearest way forward. It means cutting off most or all of the chemically processed hair and starting from healthy new growth. It can feel emotional — sometimes it is. But many people describe it as one of the most freeing decisions they've made. You stop managing the damage and start building from scratch.</p>
+      </div>
+      <div>
+        <div class="bigchop-label">Why people choose it</div>
+        <ul class="bigchop-benefits">
+          <li>Removes heavily damaged hair in one step — no more managing two textures</li>
+          <li>Allows healthier hair growth from the root up</li>
+          <li>Helps restore natural curl patterns without the old processed ends pulling them down</li>
+          <li>Makes the care routine simpler — one texture, one set of needs</li>
+          <li>For many, it shifts the relationship with their hair entirely</li>
+        </ul>
+      </div>
+    </div>
+
+    <hr class="journey-divider">
+
+    <div class="r">
+      <p class="sec-label" style="color:rgba(255,255,255,0.3)">Care</p>
+      <h3 class="journey-sub-h">How to care for natural hair</h3>
+      <p class="journey-sub-p">Natural hair thrives on moisture, patience, and low manipulation. Every curl pattern is different — learning your specific hair is part of the process. These are the foundations that apply across all textures.</p>
+    </div>
+
+    <div class="care-tips-grid r d1">
+      <div class="care-tip-card">
+        <div class="care-tip-num">01</div>
+        <div class="care-tip-title">Keep it moisturised</div>
+        <div class="care-tip-body">Use leave-in conditioners, creams, or oils consistently. Natural hair — especially 4b and 4c — loses moisture fast. A daily or every-other-day moisture refresh is not excessive, it's standard.</div>
+      </div>
+      <div class="care-tip-card">
+        <div class="care-tip-num">02</div>
+        <div class="care-tip-title">Deep condition regularly</div>
+        <div class="care-tip-body">Once a week if your hair is damaged or dry, once every two weeks if it's healthy. Deep conditioners penetrate the shaft in a way that rinse-out conditioners don't. Don't skip this.</div>
+      </div>
+      <div class="care-tip-card">
+        <div class="care-tip-num">03</div>
+        <div class="care-tip-title">Avoid excessive heat</div>
+        <div class="care-tip-body">Straighteners and blow dryers on high heat permanently alter the curl pattern. If you use heat at all, use a heat protectant, keep the temperature below 230°C, and space it out — once a month at most.</div>
+      </div>
+      <div class="care-tip-card">
+        <div class="care-tip-num">04</div>
+        <div class="care-tip-title">Use protective styles</div>
+        <div class="care-tip-body">Braids, twists, buns, and wigs let the hair rest. They reduce daily manipulation and protect the ends — the oldest and most fragile part of the strand. Don't wear them so tight they pull at the edges.</div>
+      </div>
+      <div class="care-tip-card">
+        <div class="care-tip-num">05</div>
+        <div class="care-tip-title">Detangle gently and wet</div>
+        <div class="care-tip-body">Always detangle on damp hair with conditioner or a detangler. Use a wide-tooth comb or your fingers, starting at the ends and working upward. Dry detangling on natural hair causes breakage every time.</div>
+      </div>
+      <div class="care-tip-card">
+        <div class="care-tip-num">06</div>
+        <div class="care-tip-title">Protect at night</div>
+        <div class="care-tip-body">Cotton pillowcases pull moisture out of the hair and cause friction that leads to breakage. A satin bonnet or satin pillowcase is a straightforward fix — it keeps moisture in and reduces overnight frizz significantly.</div>
+      </div>
+      <div class="care-tip-card">
+        <div class="care-tip-num">07</div>
+        <div class="care-tip-title">Learn your porosity</div>
+        <div class="care-tip-body">Low porosity hair resists moisture. High porosity hair drinks it in but loses it fast. Medium is the easiest to manage. Your porosity — not just your curl pattern — determines which products actually work for you.</div>
+      </div>
+      <div class="care-tip-card">
+        <div class="care-tip-num">08</div>
+        <div class="care-tip-title">Trim when needed</div>
+        <div class="care-tip-body">Split ends travel up the strand and cause more breakage the longer they stay. You don't need to trim on a fixed schedule — trim when you feel rough, split, or snagging ends. Small consistent trims are better than waiting for major damage.</div>
+      </div>
+      <div class="care-tip-card">
+        <div class="care-tip-num">09</div>
+        <div class="care-tip-title">Be patient with the journey</div>
+        <div class="care-tip-body">Healthy natural hair takes time and consistency. The first year is the hardest — results aren't always visible immediately. Track your progress over months, not weeks. The hair that grows with consistent care is always better than what came before it.</div>
+      </div>
+    </div>
+
   </div>
 </section>
 

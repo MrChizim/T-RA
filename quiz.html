@@ -1125,6 +1125,29 @@
     </div>
   </div>
 
+  <!-- STEP 3M: Height (Men) -->
+  <div class="quiz-step light-bg" id="step-3m" data-step="3">
+    <div class="step-inner">
+      <p class="step-num">Step 03</p>
+      <h2 class="step-question">How tall are you?</h2>
+      <p class="step-sub">Height affects proportion — what works on a 6'2" frame reads differently on a 5'6" one.</p>
+      <div class="text-options" id="heightOptions">
+        <div class="text-option" data-value="short">
+          <span>Under 5'7" &nbsp;<span style="font-weight:300;color:var(--grey);">/ Under 170cm</span></span>
+          <span class="text-option-arrow">→</span>
+        </div>
+        <div class="text-option" data-value="average">
+          <span>5'7" – 6'0" &nbsp;<span style="font-weight:300;color:var(--grey);">/ 170 – 183cm</span></span>
+          <span class="text-option-arrow">→</span>
+        </div>
+        <div class="text-option" data-value="tall">
+          <span>Over 6'0" &nbsp;<span style="font-weight:300;color:var(--grey);">/ Over 183cm</span></span>
+          <span class="text-option-arrow">→</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- STEP 6M: Climate (Men) -->
   <div class="quiz-step light-bg" id="step-6m" data-step="6">
     <div class="step-inner">
@@ -1323,6 +1346,7 @@
     faceShape: null,
     bodyType: null,
     bodyModifier: null,
+    height: null,
     climate: null,
     lifestyle: null,
     headShape: null,
@@ -1349,7 +1373,7 @@
     if (g === 'women') {
       return ['step-1','step-2w','step-3w','step-4w','step-5w','step-6w','step-7'];
     } else {
-      return ['step-1','step-2m','step-4m','step-5m','step-6m','step-7'];
+      return ['step-1','step-2m','step-3m','step-4m','step-5m','step-6m','step-7'];
     }
   }
 
@@ -1514,6 +1538,8 @@
         answers.lifestyle = val;
       } else if (stepId === 'step-6w' || stepId === 'step-6m') {
         answers.climate = val;
+      } else if (stepId === 'step-3m') {
+        answers.height = val;
       }
 
       showContinue();

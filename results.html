@@ -827,6 +827,36 @@
     }
     .product-link:hover { border-color: var(--black); }
 
+    /* ── HEIGHT NOTE ── */
+    .height-note {
+      border: 1px solid var(--grey-light);
+      padding: 32px 36px;
+      margin-top: 40px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+    .height-note-range {
+      font-size: clamp(28px, 4vw, 40px); font-weight: 900;
+      letter-spacing: -1px; color: var(--black); line-height: 1;
+      white-space: nowrap;
+    }
+    .height-note-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--grey); margin-bottom: 10px;
+    }
+    .height-note-title { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+    .height-note-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+    .height-note-list li {
+      font-size: 14px; font-weight: 300; color: var(--grey-mid);
+      padding-left: 16px; position: relative; line-height: 1.5;
+    }
+    .height-note-list li::before { content: '—'; position: absolute; left: 0; color: var(--grey-light); }
+    @media (max-width: 600px) {
+      .height-note { grid-template-columns: 1fr; gap: 16px; padding: 24px 20px; }
+    }
+
     /* ── SCROLL REVEAL ── */
     .r { opacity: 0; transform: translateY(24px); transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1); }
     .r.in { opacity: 1; transform: none; }
@@ -1010,6 +1040,7 @@
     <div class="outfit-img-block r d2" id="outfitImgBlock">
       <!-- filled by JS -->
     </div>
+    <div id="heightNote" style="display:none;" class="r d3"></div>
   </div>
 </section>
 
@@ -1575,6 +1606,71 @@
       <div class="outfit-img-card">
         <img src="images/${bodyData.outfit}.png" alt="Outfit for ${bodyData.name}"
           onerror="this.parentElement.innerHTML='<div class=\\'outfit-img-placeholder\\'>${bodyData.name} · Outfit Reference</div>'">
+      </div>
+    `;
+  }
+
+  // ── HEIGHT NOTE (men only) ──
+  const HEIGHT_DATA = {
+    short: {
+      range: 'Under 5\'7"',
+      rangeCm: 'Under 170cm',
+      title: 'Shorter frame — dress for length and proportion',
+      tips: [
+        'Wear monochromatic outfits — one colour top to bottom creates an unbroken vertical line that reads taller',
+        'Avoid oversized fits — excess fabric shortens the silhouette; fitted and tapered always reads better on a shorter frame',
+        'High-rise trousers elongate the legs; avoid low-rise cuts that divide the body at the wrong point',
+        'Avoid large horizontal prints — they add visual width, not height',
+        'Keep your trousers hemmed close to the shoe — ankle exposure on a short frame shortens the leg',
+        'Vertical stripes and narrow patterns add perceived length',
+        'A well-fitted blazer with a single button creates a long V-line through the torso'
+      ]
+    },
+    average: {
+      range: '5\'7" – 6\'0"',
+      rangeCm: '170 – 183cm',
+      title: 'Average frame — the most versatile height range',
+      tips: [
+        'Most silhouettes and proportions work for you — use body type and personal style to guide decisions',
+        'Both slim-fit and slightly relaxed fits are available to you without proportion issues',
+        'You can carry both cropped and longer jacket lengths well',
+        'Experiment with layering — bomber over hoodie, blazer over shirt — without height penalty',
+        'Hemline on trousers: slight break or no break both work; avoid a heavy stack'
+      ]
+    },
+    tall: {
+      range: 'Over 6\'0"',
+      rangeCm: 'Over 183cm',
+      title: 'Tall frame — fill the silhouette, use proportion deliberately',
+      tips: [
+        'Avoid clothes that were cut for shorter frames — sleeves and hems that are too short look poor on tall frames',
+        'Relaxed and oversized fits work well — a tall frame gives clothes room to drape properly',
+        'Bold horizontal patterns and colour-blocking add visual width and fill out the silhouette',
+        'Layering reads well at your height — volume through layers suits a tall frame',
+        'Wide-leg trousers complement tall frames well; avoid very slim cuts that make legs look even longer',
+        'Longer jackets, overcoats, and longlines are proportionate on you — they can look awkward on shorter men',
+        'Look for brands with tall or long fits — standard lengths are often cut too short at the sleeve and leg'
+      ]
+    }
+  };
+
+  if (!isWomen && A.height && HEIGHT_DATA[A.height]) {
+    const hData = HEIGHT_DATA[A.height];
+    const heightNote = document.getElementById('heightNote');
+    heightNote.style.display = '';
+    heightNote.innerHTML = `
+      <div class="height-note">
+        <div>
+          <div class="height-note-range">${hData.range}</div>
+          <div style="font-size:11px;font-weight:300;color:var(--grey);margin-top:4px;">${hData.rangeCm}</div>
+        </div>
+        <div>
+          <div class="height-note-label">Height & Proportion</div>
+          <div class="height-note-title">${hData.title}</div>
+          <ul class="height-note-list">
+            ${hData.tips.map(t => `<li>${t}</li>`).join('')}
+          </ul>
+        </div>
       </div>
     `;
   }

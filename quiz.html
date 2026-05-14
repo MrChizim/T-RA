@@ -136,9 +136,14 @@
         'auth/invalid-credential': 'Email or password is incorrect.',
         'auth/popup-closed-by-user': 'Sign-in was cancelled.',
         'auth/network-request-failed': 'Network error — check your connection.',
+        'auth/too-many-requests': 'Too many attempts. Please wait a moment and try again.',
       };
       return map[code] || 'Something went wrong. Please try again.';
     }
+
+    // Expose helpers so main script can reset loading state on validation errors
+    window._setAuthLoading = setAuthLoading;
+    window._setAuthError   = setAuthError;
   </script>
 
   <style>
@@ -1284,10 +1289,14 @@
     const email    = document.getElementById('authEmail').value.trim();
     const password = document.getElementById('authPassword').value;
     if (!email || !password) {
-      document.getElementById('authError').textContent = 'Please enter your email and password.';
-      document.getElementById('authError').style.display = 'block';
+      const errEl = document.getElementById('authError');
+      errEl.textContent = 'Please enter your email and password.';
+      errEl.style.display = 'block';
       return;
     }
+    // Disable button immediately so user gets feedback even before Firebase responds
+    if (window._setAuthLoading) window._setAuthLoading(true);
+    if (window._setAuthError) window._setAuthError('');
     if (authMode === 'signup') {
       window.signUpEmail(email, password);
     } else {

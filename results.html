@@ -9,6 +9,43 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;0,9..40,900;1,9..40,300&display=swap" rel="stylesheet" />
+  <script src="https://js.paystack.co/v1/inline.js"></script>
+
+  <!-- Firebase: check paid status + expose uid for payment -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+    import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAhjVgu4yLMPvGWBoICffQbgJADKI0mfBw",
+      authDomain: "tora-c492b.firebaseapp.com",
+      projectId: "tora-c492b",
+      storageBucket: "tora-c492b.firebasestorage.app",
+      messagingSenderId: "355607987054",
+      appId: "1:355607987054:web:ff070087e94a43e9a0377f"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    onAuthStateChanged(auth, async user => {
+      if (!user) return; // not signed in — gate stays up
+      window.__toraUid   = user.uid;
+      window.__toraEmail = user.email;
+
+      const snap = await getDoc(doc(db, 'users', user.uid));
+      const paid = snap.exists() && snap.data().paid === true;
+
+      if (paid) {
+        window.dispatchEvent(new Event('tora:paid'));
+      } else {
+        window.dispatchEvent(new Event('tora:unpaid'));
+      }
+    });
+  </script>
+
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
@@ -815,6 +852,66 @@
       .style-recs-grid { grid-template-columns: 1fr; }
       .premium-preview-grid { grid-template-columns: 1fr 1fr; }
     }
+
+    /* ── PAYMENT MODAL ── */
+    .pay-modal-overlay {
+      position: fixed; inset: 0; z-index: 800;
+      background: rgba(0,0,0,0.75);
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .pay-modal-overlay.open { opacity: 1; pointer-events: all; }
+    .pay-modal {
+      background: var(--white); max-width: 440px; width: 100%;
+      padding: 48px 40px;
+      transform: translateY(20px); transition: transform 0.3s ease;
+    }
+    .pay-modal-overlay.open .pay-modal { transform: translateY(0); }
+    .pay-modal-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--grey); margin-bottom: 16px;
+    }
+    .pay-modal-title {
+      font-size: clamp(22px, 4vw, 30px); font-weight: 900;
+      letter-spacing: -0.5px; margin-bottom: 12px; line-height: 1.1;
+    }
+    .pay-modal-desc {
+      font-size: 14px; font-weight: 300; line-height: 1.75;
+      color: var(--grey-mid); margin-bottom: 28px;
+    }
+    .pay-modal-price {
+      font-size: 40px; font-weight: 900; letter-spacing: -1px;
+      margin-bottom: 4px;
+    }
+    .pay-modal-price-note {
+      font-size: 12px; font-weight: 300; color: var(--grey); margin-bottom: 28px;
+    }
+    .pay-modal-btn {
+      width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px;
+      background: var(--black); color: var(--white); border: none;
+      font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 700;
+      letter-spacing: 2.5px; text-transform: uppercase;
+      padding: 18px 32px; cursor: pointer; transition: background 0.2s; margin-bottom: 12px;
+    }
+    .pay-modal-btn:hover { background: var(--grey-mid); }
+    .pay-modal-btn:disabled { background: var(--grey); cursor: not-allowed; }
+    .pay-modal-close {
+      position: absolute; top: 16px; right: 16px;
+      background: none; border: none; cursor: pointer;
+      font-size: 20px; color: var(--grey); line-height: 1;
+    }
+    .pay-modal-close:hover { color: var(--black); }
+    .pay-modal-inner { position: relative; }
+    .pay-modal-note {
+      font-size: 11px; font-weight: 300; color: var(--grey);
+      text-align: center; line-height: 1.6;
+    }
+    .pay-modal-error {
+      font-size: 13px; color: #c0392b; margin-bottom: 12px;
+      display: none; font-weight: 500;
+    }
   </style>
 </head>
 <body>
@@ -1012,7 +1109,7 @@
         <li>Personalised fragrance family ranking for your climate</li>
         <li>Your complete style brief — written for your exact combination</li>
       </ul>
-      <div class="gate-price">₦6,500</div>
+      <div class="gate-price" id="gatePrice">₦5,000</div>
       <p class="gate-price-note">One-time · No subscription · No expiry</p>
       <button class="unlock-btn" id="unlockBtn">
         Unlock Full Profile
@@ -1020,6 +1117,26 @@
           <path d="M5 12h14M12 5l7 7-7 7"/>
         </svg>
       </button>
+    </div>
+  </div>
+</div>
+
+<!-- PAYMENT MODAL -->
+<div class="pay-modal-overlay" id="payModal">
+  <div class="pay-modal">
+    <div class="pay-modal-inner">
+      <button class="pay-modal-close" id="payModalClose" aria-label="Close">×</button>
+      <p class="pay-modal-label">Full Access — One Time</p>
+      <h2 class="pay-modal-title">Unlock Your Complete Profile</h2>
+      <p class="pay-modal-desc">Everything built around your exact combination — hairstyle gallery, outfit lookbook, fragrance ranking, and your full personalised style brief.</p>
+      <div class="pay-modal-price" id="payModalPrice">₦5,000</div>
+      <p class="pay-modal-price-note">One-time · No subscription · No expiry</p>
+      <p class="pay-modal-error" id="payModalError"></p>
+      <button class="pay-modal-btn" id="payModalBtn">
+        Pay Now
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+      <p class="pay-modal-note" id="payModalNote">Secured by Paystack · Nigerian cards & bank transfer accepted</p>
     </div>
   </div>
 </div>
@@ -1634,12 +1751,135 @@
       `Your ${curlData.label.toLowerCase()} hair, ${faceKey} face shape, and ${bodyData.name.toLowerCase()} frame create a specific set of style opportunities that most guides never address together. The notes below combine all three dimensions into one coherent styling direction — what to prioritise, what to avoid, and why the combination you have works the way it does. This section also includes your personalised fragrance family ranking for ${scentData ? scentData.city : 'your climate'} and a curated lookbook for your exact archetype.`;
   }
 
-  // ── Unlock button stub ──
-  document.getElementById('unlockBtn').addEventListener('click', function() {
-    console.log('[TÓRA] Unlock triggered. Answers:', A);
-    // TODO: Firebase auth → Paystack payment
-    // signInGoogle().then(user => initiatePaystack(user, A));
-    alert('Payment coming soon. Your profile has been saved.');
+  // ── Premium gate: show/hide based on paid status ──
+  function unlockPremium() {
+    const overlay = document.getElementById('premiumGateOverlay');
+    const blurred = document.getElementById('premiumBlurred');
+    if (overlay) overlay.style.display = 'none';
+    if (blurred) { blurred.style.filter = 'none'; blurred.style.pointerEvents = ''; blurred.style.userSelect = ''; }
+  }
+
+  window.addEventListener('tora:paid', unlockPremium);
+
+  // If payment=success in URL (Stripe redirect), wait for auth then verify
+  if (window.location.search.includes('payment=success')) {
+    window.addEventListener('tora:unpaid', () => {
+      // Stripe webhook may still be processing — poll Firestore briefly
+      let tries = 0;
+      const poll = setInterval(async () => {
+        tries++;
+        const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+        const { getFirestore, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+        const app = getApps()[0];
+        if (!app || !window.__toraUid) return;
+        const db = getFirestore(app);
+        const snap = await getDoc(doc(db, 'users', window.__toraUid));
+        if (snap.exists() && snap.data().paid) {
+          clearInterval(poll);
+          unlockPremium();
+        }
+        if (tries >= 8) clearInterval(poll); // stop after ~8s
+      }, 1000);
+    });
+  }
+
+  // ── Payment modal ──
+  const payModal = document.getElementById('payModal');
+  const payModalBtn = document.getElementById('payModalBtn');
+  const payModalPrice = document.getElementById('payModalPrice');
+  const payModalNote = document.getElementById('payModalNote');
+  const payModalError = document.getElementById('payModalError');
+
+  // Detect Nigeria by timezone
+  const isNigeria = Intl.DateTimeFormat().resolvedOptions().timeZone === 'Africa/Lagos';
+
+  if (!isNigeria) {
+    payModalPrice.textContent = '£5';
+    payModalNote.textContent = 'Secured by Stripe · All major cards accepted';
+    const gatePrice = document.getElementById('gatePrice');
+    if (gatePrice) gatePrice.textContent = '£5';
+  }
+
+  function openPayModal() { payModal.classList.add('open'); document.body.style.overflow = 'hidden'; }
+  function closePayModal() { payModal.classList.remove('open'); document.body.style.overflow = ''; }
+
+  document.getElementById('unlockBtn').addEventListener('click', openPayModal);
+  document.getElementById('payModalClose').addEventListener('click', closePayModal);
+  payModal.addEventListener('click', e => { if (e.target === payModal) closePayModal(); });
+
+  function showPayError(msg) {
+    payModalError.textContent = msg;
+    payModalError.style.display = 'block';
+    payModalBtn.disabled = false;
+    payModalBtn.textContent = 'Try Again';
+  }
+
+  payModalBtn.addEventListener('click', async () => {
+    payModalBtn.disabled = true;
+    payModalBtn.textContent = 'Processing…';
+    payModalError.style.display = 'none';
+
+    const uid = window.__toraUid;
+    const email = window.__toraEmail || '';
+
+    if (!uid) {
+      showPayError('Please sign in before paying. Go back to the quiz page to sign in.');
+      return;
+    }
+
+    if (isNigeria) {
+      // Paystack popup
+      const paystackKey = 'REPLACE_WITH_YOUR_PAYSTACK_PUBLIC_KEY';
+      const handler = PaystackPop.setup({
+        key: paystackKey,
+        email: email || `user_${uid}@tora.app`,
+        amount: 500000, // ₦5,000 in kobo
+        currency: 'NGN',
+        ref: 'tora_' + uid + '_' + Date.now(),
+        metadata: { uid },
+        onSuccess(response) {
+          // Webhook handles Firestore update — show confirmation and poll
+          closePayModal();
+          let tries = 0;
+          const poll = setInterval(async () => {
+            tries++;
+            const { getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+            const { getFirestore, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+            const app = getApps()[0];
+            if (!app) return;
+            const db = getFirestore(app);
+            const snap = await getDoc(doc(db, 'users', uid));
+            if (snap.exists() && snap.data().paid) {
+              clearInterval(poll);
+              unlockPremium();
+            }
+            if (tries >= 10) clearInterval(poll);
+          }, 1000);
+        },
+        onCancel() {
+          payModalBtn.disabled = false;
+          payModalBtn.innerHTML = 'Pay Now <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+        }
+      });
+      handler.openIframe();
+    } else {
+      // Stripe — create checkout session via Vercel function
+      try {
+        const resp = await fetch('/api/create-stripe-session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ uid, email })
+        });
+        const data = await resp.json();
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          showPayError('Could not start payment. Please try again.');
+        }
+      } catch (err) {
+        showPayError('Network error. Please check your connection and try again.');
+      }
+    }
   });
 
   // ── Nav behaviour ──

@@ -1,0 +1,32 @@
+import Stripe from 'stripe';
+
+export default async function handler(req, res) {
+  if (req.method !== 'POST') return res.status(405).end();
+
+  const { uid, email } = req.body;
+  if (!uid) return res.status(400).json({ error: 'Missing uid' });
+
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ['card'],
+    mode: 'payment',
+    customer_email: email || undefined,
+    line_items: [{
+      price_data: {
+        currency: 'gbp',
+        unit_amount: 500, // £5.00
+        product_data: {
+          name: 'TÓRA Full Profile',
+          description: 'One-time access — complete personalised style brief',
+        },
+      },
+      quantity: 1,
+    }],
+    metadata: { uid },
+    success_url: `${req.headers.origin}/results.html?payment=success`,
+    cancel_url: `${req.headers.origin}/results.html`,
+  });
+
+  res.status(200).json({ url: session.url });
+}

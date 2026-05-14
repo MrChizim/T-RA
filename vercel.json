@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/paystack-webhook.js": { "memory": 256 },
+    "api/stripe-webhook.js": { "memory": 256 },
+    "api/create-stripe-session.js": { "memory": 256 }
+  }
+}

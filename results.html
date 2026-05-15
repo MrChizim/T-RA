@@ -779,11 +779,27 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 2px;
-      margin-bottom: 48px;
+      margin-bottom: 2px;
     }
     .premium-preview-card {
       background: var(--grey-light);
       aspect-ratio: 3/4;
+      position: relative;
+      overflow: hidden;
+    }
+    .premium-preview-card img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    .premium-preview-card-label {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: rgba(0,0,0,0.55); padding: 12px 14px;
+    }
+    .premium-preview-card-cat {
+      font-size: 9px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 3px;
+    }
+    .premium-preview-card-name {
+      font-size: 12px; font-weight: 700; color: var(--white);
     }
     .premium-brief {
       background: var(--black);
@@ -1303,14 +1319,6 @@
       <ul id="faceModifierList"></ul>
     </div>
 
-    <!-- Recommended styles -->
-    <div class="style-recs r d2">
-      <p class="style-recs-label">Recommended for your combination</p>
-      <div class="style-recs-grid" id="styleRecsGrid">
-        <!-- filled by JS -->
-      </div>
-    </div>
-
     <div id="hairGrowthSection" class="growth-tips-block r d3">
       <!-- filled by JS -->
     </div>
@@ -1444,15 +1452,15 @@
       </div>
     </div>
 
-    <!-- Preview cards -->
-    <div class="premium-preview-grid">
-      <div class="premium-preview-card"></div>
-      <div class="premium-preview-card" style="background:#e8e8e8;"></div>
-      <div class="premium-preview-card" style="background:#f0f0f0;"></div>
-      <div class="premium-preview-card" style="background:#e4e4e4;"></div>
-    </div>
+    <!-- Outfit recommendations (4 cards, filled by JS) -->
+    <div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--grey);padding:24px 0 14px;">Outfit Recommendations</div>
+    <div class="premium-preview-grid" id="outfitRecsGrid"></div>
 
-    <div class="premium-brief">
+    <!-- Hairstyle recommendations (4 cards, filled by JS) -->
+    <div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--grey);padding:24px 0 14px;margin-top:2px;">Hairstyle Recommendations</div>
+    <div class="premium-preview-grid" id="hairstyleRecsGrid"></div>
+
+    <div class="premium-brief" style="margin-top:2px;">
       <p class="premium-brief-label">Your complete style brief</p>
       <h3 class="premium-brief-title" id="blurredBriefTitle">Personalised for your combination</h3>
       <p class="premium-brief-text" id="blurredBriefText">
@@ -1460,15 +1468,6 @@
       </p>
     </div>
 
-    <!-- More blurred content suggestion -->
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:2px; margin-top:2px;">
-      <div style="background:var(--grey-light); height:120px; display:flex; align-items:center; justify-content:center;">
-        <span style="font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--grey);">Full Hairstyle Gallery</span>
-      </div>
-      <div style="background:var(--grey-light); height:120px; display:flex; align-items:center; justify-content:center;">
-        <span style="font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--grey);">Complete Outfit Lookbook</span>
-      </div>
-    </div>
   </div>
 
   <!-- Gate overlay -->
@@ -2808,7 +2807,7 @@
     `).join('');
   }
 
-  // ── PREMIUM section blurred brief title ──
+  // ── PREMIUM section: brief title + outfit/hairstyle recs ──
   if (curlData && bodyData) {
     const skinLabel = skinData ? skinData.name : '';
     document.getElementById('blurredBriefTitle').textContent =
@@ -2816,6 +2815,111 @@
     document.getElementById('blurredBriefText').textContent =
       `Your ${curlData.label.toLowerCase()} hair, ${faceKey} face shape, and ${bodyData.name.toLowerCase()} frame create a specific set of style opportunities that most guides never address together. The notes below combine all three dimensions into one coherent styling direction — what to prioritise, what to avoid, and why the combination you have works the way it does. This section also includes your personalised fragrance family ranking for ${scentData ? scentData.city : 'your climate'} and a curated lookbook for your exact archetype.`;
   }
+
+  // ── OUTFIT RECOMMENDATIONS by body type ──
+  const OUTFIT_RECS = {
+    hourglass: [
+      { name: 'Wrap Midi Dress', cat: 'Day Wear', img: 'outfit_hourglass_wrap.jpg' },
+      { name: 'Bodycon Co-ord', cat: 'Evening', img: 'outfit_hourglass_bodycon.jpg' },
+      { name: 'Fitted Blazer + Trousers', cat: 'Work', img: 'outfit_hourglass_blazer.jpg' },
+      { name: 'High-Waist Jeans + Crop', cat: 'Casual', img: 'outfit_hourglass_casual.jpg' }
+    ],
+    pear: [
+      { name: 'A-Line Skirt + Structured Top', cat: 'Day Wear', img: 'outfit_pear_aline.jpg' },
+      { name: 'Wide-Leg Trousers + Bold Top', cat: 'Evening', img: 'outfit_pear_widelegtrousers.jpg' },
+      { name: 'Structured Blazer + Slim Skirt', cat: 'Work', img: 'outfit_pear_blazer.jpg' },
+      { name: 'Maxi Dress + Shoulder Detail', cat: 'Casual', img: 'outfit_pear_casual.jpg' }
+    ],
+    apple: [
+      { name: 'Empire Waist Dress', cat: 'Day Wear', img: 'outfit_apple_empire.jpg' },
+      { name: 'Wrap Blouse + Flared Skirt', cat: 'Evening', img: 'outfit_apple_wrap.jpg' },
+      { name: 'Open Blazer + V-Neck', cat: 'Work', img: 'outfit_apple_blazer.jpg' },
+      { name: 'Flowy Tunic + Wide Trousers', cat: 'Casual', img: 'outfit_apple_casual.jpg' }
+    ],
+    rectangle: [
+      { name: 'Peplum Top + Pencil Skirt', cat: 'Day Wear', img: 'outfit_rect_peplum.jpg' },
+      { name: 'Belted Wrap Dress', cat: 'Evening', img: 'outfit_rect_wrap.jpg' },
+      { name: 'Blazer + High-Waist Flares', cat: 'Work', img: 'outfit_rect_blazer.jpg' },
+      { name: 'Layered Streetwear', cat: 'Casual', img: 'outfit_rect_casual.jpg' }
+    ],
+    inverted: [
+      { name: 'Wide-Leg Trousers + Simple Top', cat: 'Day Wear', img: 'outfit_inv_widelegs.jpg' },
+      { name: 'A-Line Maxi + Fitted Top', cat: 'Evening', img: 'outfit_inv_maxi.jpg' },
+      { name: 'Flared Trousers + Structured Jacket', cat: 'Work', img: 'outfit_inv_jacket.jpg' },
+      { name: 'Wrap Skirt + Fitted Tee', cat: 'Casual', img: 'outfit_inv_casual.jpg' }
+    ]
+  };
+
+  // ── HAIRSTYLE RECOMMENDATIONS by curl type + face shape ──
+  const HAIRSTYLE_RECS = {
+    '4c': [
+      { name: 'Tapered TWA', cat: 'Short', img: 'hair_4c_twa.jpg' },
+      { name: 'High Puff', cat: 'Protective', img: 'hair_4c_puff.jpg' },
+      { name: 'Chunky Twists', cat: 'Protective', img: 'hair_4c_twists.jpg' },
+      { name: 'Wash & Go', cat: 'Natural', img: 'hair_4c_washgo.jpg' }
+    ],
+    '4b': [
+      { name: 'Twist Out', cat: 'Natural', img: 'hair_4b_twistout.jpg' },
+      { name: 'Box Braids', cat: 'Protective', img: 'hair_4b_boxbraids.jpg' },
+      { name: 'High Puff + Edges', cat: 'Quick Style', img: 'hair_4b_puff.jpg' },
+      { name: 'Bantu Knot Out', cat: 'Natural', img: 'hair_4b_bantu.jpg' }
+    ],
+    '4a': [
+      { name: 'Braid Out', cat: 'Natural', img: 'hair_4a_braidout.jpg' },
+      { name: 'Defined Wash & Go', cat: 'Natural', img: 'hair_4a_washgo.jpg' },
+      { name: 'Cornrows + Puff', cat: 'Protective', img: 'hair_4a_cornrows.jpg' },
+      { name: 'Flat Twist Out', cat: 'Natural', img: 'hair_4a_flattwist.jpg' }
+    ],
+    '3c': [
+      { name: 'Defined Wash & Go', cat: 'Natural', img: 'hair_3c_washgo.jpg' },
+      { name: 'Half-Up Half-Down', cat: 'Style', img: 'hair_3c_halfup.jpg' },
+      { name: 'Twist Out', cat: 'Natural', img: 'hair_3c_twistout.jpg' },
+      { name: 'Braided Updo', cat: 'Protective', img: 'hair_3c_updo.jpg' }
+    ],
+    '3b': [
+      { name: 'Scrunched Wash & Go', cat: 'Natural', img: 'hair_3b_washgo.jpg' },
+      { name: 'Halo Braid', cat: 'Style', img: 'hair_3b_halo.jpg' },
+      { name: 'Voluminous Blowout', cat: 'Heat Style', img: 'hair_3b_blowout.jpg' },
+      { name: 'Low Bun with Curls', cat: 'Style', img: 'hair_3b_bun.jpg' }
+    ],
+    '3a': [
+      { name: 'Loose Spiral Wash & Go', cat: 'Natural', img: 'hair_3a_washgo.jpg' },
+      { name: 'Braided Crown', cat: 'Style', img: 'hair_3a_crown.jpg' },
+      { name: 'Messy Bun', cat: 'Casual', img: 'hair_3a_messybun.jpg' },
+      { name: 'Diffused Volume', cat: 'Heat Style', img: 'hair_3a_diffused.jpg' }
+    ]
+  };
+
+  function buildPremiumRecs() {
+    const bodyKey = A.bodyType || 'hourglass';
+    const curlKey = A.curlType || '4c';
+    const outfits = OUTFIT_RECS[bodyKey] || OUTFIT_RECS['hourglass'];
+    const hairstyles = HAIRSTYLE_RECS[curlKey] || HAIRSTYLE_RECS['4c'];
+
+    function makeCard(item) {
+      const card = document.createElement('div');
+      card.className = 'premium-preview-card';
+      const img = document.createElement('img');
+      img.src = `images/${item.img}`;
+      img.alt = item.name;
+      img.onerror = function() {
+        this.style.display = 'none';
+        card.style.background = 'var(--grey-light)';
+      };
+      const label = document.createElement('div');
+      label.className = 'premium-preview-card-label';
+      label.innerHTML = `<div class="premium-preview-card-cat">${item.cat}</div><div class="premium-preview-card-name">${item.name}</div>`;
+      card.appendChild(img);
+      card.appendChild(label);
+      return card;
+    }
+
+    const outfitGrid = document.getElementById('outfitRecsGrid');
+    const hairGrid = document.getElementById('hairstyleRecsGrid');
+    if (outfitGrid) outfits.forEach(o => outfitGrid.appendChild(makeCard(o)));
+    if (hairGrid) hairstyles.forEach(h => hairGrid.appendChild(makeCard(h)));
+  }
+  buildPremiumRecs();
 
   // ── Premium gate: show/hide based on paid status ──
   function unlockPremium() {

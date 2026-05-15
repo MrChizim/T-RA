@@ -541,8 +541,13 @@
     if (isWomen) {
       document.getElementById('filterMakeup').style.display = '';
       document.getElementById('filterBody').style.display = '';
-      document.getElementById('secMakeup').style.display = '';
-      document.getElementById('secBody').style.display = '';
+      ['secMakeup', 'secBody'].forEach(id => {
+        const sec = document.getElementById(id);
+        if (sec) {
+          sec.style.display = '';
+          sec.querySelectorAll('.r').forEach(el => el.classList.add('in'));
+        }
+      });
     }
 
     buildHairSection(A, isWomen);
@@ -554,8 +559,9 @@
       buildBodySection(A);
     }
 
-    // Observe reveal elements
+    // Observe reveal elements — also force-in after short delay as fallback
     document.querySelectorAll('.r').forEach(el => observer.observe(el));
+    setTimeout(() => document.querySelectorAll('.r').forEach(el => el.classList.add('in')), 300);
 
     // Filter buttons
     document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -566,8 +572,9 @@
         document.querySelectorAll('.shop-section').forEach(sec => {
           const womenOnly = sec.id === 'secMakeup' || sec.id === 'secBody';
           if (!isWomen && womenOnly) { sec.style.display = 'none'; return; }
-          if (cat === 'all') { sec.style.display = ''; }
-          else { sec.style.display = sec.dataset.cat === cat ? '' : 'none'; }
+          const show = cat === 'all' || sec.dataset.cat === cat;
+          sec.style.display = show ? '' : 'none';
+          if (show) sec.querySelectorAll('.r').forEach(el => el.classList.add('in'));
         });
       });
     });

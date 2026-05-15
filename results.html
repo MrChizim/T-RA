@@ -1101,14 +1101,26 @@
     .skincare-product-card {
       background: var(--white);
       border: 1px solid var(--grey-light);
-      padding: 24px 22px;
+      padding: 0 0 22px;
+      overflow: hidden;
     }
-    .skincare-product-step { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--grey); margin-bottom: 5px; }
-    .skincare-product-brand { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--grey-mid); margin-bottom: 4px; }
-    .skincare-product-name { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
-    .skincare-product-why { font-size: 12px; font-weight: 300; line-height: 1.65; color: var(--grey-mid); margin-bottom: 10px; }
+    .skincare-product-img {
+      width: 100%; aspect-ratio: 1/1; background: #ebebeb;
+      position: relative; margin-bottom: 18px;
+    }
+    .skincare-product-img-inner {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 4px; padding: 16px; text-align: center;
+    }
+    .skincare-product-img .pip-initial { font-size: 42px; font-weight: 900; letter-spacing: -2px; color: rgba(0,0,0,0.1); line-height: 1; }
+    .skincare-product-img .pip-brand { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(0,0,0,0.25); margin-top: 4px; }
+    .skincare-product-step { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--grey); margin-bottom: 5px; padding: 0 20px; }
+    .skincare-product-brand { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--grey-mid); margin-bottom: 4px; padding: 0 20px; }
+    .skincare-product-name { font-size: 14px; font-weight: 700; margin-bottom: 6px; padding: 0 20px; }
+    .skincare-product-why { font-size: 12px; font-weight: 300; line-height: 1.65; color: var(--grey-mid); margin-bottom: 10px; padding: 0 20px; }
     .skincare-product-link {
-      display: inline-flex; align-items: center; gap: 6px;
+      display: inline-flex; align-items: center; gap: 6px; margin: 0 20px;
       font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
       text-transform: uppercase; color: var(--black);
       text-decoration: none; border-bottom: 1px solid var(--grey-light);
@@ -2728,8 +2740,16 @@
     const productsHTML = `
       <div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--grey);padding:20px 0 12px;">Beginner-Friendly Products</div>
       <div class="skincare-product-grid">
-        ${skincareData.products.map(p => `
+        ${skincareData.products.map(p => {
+          const initial = (p.brand || '?').charAt(0).toUpperCase();
+          return `
           <div class="skincare-product-card">
+            <div class="skincare-product-img">
+              <div class="skincare-product-img-inner">
+                <div class="pip-initial">${initial}</div>
+                <div class="pip-brand">${p.brand}</div>
+              </div>
+            </div>
             <div class="skincare-product-step">${p.step}</div>
             <div class="skincare-product-brand">${p.brand}</div>
             <div class="skincare-product-name">${p.name}</div>
@@ -2737,8 +2757,8 @@
             <a href="${p.link}" target="_blank" rel="noopener" class="skincare-product-link">
               Shop <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
-          </div>
-        `).join('')}
+          </div>`;
+        }).join('')}
       </div>`;
 
     skincareContent.innerHTML = introHTML + amHTML + pmHTML + productsHTML;

@@ -900,7 +900,7 @@
 <!-- ══════════════════════════════
      HERO
 ══════════════════════════════ -->
-<section id="hero">
+<section id="hero" data-nav="dark">
   <div class="slides">
     <div class="slide sl1 active"></div>
     <div class="slide sl2"></div>
@@ -927,7 +927,7 @@
 </section>
 
 <!-- Ticker -->
-<div class="ticker">
+<div class="ticker" data-nav="dark">
   <div class="ticker-track">
     <span class="ticker-item">Natural Hair</span><span class="ticker-sep"> · </span>
     <span class="ticker-item">4c Textures</span><span class="ticker-sep"> · </span>
@@ -991,7 +991,7 @@
 <!-- ══════════════════════════════
      PILLARS — dark
 ══════════════════════════════ -->
-<section id="pillars">
+<section id="pillars" data-nav="dark">
   <div class="wrap">
     <div class="pillars-top">
       <h2 class="pillars-h r">Four pillars.<br>One identity.</h2>
@@ -1127,7 +1127,7 @@
 <!-- ══════════════════════════════
      ETHOS
 ══════════════════════════════ -->
-<section id="ethos">
+<section id="ethos" data-nav="dark">
   <div class="wrap" style="text-align:center;">
     <blockquote class="ethos-q r">"Black hair is not difficult. It just deserves someone who actually knows it."</blockquote>
     <p class="ethos-src r d1">TÓRA — Built in Nigeria, for the world.</p>
@@ -1253,14 +1253,23 @@
   let scrollTimer = null;
   let isScrolling = false;
 
+  const darkSections = Array.from(document.querySelectorAll('[data-nav="dark"]'));
+
   function updateState() {
     const scrollY   = window.scrollY;
     const pastHero  = scrollY > hero.offsetHeight - 60;
     const scrolling = isScrolling && pastHero;
 
-    // Logo and hamburger colour
-    logo.classList.toggle('dark', pastHero);
-    hamburger.classList.toggle('dark', pastHero && !hamburger.classList.contains('open'));
+    // Logo and hamburger colour — white on dark sections, black on light sections
+    if (!hamburger.classList.contains('open')) {
+      const navMid = scrollY + 36;
+      const inDark = darkSections.some(s => {
+        const top = s.offsetTop;
+        return navMid >= top && navMid < top + s.offsetHeight;
+      });
+      logo.classList.toggle('dark', !inDark);
+      hamburger.classList.toggle('dark', !inDark);
+    }
 
     // Nav bar: only show when past hero, hidden while actively scrolling
     if (!pastHero) {
@@ -1293,7 +1302,12 @@
     hamburger.classList.toggle('open', open);
     drawer.classList.toggle('open', open);
     document.body.style.overflow = open ? 'hidden' : '';
-    logo.classList.toggle('dark', open || window.scrollY > hero.offsetHeight - 60);
+    if (open) {
+      logo.classList.add('dark');
+      hamburger.classList.remove('dark');
+    } else {
+      updateState();
+    }
   }
 
   hamburger.addEventListener('click', e => {

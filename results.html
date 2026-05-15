@@ -192,9 +192,14 @@
       border: 1px solid rgba(255,255,255,0.15);
       padding: 6px 14px;
     }
+    .hero-actions {
+      display: flex;
+      gap: 32px;
+      margin-top: 28px;
+      position: relative;
+      z-index: 1;
+    }
     .hero-retake {
-      position: absolute;
-      bottom: 72px; right: 36px;
       font-size: 10px;
       font-weight: 700;
       letter-spacing: 2px;
@@ -202,7 +207,6 @@
       color: rgba(255,255,255,0.3);
       text-decoration: none;
       transition: color 0.2s;
-      z-index: 1;
     }
     .hero-retake:hover { color: var(--white); }
 
@@ -1163,7 +1167,7 @@
       .scent-city-block { padding: 32px 24px; }
       .site-logo { left: 20px; }
       .hamburger { right: 20px; top: 20px; }
-      .hero-retake { right: 20px; bottom: 24px; }
+      .hero-actions { gap: 20px; }
       .drawer { padding: 0 24px; overflow-y: auto; justify-content: flex-start; padding-top: 80px; padding-bottom: 60px; }
       .outfit-img-block { grid-template-columns: 1fr; }
       .skin-undertone-card { grid-template-columns: 1fr; }
@@ -1262,12 +1266,14 @@
 </div>
 
 <!-- HERO -->
-<div class="results-hero" id="resultsHero">
+<div class="results-hero" id="resultsHero" data-nav="light">
   <p class="hero-eyebrow">Your TÓRA Profile</p>
   <h1 class="hero-title" id="heroTitle">YOUR<br>PROFILE</h1>
   <div class="hero-combination" id="heroCombination"></div>
-  <a href="shop.html" class="hero-retake" style="right:auto;left:36px;bottom:72px;">Shop your products →</a>
-  <a href="quiz.html?retake=1" class="hero-retake">Retake Quiz →</a>
+  <div class="hero-actions">
+    <a href="shop.html" class="hero-retake">Shop your products →</a>
+    <a href="quiz.html?retake=1" class="hero-retake">Retake Quiz →</a>
+  </div>
 </div>
 
 <!-- SECTION 01 — HAIR -->
@@ -1352,7 +1358,7 @@
 </section>
 
 <!-- SECTION 03 — SCENT -->
-<section class="results-section dark" id="scentSection">
+<section class="results-section dark" id="scentSection" data-nav="light">
   <div class="wrap">
     <div class="section-header r">
       <div class="section-number" style="color:rgba(255,255,255,0.05);">03</div>
@@ -2953,13 +2959,17 @@
   const siteLogo = document.getElementById('siteLogo');
   const hamburger = document.getElementById('hamburger');
   const drawer = document.getElementById('drawer');
+  const lightSections = Array.from(document.querySelectorAll('[data-nav="light"]'));
 
   function updateNav() {
-    const pastHero = window.scrollY > (document.getElementById('resultsHero').offsetHeight - 60);
-    siteLogo.classList.toggle('dark', pastHero);
-    if (!hamburger.classList.contains('open')) {
-      hamburger.classList.toggle('dark', pastHero);
-    }
+    if (hamburger.classList.contains('open')) return;
+    const navMid = window.scrollY + 36;
+    const isLight = lightSections.some(s => {
+      const top = s.offsetTop;
+      return navMid >= top && navMid < top + s.offsetHeight;
+    });
+    siteLogo.classList.toggle('dark', !isLight);
+    hamburger.classList.toggle('dark', !isLight);
   }
   window.addEventListener('scroll', updateNav, { passive: true });
   updateNav();

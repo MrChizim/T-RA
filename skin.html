@@ -59,6 +59,9 @@
     .hamburger.open span:nth-child(2) { opacity: 0; }
     .hamburger.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
     .hamburger.open span { background: var(--black) !important; }
+    .site-logo.light { color: var(--white); }
+    .hamburger.light span { background: var(--white); }
+    .site-logo { transition: color 0.3s ease; }
 
     .drawer {
       position: fixed; inset: 0; background: var(--white); z-index: 400;
@@ -472,7 +475,7 @@
 </div>
 
 <!-- PAGE HERO -->
-<div class="page-hero">
+<div class="page-hero" data-nav="dark">
   <div class="page-hero-inner">
     <p class="breadcrumb"><a href="index.html">TÓRA</a> / Skin</p>
     <h1 class="page-title">SKIN</h1>
@@ -536,7 +539,7 @@
 <!-- ══════════════════════════════
      SECTION 2 — HOW TO FIND YOURS
 ══════════════════════════════ -->
-<section id="find-undertone">
+<section id="find-undertone" data-nav="dark">
   <div class="wrap">
     <div class="section-intro section-intro-dark r">
       <p class="sec-label">Method</p>
@@ -676,7 +679,7 @@
 <!-- ══════════════════════════════
      SECTION 4 — METALS & JEWELLERY
 ══════════════════════════════ -->
-<section id="metals">
+<section id="metals" data-nav="dark">
   <div class="wrap">
     <div class="section-intro section-intro-dark r">
       <p class="sec-label">Jewellery</p>
@@ -847,7 +850,7 @@
 <!-- ══════════════════════════════
      SECTION 7 — CTA
 ══════════════════════════════ -->
-<div class="cta-block">
+<div class="cta-block" data-nav="dark">
   <h2>Add your skin tone to your TÓRA profile</h2>
   <p>Take the style quiz to get personalised colour, jewellery, and accessory recommendations built around your undertone, face shape, and body type together.</p>
   <a href="quiz.html" class="cta-btn">Take the Quiz →</a>
@@ -886,6 +889,22 @@
     });
   }, { threshold: 0.08 });
   rEls.forEach(el => obs.observe(el));
+
+  // ── Nav colour switching ──
+  const siteLogo = document.querySelector('.site-logo');
+  const darkSections = Array.from(document.querySelectorAll('[data-nav="dark"]'));
+  function updateNavColour() {
+    if (hamburger.classList.contains('open')) return;
+    const navMid = window.scrollY + 36;
+    const isDark = darkSections.some(s => {
+      const top = s.offsetTop;
+      return navMid >= top && navMid < top + s.offsetHeight;
+    });
+    siteLogo.classList.toggle('light', isDark);
+    hamburger.classList.toggle('light', isDark);
+  }
+  window.addEventListener('scroll', updateNavColour, { passive: true });
+  updateNavColour();
 </script>
 
 <script type="module">

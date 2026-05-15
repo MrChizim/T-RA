@@ -480,11 +480,6 @@
     .beard-img-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; filter: grayscale(100%); transition: transform 0.5s ease; }
     .beard-card:hover .beard-img-wrap img { transform: scale(1.04); }
 
-    /* ── FACE SHAPE CARD IMAGE ── */
-    .face-img-wrap { aspect-ratio: 4/5; margin: -32px -26px 16px; }
-    .face-img-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; filter: grayscale(100%); transition: transform 0.5s ease; }
-    .face-card:hover .face-img-wrap img { transform: scale(1.04); }
-
     /* ── HEAD SHAPE CARD IMAGE ── */
     .head-img-wrap { aspect-ratio: 4/5; margin: -36px -28px 16px; }
     .head-img-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; filter: grayscale(100%); }
@@ -507,22 +502,6 @@
     .beard-desc { font-size: 14px; font-weight: 300; line-height: 1.75; color: var(--grey-mid); margin-bottom: 14px; }
     .beard-tip { font-size: 12px; font-weight: 500; color: var(--grey); border-left: 2px solid var(--grey-light); padding-left: 12px; line-height: 1.5; }
 
-
-    /* ── FACE SHAPES ── */
-    #face-shapes { padding: 96px 0; background: var(--black); }
-    .face-header { margin-bottom: 48px; }
-    .face-header h2 { font-size: clamp(30px,4vw,48px); font-weight: 700; color: var(--white); line-height: 1.1; margin-bottom: 16px; letter-spacing: -0.5px; }
-    .face-header p { font-size: 16px; font-weight: 300; line-height: 1.8; color: rgba(255,255,255,0.4); max-width: 560px; }
-    .face-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.07); }
-    .face-card { background: var(--black); padding: 32px 26px; transition: background 0.2s; overflow: hidden; }
-    .face-card:hover { background: #0d0d0d; }
-    .face-shape-name { font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 6px; }
-    .face-shape-sub { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.25); margin-bottom: 14px; }
-    .face-shape-desc { font-size: 14px; font-weight: 300; line-height: 1.75; color: rgba(255,255,255,0.45); margin-bottom: 14px; }
-    .face-best h4 { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.2); margin-bottom: 8px; }
-    .face-best ul { list-style: none; display: flex; flex-direction: column; gap: 5px; }
-    .face-best li { font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.35); padding-left: 14px; position: relative; line-height: 1.4; }
-    .face-best li::before { content: '—'; position: absolute; left: 0; color: rgba(255,255,255,0.15); }
 
     /* ── HEAD SHAPES ── */
     #head-shapes { padding: 96px 0; background: var(--white); }
@@ -595,16 +574,14 @@
       .damage-row { grid-template-columns: 1fr; gap: 8px; }
       .mens-grid { grid-template-columns: 1fr; }
       .beard-grid { grid-template-columns: 1fr 1fr; }
-      .face-grid { grid-template-columns: 1fr 1fr; }
       .head-grid { grid-template-columns: 1fr; }
       .acc-grid { grid-template-columns: 1fr 1fr; }
-      #curl-types, #porosity, #damage, #natural-journey, #protective-styles, #mens, #beards, #face-shapes, #head-shapes, #accessories { padding: 72px 0; }
+      #curl-types, #porosity, #damage, #natural-journey, #protective-styles, #mens, #beards, #head-shapes, #accessories { padding: 72px 0; }
       .site-logo { left: 20px; } .hamburger { right: 20px; top: 20px; }
     }
     @media (max-width: 560px) {
       .curl-grid { grid-template-columns: 1fr; }
       .beard-grid { grid-template-columns: 1fr; }
-      .face-grid { grid-template-columns: 1fr; }
       .acc-grid { grid-template-columns: 1fr; }
     }
   </style>
@@ -1199,119 +1176,6 @@
       </div>
 
     </div>
-  </div>
-</section>
-
-<!-- FACE SHAPES -->
-<section id="face-shapes" data-gender="w" data-nav="dark">
-  <div class="wrap">
-    <div class="face-header r">
-      <p class="sec-label" style="color:rgba(255,255,255,0.3)">Face Shapes</p>
-      <h2>Your face shape — and what it means for your hair</h2>
-      <p>Face shape is the single most useful starting point when choosing a style. African facial structures span every shape — oval, round, square, diamond, oblong, heart — but with different proportions than the Western reference most guides use. Take these as direction, not instruction. Your face is one factor, not the whole picture.</p>
-    </div>
-
-
-    <div class="face-grid r d1">
-
-      <div class="face-card">
-        <div class="face-img-wrap"><img src="images/face_oval.png" alt="Oval face shape" loading="lazy"></div>
-        <div class="face-shape-name">Oval</div>
-        <div class="face-shape-sub">Balanced · Gently rounded chin</div>
-        <div class="face-shape-desc">Forehead slightly wider than the jaw with a softly rounded chin. The most versatile face shape — almost every hairstyle works. The reference most style guides assume as default.</div>
-        <div class="face-best">
-          <h4>Recommended styles</h4>
-          <ul>
-            <li>Wash-and-go afros, twist-outs, bantu knots — all flattering</li>
-            <li>Braids worn up, down, or half-up work equally well</li>
-            <li>Locs of any length sit beautifully on this shape</li>
-            <li>Experiment freely — very little to avoid here</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="face-card">
-        <div class="face-img-wrap"><img src="images/face_round.png" alt="Round face shape" loading="lazy"></div>
-        <div class="face-shape-name">Round</div>
-        <div class="face-shape-sub">Equal width and length · Soft jaw</div>
-        <div class="face-shape-desc">Width and length are roughly equal with a soft, curved jaw. Common in West African women. The goal is to add length and create the illusion of a slimmer frame.</div>
-        <div class="face-best">
-          <h4>Recommended styles</h4>
-          <ul>
-            <li>High buns and pineapple updos to add vertical height</li>
-            <li>Long braids or locs past the chin to elongate the face</li>
-            <li>Centre parts — avoid side parts that widen</li>
-            <li>Avoid wide, voluminous afros that add horizontal width</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="face-card">
-        <div class="face-img-wrap"><img src="images/face_square.png" alt="Square face shape" loading="lazy"></div>
-        <div class="face-shape-name">Square</div>
-        <div class="face-shape-sub">Strong jaw · Angular · Equal width</div>
-        <div class="face-shape-desc">Strong, defined jawline with similar width at the forehead and jaw. A powerful, structured look common across sub-Saharan women. The goal is to soften the angles with movement and texture.</div>
-        <div class="face-best">
-          <h4>Recommended styles</h4>
-          <ul>
-            <li>Loose twist-outs and curl definition — soft texture at the jaw</li>
-            <li>Side-swept braids or locs that break the jaw's straight line</li>
-            <li>Layers and volume at the crown to draw the eye upward</li>
-            <li>Avoid blunt bobs or straight cuts that mirror the jaw angle</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="face-card">
-        <div class="face-img-wrap"><img src="images/face_oblong.png" alt="Oblong face shape" loading="lazy"></div>
-        <div class="face-shape-name">Oblong / Rectangle</div>
-        <div class="face-shape-sub">Long · Narrow · Even width</div>
-        <div class="face-shape-desc">Face is noticeably longer than it is wide with consistent width throughout. Common in East African women — Kenyan, Ethiopian, Somali frames often carry this shape. The goal is to add width and break the vertical line.</div>
-        <div class="face-best">
-          <h4>Recommended styles</h4>
-          <ul>
-            <li>Wide afros with volume at the sides, not just height</li>
-            <li>Fringe and baby hairs to reduce the forehead's length</li>
-            <li>Short to medium bobs — shoulder-length styles look excellent</li>
-            <li>Avoid very long styles worn straight down</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="face-card">
-        <div class="face-img-wrap"><img src="images/face_diamond.png" alt="Diamond face shape" loading="lazy"></div>
-        <div class="face-shape-name">Diamond</div>
-        <div class="face-shape-sub">Narrow forehead · Wide cheekbones · Narrow chin</div>
-        <div class="face-shape-desc">Widest at the cheekbones, tapering to both a narrow forehead and chin. High cheekbones are a prominent African feature. The goal is to balance the forehead and soften the pointed chin.</div>
-        <div class="face-best">
-          <h4>Recommended styles</h4>
-          <ul>
-            <li>Volume or width at the crown to widen the forehead</li>
-            <li>Chin-length styles that add mass to the lower face</li>
-            <li>Wispy or feathered ends at the chin</li>
-            <li>Avoid styles with maximum volume at the cheekbones</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="face-card">
-        <div class="face-img-wrap"><img src="images/face_heart.png" alt="Heart face shape" loading="lazy"></div>
-        <div class="face-shape-name">Heart</div>
-        <div class="face-shape-sub">Wide forehead · Narrow jaw</div>
-        <div class="face-shape-desc">Wide forehead tapering to a pointed or narrow chin. Present across the continent, especially in women with high foreheads. The goal is to reduce forehead width and add weight at the lower face.</div>
-        <div class="face-best">
-          <h4>Recommended styles</h4>
-          <ul>
-            <li>Side parts and swept styles to break up the forehead</li>
-            <li>Volume and fullness at the jaw and chin</li>
-            <li>Chin-length bobs, lob styles, or braids at the chin</li>
-            <li>Avoid centre-parted styles with volume only at the top</li>
-          </ul>
-        </div>
-      </div>
-
-    </div>
-
   </div>
 </section>
 

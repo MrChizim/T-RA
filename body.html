@@ -141,6 +141,27 @@
     .cta-btn { display: inline-flex; align-items: center; gap: 10px; background: var(--white); color: var(--black); font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; text-decoration: none; padding: 15px 30px; transition: background 0.2s; }
     .cta-btn:hover { background: var(--grey-light); }
 
+    /* ── FACE SHAPE CARD IMAGE ── */
+    .face-img-wrap { aspect-ratio: 4/5; margin: -32px -26px 16px; }
+    .face-img-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; filter: grayscale(100%); transition: transform 0.5s ease; }
+    .face-card:hover .face-img-wrap img { transform: scale(1.04); }
+
+    /* ── FACE SHAPES ── */
+    #face-shapes { padding: 96px 0; background: var(--black); }
+    .face-header { margin-bottom: 48px; }
+    .face-header h2 { font-size: clamp(30px,4vw,48px); font-weight: 700; color: var(--white); line-height: 1.1; margin-bottom: 16px; letter-spacing: -0.5px; }
+    .face-header p { font-size: 16px; font-weight: 300; line-height: 1.8; color: rgba(255,255,255,0.4); max-width: 560px; }
+    .face-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.07); }
+    .face-card { background: var(--black); padding: 32px 26px; transition: background 0.2s; overflow: hidden; }
+    .face-card:hover { background: #0d0d0d; }
+    .face-shape-name { font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 6px; }
+    .face-shape-sub { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.25); margin-bottom: 14px; }
+    .face-shape-desc { font-size: 14px; font-weight: 300; line-height: 1.75; color: rgba(255,255,255,0.45); margin-bottom: 14px; }
+    .face-best h4 { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.2); margin-bottom: 8px; }
+    .face-best ul { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+    .face-best li { font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.35); padding-left: 14px; position: relative; line-height: 1.4; }
+    .face-best li::before { content: '—'; position: absolute; left: 0; color: rgba(255,255,255,0.15); }
+
     /* ── SCROLL REVEAL ── */
     .r { opacity: 0; transform: translateY(24px); transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1); }
     .r.in { opacity: 1; transform: none; }
@@ -156,10 +177,13 @@
       .arch-img-wrap { aspect-ratio: 3/4; }
       #intro, .arch-section { padding: 72px 0; }
       .site-logo { left: 20px; } .hamburger { right: 20px; top: 20px; }
+      .face-grid { grid-template-columns: 1fr 1fr; }
+      #face-shapes { padding: 72px 0; }
     }
     @media (max-width: 480px) {
       .arch-grid { grid-template-columns: 1fr; }
       .arch-img-wrap { aspect-ratio: 2/3; }
+      .face-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -506,6 +530,117 @@
             <li>Very slim-fit trousers — expose ankle and look too tight on long legs</li>
             <li>Cropped anything — shortens where you don't need it</li>
             <li>All-black slim-fit — makes a tall frame look very severe</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FACE SHAPES -->
+<section id="face-shapes" data-gender="w" data-nav="dark">
+  <div class="wrap">
+    <div class="face-header r">
+      <p class="sec-label" style="color:rgba(255,255,255,0.3)">Face Shapes</p>
+      <h2>Your face shape — and what it means for your style</h2>
+      <p>Face shape is the single most useful starting point when choosing a style. African facial structures span every shape — oval, round, square, diamond, oblong, heart — but with different proportions than the Western reference most guides use. Take these as direction, not instruction. Your face is one factor, not the whole picture.</p>
+    </div>
+
+    <div class="face-grid r d1">
+
+      <div class="face-card">
+        <div class="face-img-wrap"><img src="images/face_oval.png" alt="Oval face shape" loading="lazy"></div>
+        <div class="face-shape-name">Oval</div>
+        <div class="face-shape-sub">Balanced · Gently rounded chin</div>
+        <div class="face-shape-desc">Forehead slightly wider than the jaw with a softly rounded chin. The most versatile face shape — almost every style works. The reference most guides assume as default.</div>
+        <div class="face-best">
+          <h4>Style notes</h4>
+          <ul>
+            <li>Necklines and collar styles — almost all work well</li>
+            <li>Statement earrings in any shape or length</li>
+            <li>Glasses in any frame shape — oval faces carry them all</li>
+            <li>Experiment freely — very little to avoid here</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="face-card">
+        <div class="face-img-wrap"><img src="images/face_round.png" alt="Round face shape" loading="lazy"></div>
+        <div class="face-shape-name">Round</div>
+        <div class="face-shape-sub">Equal width and length · Soft jaw</div>
+        <div class="face-shape-desc">Width and length are roughly equal with a soft, curved jaw. Common in West African women. The goal is to add length and create the illusion of a slimmer frame.</div>
+        <div class="face-best">
+          <h4>Style notes</h4>
+          <ul>
+            <li>Long drop earrings and pendants to elongate the face</li>
+            <li>V-necklines and deep scoop necks — draw the eye downward</li>
+            <li>Angular or rectangular glasses frames</li>
+            <li>Avoid wide, rounded collar styles that echo the face shape</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="face-card">
+        <div class="face-img-wrap"><img src="images/face_square.png" alt="Square face shape" loading="lazy"></div>
+        <div class="face-shape-name">Square</div>
+        <div class="face-shape-sub">Strong jaw · Angular · Equal width</div>
+        <div class="face-shape-desc">Strong, defined jawline with similar width at the forehead and jaw. A powerful, structured look common across sub-Saharan women. The goal is to soften the angles.</div>
+        <div class="face-best">
+          <h4>Style notes</h4>
+          <ul>
+            <li>Round and oval glasses frames to soften the jaw</li>
+            <li>Hoop earrings and rounded earring shapes</li>
+            <li>Scoop necks and curved necklines</li>
+            <li>Avoid geometric, angular jewellery that mirrors the jaw</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="face-card">
+        <div class="face-img-wrap"><img src="images/face_oblong.png" alt="Oblong face shape" loading="lazy"></div>
+        <div class="face-shape-name">Oblong / Rectangle</div>
+        <div class="face-shape-sub">Long · Narrow · Even width</div>
+        <div class="face-shape-desc">Face is noticeably longer than it is wide with consistent width throughout. Common in East African women — Kenyan, Ethiopian, Somali frames often carry this shape. The goal is to add width and break the vertical line.</div>
+        <div class="face-best">
+          <h4>Style notes</h4>
+          <ul>
+            <li>Wide, statement earrings — studs and wide hoops add width</li>
+            <li>Boat necks and off-shoulder necklines to broaden the shoulder line</li>
+            <li>Wide frame glasses — square or rectangular</li>
+            <li>Avoid very long drop earrings that extend the vertical</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="face-card">
+        <div class="face-img-wrap"><img src="images/face_diamond.png" alt="Diamond face shape" loading="lazy"></div>
+        <div class="face-shape-name">Diamond</div>
+        <div class="face-shape-sub">Narrow forehead · Wide cheekbones · Narrow chin</div>
+        <div class="face-shape-desc">Widest at the cheekbones, tapering to both a narrow forehead and chin. High cheekbones are a prominent feature. The goal is to balance the forehead and soften the pointed chin.</div>
+        <div class="face-best">
+          <h4>Style notes</h4>
+          <ul>
+            <li>Stud and drop earrings — avoid very wide statement earrings at cheek level</li>
+            <li>Oval and rimless glasses to soften the cheekbone width</li>
+            <li>Sweetheart and curved necklines to broaden the lower face</li>
+            <li>Avoid cat-eye frames that exaggerate the cheekbone width</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="face-card">
+        <div class="face-img-wrap"><img src="images/face_heart.png" alt="Heart face shape" loading="lazy"></div>
+        <div class="face-shape-name">Heart</div>
+        <div class="face-shape-sub">Wide forehead · Narrow jaw</div>
+        <div class="face-shape-desc">Wide forehead tapering to a pointed or narrow chin. Present across the continent, especially in women with high foreheads. The goal is to reduce forehead width and add weight at the lower face.</div>
+        <div class="face-best">
+          <h4>Style notes</h4>
+          <ul>
+            <li>Drop and chandelier earrings to add weight at the chin</li>
+            <li>Wide-jaw frames and bottom-heavy glasses</li>
+            <li>V-neck and sweetheart necklines to narrow the forehead visually</li>
+            <li>Avoid top-heavy earrings and embellished headbands</li>
           </ul>
         </div>
       </div>

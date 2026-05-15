@@ -157,24 +157,24 @@
     .product-card > *:not(.product-img-wrap) { padding-left: 24px; padding-right: 24px; }
     .product-img-wrap {
       width: 100%; aspect-ratio: 1/1;
-      background: #e0e0e0;
-      display: flex; align-items: center; justify-content: center;
+      background: #ebebeb;
+      position: relative;
       overflow: hidden; margin-bottom: 20px; flex-shrink: 0;
     }
-    .product-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .product-img-wrap img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
     .product-img-placeholder {
-      width: 100%; height: 100%;
+      position: absolute; inset: 0;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       gap: 6px; padding: 20px; text-align: center;
     }
     .pip-initial {
-      font-size: 36px; font-weight: 900; letter-spacing: -1px;
-      color: rgba(0,0,0,0.12); line-height: 1;
+      font-size: 48px; font-weight: 900; letter-spacing: -2px;
+      color: rgba(0,0,0,0.1); line-height: 1;
     }
-    .pip-brand { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(0,0,0,0.3); }
-    .pip-type { font-size: 9px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: rgba(0,0,0,0.18); }
-    .product-card.featured .product-img-wrap { background: #1a1a1a; }
-    .product-card.featured .pip-initial { color: rgba(255,255,255,0.1); }
+    .pip-brand { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(0,0,0,0.28); }
+    .pip-type { font-size: 9px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: rgba(0,0,0,0.15); }
+    .product-card.featured .product-img-wrap { background: #111; }
+    .product-card.featured .pip-initial { color: rgba(255,255,255,0.08); }
     .product-card.featured .pip-brand { color: rgba(255,255,255,0.2); }
     .product-card.featured .pip-type { color: rgba(255,255,255,0.1); }
     .product-match { padding-top: 4px; }
@@ -446,13 +446,15 @@
     document.getElementById('shopEyebrow').textContent = 'TÓRA — Personalised Shop';
     document.getElementById('shopTitle').innerHTML = 'Your<br>Products';
     document.getElementById('shopSubtitle').textContent = 'Every product here is matched to your specific combination. Not generic recommendations — yours.';
-  } else {
-    // Prompt to personalise without blocking
-    const tags = document.getElementById('profileTags');
-    tags.innerHTML = '<a href="quiz.html" style="display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--black);border:1px solid var(--black);padding:10px 20px;text-decoration:none;">Take the quiz to personalise this shop →</a>';
   }
 
   buildShop(quizData);
+
+  if (!isPersonalised) {
+    // Append CTA after buildShop has set profile tags
+    const tags = document.getElementById('profileTags');
+    tags.innerHTML = '<a href="quiz.html" style="display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--black);border:1px solid var(--black);padding:10px 20px;text-decoration:none;">Take the quiz to personalise this shop →</a>';
+  }
 
   function buildShop(A) {
     const isWomen = A.gender === 'women';
@@ -495,14 +497,11 @@
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         const cat = btn.dataset.cat;
-        document.querySelectorAll('.shop-section[data-cat]').forEach(sec => {
-          const isMakeupOrBody = sec.id === 'secMakeup' || sec.id === 'secBody';
-          if (cat === 'all') {
-            if (isMakeupOrBody && !isWomen) { sec.style.display = 'none'; return; }
-            sec.style.display = '';
-          } else {
-            sec.style.display = sec.dataset.cat === cat ? '' : 'none';
-          }
+        document.querySelectorAll('.shop-section').forEach(sec => {
+          const womenOnly = sec.id === 'secMakeup' || sec.id === 'secBody';
+          if (!isWomen && womenOnly) { sec.style.display = 'none'; return; }
+          if (cat === 'all') { sec.style.display = ''; }
+          else { sec.style.display = sec.dataset.cat === cat ? '' : 'none'; }
         });
       });
     });

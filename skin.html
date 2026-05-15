@@ -96,6 +96,14 @@
       position: relative;
       overflow: hidden;
     }
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 55%; height: 100%;
+      background: url('images/skin hero.png') center/cover no-repeat;
+      opacity: 0.2;
+    }
     .page-hero-inner { max-width: 1080px; margin: 0 auto; position: relative; z-index: 1; }
     .breadcrumb {
       font-size: 11px; font-weight: 600; letter-spacing: 3px;
@@ -346,7 +354,42 @@
       border-left: 2px solid var(--grey-light); padding-left: 16px; line-height: 1.6;
     }
 
-    /* ── SECTION 6 — CTA (black) ── */
+    /* ── SECTION 6 — SKIN TONES ── */
+    #skin-tones { padding: 96px 0; background: var(--white); }
+    .skin-tones-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 2px;
+    }
+    @media (max-width: 700px) {
+      .skin-tones-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 400px) {
+      .skin-tones-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .skin-tone-card {
+      position: relative;
+      overflow: hidden;
+      background: var(--black);
+    }
+    .skin-tone-card img {
+      width: 100%; aspect-ratio: 2/3;
+      object-fit: cover; object-position: center top;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+    .skin-tone-card:hover img { transform: scale(1.04); }
+    .skin-tone-card-label {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 12px 14px;
+      background: linear-gradient(0deg, rgba(0,0,0,0.75) 0%, transparent 100%);
+    }
+    .skin-tone-card-name {
+      font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--white);
+    }
+
+    /* ── SECTION 7 — CTA (black) ── */
     .cta-block {
       background: var(--black); padding: 96px 36px; text-align: center;
     }
@@ -761,7 +804,46 @@
 </section>
 
 <!-- ══════════════════════════════
-     SECTION 6 — CTA
+     SECTION 6 — SKIN TONES
+══════════════════════════════ -->
+<section id="skin-tones">
+  <div class="wrap">
+    <div class="section-intro r">
+      <p class="sec-label">Skin Tones</p>
+      <h2>Six tones. One spectrum.</h2>
+      <p>African skin doesn't fit into "light, medium, deep." These six tones — honey through onyx — represent the real range. Each has its own colour palette, its own makeup approach, its own jewellery logic. Find yours in the quiz.</p>
+    </div>
+  </div>
+  <div class="skin-tones-grid r d1">
+    <div class="skin-tone-card">
+      <img src="images/honey skin.png" alt="Honey skin tone" onerror="this.style.background='#C8A07A';this.style.minHeight='200px';this.style.display='block'">
+      <div class="skin-tone-card-label"><div class="skin-tone-card-name">Honey</div></div>
+    </div>
+    <div class="skin-tone-card">
+      <img src="images/caramel skin.png" alt="Caramel skin tone" onerror="this.style.background='#A0704A';this.style.minHeight='200px';this.style.display='block'">
+      <div class="skin-tone-card-label"><div class="skin-tone-card-name">Caramel</div></div>
+    </div>
+    <div class="skin-tone-card">
+      <img src="images/brown skin.png" alt="Brown skin tone" onerror="this.style.background='#7B5035';this.style.minHeight='200px';this.style.display='block'">
+      <div class="skin-tone-card-label"><div class="skin-tone-card-name">Brown</div></div>
+    </div>
+    <div class="skin-tone-card">
+      <img src="images/chestnut skin.png" alt="Chestnut skin tone" onerror="this.style.background='#5C3322';this.style.minHeight='200px';this.style.display='block'">
+      <div class="skin-tone-card-label"><div class="skin-tone-card-name">Chestnut</div></div>
+    </div>
+    <div class="skin-tone-card">
+      <img src="images/ebony skin.png" alt="Ebony skin tone" onerror="this.style.background='#3A1F12';this.style.minHeight='200px';this.style.display='block'">
+      <div class="skin-tone-card-label"><div class="skin-tone-card-name">Ebony</div></div>
+    </div>
+    <div class="skin-tone-card">
+      <img src="images/onyx skin.png" alt="Onyx skin tone" onerror="this.style.background='#1C0E08';this.style.minHeight='200px';this.style.display='block'">
+      <div class="skin-tone-card-label"><div class="skin-tone-card-name">Onyx</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     SECTION 7 — CTA
 ══════════════════════════════ -->
 <div class="cta-block">
   <h2>Add your skin tone to your TÓRA profile</h2>

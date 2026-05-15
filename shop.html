@@ -289,20 +289,6 @@
       font-size: 14px; font-weight: 300; line-height: 1.8; color: rgba(255,255,255,0.5);
     }
 
-    /* ── GATE ── */
-    #shopGate {
-      min-height: 80vh; display: flex; flex-direction: column;
-      align-items: center; justify-content: center; text-align: center;
-      padding: 60px 36px; display: none;
-    }
-    #shopGate h2 { font-size: 28px; font-weight: 700; margin-bottom: 12px; }
-    #shopGate p { font-size: 14px; color: var(--grey); max-width: 380px; margin-bottom: 24px; line-height: 1.7; }
-    #shopGate a {
-      font-size: 11px; font-weight: 700; letter-spacing: 2px;
-      text-transform: uppercase; color: var(--white); background: var(--black);
-      padding: 14px 28px; text-decoration: none;
-    }
-
     /* ── REVEAL ── */
     .r { opacity: 0; transform: translateY(18px); transition: opacity 0.55s ease, transform 0.55s ease; }
     .r.in { opacity: 1; transform: none; }
@@ -335,21 +321,14 @@
   <div class="drawer-footer">© TÓRA 2025</div>
 </div>
 
-<!-- GATE: shown when no quiz answers -->
-<div id="shopGate">
-  <h2>Take the quiz first</h2>
-  <p>Your shop is personalised to your curl type, skin tone, body type, and face shape. Complete the quiz to see your matched products.</p>
-  <a href="quiz.html">Take the quiz →</a>
-</div>
-
 <!-- MAIN SHOP -->
-<div id="shopMain" style="display:none;">
+<div id="shopMain">
 
   <!-- HEADER -->
   <header class="shop-header">
-    <div class="shop-eyebrow">TÓRA — Personalised Shop</div>
-    <h1 class="shop-title">Your<br>Products</h1>
-    <p class="shop-subtitle">Every product here is matched to your specific combination. Not generic recommendations — yours.</p>
+    <div class="shop-eyebrow" id="shopEyebrow">TÓRA — Shop</div>
+    <h1 class="shop-title" id="shopTitle">The<br>Edit</h1>
+    <p class="shop-subtitle" id="shopSubtitle">The best products for Black and African hair, skin, and style — curated and sourced on Jumia.</p>
     <div class="profile-tags" id="profileTags"></div>
   </header>
 
@@ -458,12 +437,22 @@
   const raw = localStorage.getItem('tora_quiz');
   const A = raw ? JSON.parse(raw) : null;
 
-  if (!A || !A.curlType) {
-    document.getElementById('shopGate').style.display = 'flex';
+  // Default answers for visitors without quiz data — show general best-sellers
+  const defaults = { curlType: '4c', skinTone: 'brown', skinType: 'combination', undertone: 'warm', bodyType: 'hourglass', faceShape: 'oval', gender: 'women' };
+  const quizData = (A && A.curlType) ? A : defaults;
+  const isPersonalised = !!(A && A.curlType);
+
+  if (isPersonalised) {
+    document.getElementById('shopEyebrow').textContent = 'TÓRA — Personalised Shop';
+    document.getElementById('shopTitle').innerHTML = 'Your<br>Products';
+    document.getElementById('shopSubtitle').textContent = 'Every product here is matched to your specific combination. Not generic recommendations — yours.';
   } else {
-    document.getElementById('shopMain').style.display = '';
-    buildShop(A);
+    // Prompt to personalise without blocking
+    const tags = document.getElementById('profileTags');
+    tags.innerHTML = '<a href="quiz.html" style="display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--black);border:1px solid var(--black);padding:10px 20px;text-decoration:none;">Take the quiz to personalise this shop →</a>';
   }
+
+  buildShop(quizData);
 
   function buildShop(A) {
     const isWomen = A.gender === 'women';

@@ -606,6 +606,8 @@
     <li><a href="scent.html">Scent <span class="d-arrow">→</span></a></li>
     <li><a href="skin.html">Skin <span class="d-arrow">→</span></a></li>
     <li><a href="quiz.html">Style Quiz <span class="d-arrow">→</span></a></li>
+    <li id="navSignIn" style="display:none;"><a href="#" onclick="window.__toraSignIn();return false;">Sign In <span class="d-arrow">→</span></a></li>
+    <li id="navSignOut" style="display:none;"><a href="#" onclick="window.__toraSignOut();return false;">Sign Out <span class="d-arrow">→</span></a></li>
   </ul>
   <div class="drawer-footer">Hair · Body · Scent · Skin</div>
 </div>
@@ -1436,6 +1438,27 @@
 
   // Init from stored preference, default to women
   applyGender(localStorage.getItem(GKEY) || 'w');
+</script>
+
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+  import { getAuth, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+  const app = initializeApp({ apiKey:"AIzaSyD3VTLMkB7WhzOzfzGWMzqFx0OqQMOuJxM", authDomain:"tora-c492b.firebaseapp.com", projectId:"tora-c492b" });
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+  onAuthStateChanged(auth, user => {
+    const signInBtn = document.getElementById('navSignIn');
+    const signOutBtn = document.getElementById('navSignOut');
+    if (user) {
+      if (signInBtn) signInBtn.style.display = 'none';
+      if (signOutBtn) signOutBtn.style.display = '';
+    } else {
+      if (signInBtn) signInBtn.style.display = '';
+      if (signOutBtn) signOutBtn.style.display = 'none';
+    }
+  });
+  window.__toraSignIn = () => signInWithPopup(auth, provider).then(() => location.reload()).catch(err => console.error(err));
+  window.__toraSignOut = () => signOut(auth).then(() => location.reload()).catch(err => console.error(err));
 </script>
 </body>
 </html>

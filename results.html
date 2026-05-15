@@ -47,9 +47,10 @@
       window.__toraUid   = user.uid;
       window.__toraEmail = user.email;
 
+      const ADMIN_EMAILS = ['siriusoddjobs@gmail.com'];
       const snap = await getDoc(doc(db, 'users', user.uid));
       const data = snap.exists() ? snap.data() : {};
-      const paid = data.paid === true;
+      const paid = data.paid === true || ADMIN_EMAILS.includes(user.email);
 
       // Restore quiz answers from Firestore if localStorage is empty
       if (!localStorage.getItem('tora_quiz') && data.answers) {

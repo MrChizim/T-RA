@@ -59,8 +59,9 @@
         if (data.answers && !localStorage.getItem('tora_quiz')) {
           localStorage.setItem('tora_quiz', JSON.stringify(data.answers));
         }
-        // If already completed quiz, go straight to results
-        if (data.answers && data.quizCompletedAt) {
+        // If already completed quiz, go straight to results — unless retaking
+        const isRetake = new URLSearchParams(window.location.search).get('retake') === '1';
+        if (!isRetake && data.answers && data.quizCompletedAt) {
           window.__toraUser = user;
           window.location.href = 'results.html';
           return;

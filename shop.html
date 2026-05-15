@@ -149,10 +149,35 @@
     }
     .product-card {
       background: var(--grey-light);
-      padding: 28px 24px;
+      padding: 0 0 24px;
       display: flex; flex-direction: column;
       transition: background 0.2s;
+      overflow: hidden;
     }
+    .product-card > *:not(.product-img-wrap) { padding-left: 24px; padding-right: 24px; }
+    .product-img-wrap {
+      width: 100%; aspect-ratio: 1/1;
+      background: #e0e0e0;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; margin-bottom: 20px; flex-shrink: 0;
+    }
+    .product-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .product-img-placeholder {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 6px; padding: 20px; text-align: center;
+    }
+    .pip-initial {
+      font-size: 36px; font-weight: 900; letter-spacing: -1px;
+      color: rgba(0,0,0,0.12); line-height: 1;
+    }
+    .pip-brand { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(0,0,0,0.3); }
+    .pip-type { font-size: 9px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: rgba(0,0,0,0.18); }
+    .product-card.featured .product-img-wrap { background: #1a1a1a; }
+    .product-card.featured .pip-initial { color: rgba(255,255,255,0.1); }
+    .product-card.featured .pip-brand { color: rgba(255,255,255,0.2); }
+    .product-card.featured .pip-type { color: rgba(255,255,255,0.1); }
+    .product-match { padding-top: 4px; }
     .product-card:hover { background: #e4e4e4; }
     .product-card.featured {
       grid-column: span 2;
@@ -606,22 +631,7 @@
     const products = SCENT_PRODUCTS[scentKey];
     document.getElementById('scentSectionTitle').textContent = `${cap(scentKey)} undertone — your scent family`;
     const grid = document.getElementById('scentProductsGrid');
-    grid.innerHTML = products.map((p, i) => `
-      <div class="product-card${i === 0 ? ' featured' : ''} r">
-        <div class="product-match">
-          ${p.goodFor.map(g => `<span class="match-tag">${g}</span>`).join('')}
-        </div>
-        <div class="product-type">${p.type}</div>
-        <div class="product-brand">${p.brand}</div>
-        <div class="product-name">${p.name}</div>
-        <p class="product-why">${p.why}</p>
-        <div class="product-price">${p.price}</div>
-        <a href="${p.link}" target="_blank" rel="noopener" class="shop-btn">
-          Shop on Jumia
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
-    `).join('');
+    grid.innerHTML = products.map((p, i) => renderCard(p, i)).join('');
   }
 
   function buildHairSection(A, isWomen) {
@@ -643,22 +653,7 @@
     }
 
     const grid = document.getElementById('hairProductsGrid');
-    grid.innerHTML = products.map((p, i) => `
-      <div class="product-card${i === 0 ? ' featured' : ''} r">
-        <div class="product-match">
-          ${p.goodFor.map(g => `<span class="match-tag">${g}</span>`).join('')}
-        </div>
-        <div class="product-type">${p.type}</div>
-        <div class="product-brand">${p.brand}</div>
-        <div class="product-name">${p.name}</div>
-        <p class="product-why">${p.why}</p>
-        <div class="product-price">${p.price}</div>
-        <a href="${p.link}" target="_blank" rel="noopener" class="shop-btn">
-          Shop on Jumia
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
-    `).join('');
+    grid.innerHTML = products.map((p, i) => renderCard(p, i)).join('');
   }
 
   // ── SKINCARE SECTION ──
@@ -697,22 +692,7 @@
     document.getElementById('skinSectionTitle').textContent = `${skinTypeLabel} — recommended products`;
 
     const grid = document.getElementById('skinProductsGrid');
-    grid.innerHTML = products.map((p, i) => `
-      <div class="product-card${i === 0 ? ' featured' : ''} r">
-        <div class="product-match">
-          ${p.goodFor.map(g => `<span class="match-tag">${g}</span>`).join('')}
-        </div>
-        <div class="product-type">${p.step}</div>
-        <div class="product-brand">${p.brand}</div>
-        <div class="product-name">${p.name}</div>
-        <p class="product-why">${p.why}</p>
-        <div class="product-price">${p.price}</div>
-        <a href="${p.link}" target="_blank" rel="noopener" class="shop-btn">
-          Shop on Jumia
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
-    `).join('');
+    grid.innerHTML = products.map((p, i) => renderCard(p, i)).join('');
   }
 
   // ── MAKEUP SECTION ──
@@ -772,22 +752,7 @@
     document.getElementById('makeupSectionTitle').textContent = `${toneLabel} skin — your matched makeup`;
 
     const grid = document.getElementById('makeupProductsGrid');
-    grid.innerHTML = products.map((p, i) => `
-      <div class="product-card${i === 0 ? ' featured' : ''} r">
-        <div class="product-match">
-          ${p.goodFor.map(g => `<span class="match-tag">${g}</span>`).join('')}
-        </div>
-        <div class="product-type">${p.type}</div>
-        <div class="product-brand">${p.brand}</div>
-        <div class="product-name">${p.name}</div>
-        <p class="product-why">${p.why}</p>
-        <div class="product-price">${p.price}</div>
-        <a href="${p.link}" target="_blank" rel="noopener" class="shop-btn">
-          Shop on Jumia
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
-    `).join('');
+    grid.innerHTML = products.map((p, i) => renderCard(p, i)).join('');
   }
 
   // ── BODY & STYLE SECTION ──
@@ -830,12 +795,23 @@
     const bodyLabel = cap(bodyKey);
 
     const grid = document.getElementById('bodyProductsGrid');
-    grid.innerHTML = products.map((p, i) => `
+    grid.innerHTML = products.map((p, i) => renderCard(p, i)).join('');
+  }
+
+  // ── SHARED CARD RENDERER ──
+  function renderCard(p, i) {
+    const initial = (p.brand || p.name || '?').charAt(0).toUpperCase();
+    const label = p.type || p.step || 'Product';
+    const imgHTML = p.img
+      ? `<img src="${p.img}" alt="${p.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class='product-img-placeholder' style='display:none'><div class='pip-initial'>${initial}</div><div class='pip-brand'>${p.brand}</div><div class='pip-type'>${label}</div></div>`
+      : `<div class='product-img-placeholder'><div class='pip-initial'>${initial}</div><div class='pip-brand'>${p.brand}</div><div class='pip-type'>${label}</div></div>`;
+    return `
       <div class="product-card${i === 0 ? ' featured' : ''} r">
+        <div class="product-img-wrap">${imgHTML}</div>
         <div class="product-match">
-          ${p.goodFor.map(g => `<span class="match-tag">${g}</span>`).join('')}
+          ${(p.goodFor || []).map(g => `<span class="match-tag">${g}</span>`).join('')}
         </div>
-        <div class="product-type">${p.type}</div>
+        <div class="product-type">${label}</div>
         <div class="product-brand">${p.brand}</div>
         <div class="product-name">${p.name}</div>
         <p class="product-why">${p.why}</p>
@@ -844,8 +820,7 @@
           Shop on Jumia
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
-      </div>
-    `).join('');
+      </div>`;
   }
 
   // ── UTILS ──

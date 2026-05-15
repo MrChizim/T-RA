@@ -906,6 +906,9 @@
     .product-card { background: var(--white); padding: 28px 24px; }
     .product-img-wrap { aspect-ratio: 1/1; background: var(--grey-light); margin: -28px -24px 20px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
     .product-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+    .product-img-placeholder { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 20px; text-align: center; }
+    .product-img-placeholder .pip-brand { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--grey); }
+    .product-img-placeholder .pip-type { font-size: 10px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: rgba(0,0,0,0.25); }
     .product-brand { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--grey); margin-bottom: 6px; }
     .product-name { font-size: 15px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.2px; }
     .product-why { font-size: 13px; font-weight: 300; line-height: 1.6; color: var(--grey-mid); margin-bottom: 14px; }
@@ -1222,7 +1225,7 @@
     <li><a href="body.html">Body <span class="d-arrow">→</span></a></li>
     <li><a href="scent.html">Scent <span class="d-arrow">→</span></a></li>
     <li><a href="shop.html">Shop <span class="d-arrow">→</span></a></li>
-    <li><a href="quiz.html">Retake Quiz <span class="d-arrow">→</span></a></li>
+    <li><a href="quiz.html?retake=1">Retake Quiz <span class="d-arrow">→</span></a></li>
     <li><a href="results.html">My Profile <span class="d-arrow">→</span></a></li>
   </ul>
   <div class="drawer-footer">Hair · Body · Scent · Skin</div>
@@ -1234,7 +1237,7 @@
   <h1 class="hero-title" id="heroTitle">YOUR<br>PROFILE</h1>
   <div class="hero-combination" id="heroCombination"></div>
   <a href="shop.html" class="hero-retake" style="right:auto;left:36px;bottom:72px;">Shop your products →</a>
-  <a href="quiz.html" class="hero-retake">Retake Quiz →</a>
+  <a href="quiz.html?retake=1" class="hero-retake">Retake Quiz →</a>
 </div>
 
 <!-- SECTION 01 — HAIR -->
@@ -2731,8 +2734,9 @@
     productGrid.innerHTML = shampooCardHTML + products.map(p => `
       <div class="product-card">
         <div class="product-img-wrap">
-          ${p.img ? `<img src="${p.img}" alt="${p.name}" onerror="this.parentElement.innerHTML='<div style=\\'padding:20px;text-align:center;color:var(--grey);font-size:11px;font-weight:700;letter-spacing:2px;\\'>${p.brand}</div>'">`
-          : `<div style="padding:20px;text-align:center;color:var(--grey);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;">${p.brand}</div>`}
+          ${p.img
+            ? `<img src="${p.img}" alt="${p.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class='product-img-placeholder' style='display:none'><div class='pip-brand'>${p.brand}</div><div class='pip-type'>${p.type || 'Hair Care'}</div></div>`
+            : `<div class='product-img-placeholder'><div class='pip-brand'>${p.brand}</div><div class='pip-type'>${p.type || 'Hair Care'}</div></div>`}
         </div>
         <div class="product-brand">${p.brand}</div>
         <div class="product-name">${p.name}</div>

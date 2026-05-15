@@ -1035,17 +1035,26 @@
     }
     .makeup-product-card {
       background: var(--grey-light);
-      padding: 24px 22px;
+      padding: 0 0 22px;
+      overflow: hidden;
     }
+    .makeup-product-img {
+      width: 100%; aspect-ratio: 1/1; background: #e0e0e0;
+      position: relative; margin-bottom: 18px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .makeup-product-img .pip-initial { font-size: 42px; font-weight: 900; letter-spacing: -2px; color: rgba(0,0,0,0.1); line-height: 1; }
+    .makeup-product-img .pip-brand { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(0,0,0,0.25); margin-top: 6px; }
+    .makeup-product-img-inner { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 16px; text-align: center; }
     .makeup-product-type {
       font-size: 10px; font-weight: 700; letter-spacing: 2px;
-      text-transform: uppercase; color: var(--grey); margin-bottom: 6px;
+      text-transform: uppercase; color: var(--grey); margin-bottom: 6px; padding: 0 20px;
     }
-    .makeup-product-brand { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--grey-mid); margin-bottom: 4px; }
-    .makeup-product-name { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
-    .makeup-product-why { font-size: 12px; font-weight: 300; line-height: 1.65; color: var(--grey-mid); margin-bottom: 10px; }
+    .makeup-product-brand { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--grey-mid); margin-bottom: 4px; padding: 0 20px; }
+    .makeup-product-name { font-size: 14px; font-weight: 700; margin-bottom: 6px; padding: 0 20px; }
+    .makeup-product-why { font-size: 12px; font-weight: 300; line-height: 1.65; color: var(--grey-mid); margin-bottom: 10px; padding: 0 20px; }
     .makeup-product-link {
-      display: inline-flex; align-items: center; gap: 6px;
+      display: inline-flex; align-items: center; gap: 6px; margin: 0 20px;
       font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
       text-transform: uppercase; color: var(--black);
       text-decoration: none; border-bottom: 1px solid var(--grey-light);
@@ -2344,8 +2353,11 @@
       avoid: 'Cool-toned pinks, icy lavenders, and blue-based reds. These fight your undertone and create a muddy, unbalanced finish.',
       products: [
         { type: 'Foundation', brand: 'Black Opal', name: 'True Color Stick Foundation', why: 'Warm undertone range built for melanin-rich skin. Caramel shade is a near-perfect match for honey skin.', link: 'https://www.jumia.com.ng/catalog/?q=black+opal+foundation' },
+        { type: 'Concealer', brand: 'Maybelline', name: 'Fit Me Concealer — 20 Sand', why: 'Warm-toned concealer that blends into honey skin without turning grey or ashy. Apply under eyes and over blemishes.', link: 'https://www.jumia.com.ng/catalog/?q=maybelline+fit+me+concealer' },
+        { type: 'Blush', brand: 'NYX', name: 'Sweet Cheeks Blush — Citrine Rose', why: 'Warm peachy-coral blush that shows up beautifully on honey skin. Buildable pigment, long-wear.', link: 'https://www.jumia.com.ng/catalog/?q=nyx+sweet+cheeks+blush' },
+        { type: 'Highlighter', brand: 'Juvia\'s Place', name: 'I Am Magic Highlighter — Gold', why: 'Gold highlighter formulated for melanin-rich skin. Warm honey skin amplifies the gold glow on the cheekbones.', link: 'https://www.jumia.com.ng/catalog/?q=juvias+place+highlighter' },
         { type: 'Lip Colour', brand: 'Fenty Beauty', name: 'Stunna Lip Paint — Uncensored', why: 'Universal red that works on every skin tone including warm undertones. Full coverage, long-wear.', link: 'https://www.jumia.com.ng/catalog/?q=fenty+lip' },
-        { type: 'Eyeshadow', brand: 'Juvia\'s Place', name: 'The Zulu Palette', why: 'Made for deep and warm skin tones. Copper, gold, and terracotta shades that are designed to show up on melanated skin.', link: 'https://www.jumia.com.ng/catalog/?q=juvias+place+palette' }
+        { type: 'Eyeshadow', brand: 'Juvia\'s Place', name: 'The Zulu Palette', why: 'Made for deep and warm skin tones. Copper, gold, and terracotta shades designed to show up on melanated skin.', link: 'https://www.jumia.com.ng/catalog/?q=juvias+place+palette' }
       ]
     },
     caramel: {
@@ -2367,8 +2379,11 @@
       avoid: 'Ash-toned foundations, cool pink blushes, and stark white highlighters. Grey-based highlighters look dusty — choose gold or champagne.',
       products: [
         { type: 'Foundation', brand: 'Fenty Beauty', name: 'Pro Filt\'r Soft Matte Foundation', why: 'Shade 280W matches warm caramel undertones precisely. Full coverage, no oxidising.', link: 'https://www.jumia.com.ng/catalog/?q=fenty+pro+filtr' },
+        { type: 'Concealer', brand: 'NYX', name: 'Can\'t Stop Won\'t Stop Concealer — Caramel', why: 'Full-coverage concealer in warm caramel shades that won\'t pull grey or pink on warm undertones.', link: 'https://www.jumia.com.ng/catalog/?q=nyx+cant+stop+concealer' },
         { type: 'Blush', brand: 'Sleek MakeUP', name: 'Blush by 3 — Lace', why: 'Warm peachy-rose blush that shows up on caramel skin without looking chalky. Available in Nigeria.', link: 'https://www.jumia.com.ng/catalog/?q=sleek+blush' },
-        { type: 'Highlighter', brand: 'Juvia\'s Place', name: 'I Am Magic Highlighter', why: 'Gold-toned highlighter formulated for deep and medium skin tones. Warm caramel skin amplifies the gold glow.', link: 'https://www.jumia.com.ng/catalog/?q=juvias+place+highlighter' }
+        { type: 'Highlighter', brand: 'Juvia\'s Place', name: 'I Am Magic Highlighter', why: 'Gold-toned highlighter formulated for deep and medium skin tones. Warm caramel skin amplifies the gold glow.', link: 'https://www.jumia.com.ng/catalog/?q=juvias+place+highlighter' },
+        { type: 'Lip Colour', brand: 'MAC', name: 'Velvet Teddy Lipstick', why: 'The most universally flattering warm nude on medium-dark skin. Velvet finish, long-wear, widely available.', link: 'https://www.jumia.com.ng/catalog/?q=mac+velvet+teddy' },
+        { type: 'Eyeshadow', brand: 'Morphe', name: '35O Nature Glow Palette', why: 'Warm neutral tones — copper, bronze, terracotta — highly pigmented for caramel skin. Great value palette.', link: 'https://www.jumia.com.ng/catalog/?q=morphe+35o' }
       ]
     },
     brown: {
@@ -2389,9 +2404,12 @@
       blush: { shades: [{n:'Warm Rose',h:'#C06050'},{n:'Deep Peach',h:'#E8A87C'},{n:'Mauve',h:'#997799'}], note: 'Brown skin with neutral undertones accepts both warm and cool blush — the widest range. Mauve and warm rose are your safest choices.' },
       avoid: 'Very pale or chalky foundation shades. Grey-toned products generally. Frosted eyeshadows from older formulations — these are not pigmented enough for medium-deep skin.',
       products: [
-        { type: 'Foundation', brand: 'L\'Oréal', name: 'True Match Liquid Foundation W6', why: 'Accessible, widely available in Nigeria and the UK. Warm W6 or neutral N6 depending on your lean within the brown tone range.', link: 'https://www.jumia.com.ng/catalog/?q=loreal+true+match' },
-        { type: 'Lip Colour', brand: 'MAC', name: 'Velvet Teddy / Chestnut', why: 'Both are universally flattering on brown skin. Velvet Teddy is the best-selling neutral nude on medium-deep skin globally.', link: 'https://www.jumia.com.ng/catalog/?q=mac+lipstick' },
-        { type: 'Eyeshadow', brand: 'Morphe', name: '35O Nature Glow Palette', why: 'Neutral and warm tones that show up well on brown skin. Accessible price point, pigmented for medium-deep skin.', link: 'https://www.jumia.com.ng/catalog/?q=morphe+35o' }
+        { type: 'Foundation', brand: 'L\'Oréal', name: 'True Match Liquid Foundation W6', why: 'Accessible, widely available in Nigeria and the UK. Warm W6 or neutral N6 depending on your undertone lean.', link: 'https://www.jumia.com.ng/catalog/?q=loreal+true+match' },
+        { type: 'Concealer', brand: 'Fenty Beauty', name: 'Pro Filt\'r Instant Retouch Concealer 330', why: 'Neutral-medium concealer that matches brown skin without pulling warm or cool. Lightweight, buildable.', link: 'https://www.jumia.com.ng/catalog/?q=fenty+concealer' },
+        { type: 'Blush', brand: 'NYX', name: 'Sweet Cheeks Blush — Citrine Rose', why: 'Warm rose-toned blush that registers on medium-brown skin without looking chalky or flat.', link: 'https://www.jumia.com.ng/catalog/?q=nyx+sweet+cheeks+blush' },
+        { type: 'Highlighter', brand: 'Becca', name: 'Shimmering Skin Perfector — Champagne Pop', why: 'Champagne-gold highlighter that flatters neutral brown undertones. Works with both warm and cool leans.', link: 'https://www.jumia.com.ng/catalog/?q=becca+champagne+pop' },
+        { type: 'Lip Colour', brand: 'MAC', name: 'Velvet Teddy Lipstick', why: 'The best-selling neutral nude on medium-deep skin globally. Flatters both warm and cool brown skin.', link: 'https://www.jumia.com.ng/catalog/?q=mac+velvet+teddy' },
+        { type: 'Eyeshadow', brand: 'Morphe', name: '35O Nature Glow Palette', why: 'Neutral and warm tones that show up well on brown skin. Pigmented for medium-deep skin, great value.', link: 'https://www.jumia.com.ng/catalog/?q=morphe+35o' }
       ]
     },
     chestnut: {
@@ -2413,8 +2431,11 @@
       avoid: 'Anything pale, frosted, or ash-toned. Cool pinks vanish entirely. Avoid foundation shades with grey or pink undertones — they look ashy against warm chestnut skin.',
       products: [
         { type: 'Foundation', brand: 'Fenty Beauty', name: 'Pro Filt\'r 400W', why: 'Deep warm foundation built for exactly this depth. Stays true to the warm undertone all day without oxidising.', link: 'https://www.jumia.com.ng/catalog/?q=fenty+pro+filtr+400' },
-        { type: 'Eyeshadow', brand: 'Juvia\'s Place', name: 'The Nubian 2 Palette', why: 'Formulated for deep skin tones specifically. Warm copper, bronze, and terracotta shades hit the deepest on chestnut skin.', link: 'https://www.jumia.com.ng/catalog/?q=juvias+nubian' },
-        { type: 'Lip Colour', brand: 'NYX', name: 'Soft Matte Lip Cream — Toulouse / Cannes', why: 'Deep wine and warm berry shades that amplify chestnut skin. Long-wear, affordable, available in Nigeria.', link: 'https://www.jumia.com.ng/catalog/?q=nyx+soft+matte+lip' }
+        { type: 'Concealer', brand: 'Black Opal', name: 'True Color Stick Concealer — Mahogany', why: 'One of the few concealers that goes deep enough for chestnut skin without pulling grey. Warm undertone formula.', link: 'https://www.jumia.com.ng/catalog/?q=black+opal+concealer' },
+        { type: 'Blush', brand: 'Sleek MakeUP', name: 'Blush by 3 — Flame', why: 'Deep coral-brick blush that registers on chestnut skin. Lightweight shades disappear — this one doesn\'t.', link: 'https://www.jumia.com.ng/catalog/?q=sleek+blush+flame' },
+        { type: 'Highlighter', brand: 'Juvia\'s Place', name: 'I Am Magic Highlighter — Bronze', why: 'Bronze-gold highlighter built for deep warm skin. Gold and bronze sit beautifully against warm chestnut skin.', link: 'https://www.jumia.com.ng/catalog/?q=juvias+place+highlighter' },
+        { type: 'Eyeshadow', brand: 'Juvia\'s Place', name: 'The Nubian 2 Palette', why: 'Formulated for deep skin tones. Warm copper, bronze, and terracotta shades designed to show up on chestnut skin.', link: 'https://www.jumia.com.ng/catalog/?q=juvias+nubian' },
+        { type: 'Lip Colour', brand: 'NYX', name: 'Soft Matte Lip Cream — Toulouse', why: 'Deep wine that amplifies chestnut skin. Long-wear, affordable, widely available in Nigeria.', link: 'https://www.jumia.com.ng/catalog/?q=nyx+soft+matte+lip' }
       ]
     },
     ebony: {
@@ -2436,7 +2457,10 @@
       avoid: 'Pale, chalky, or cool-pink foundations. Frost and shimmer eyeshadows from drugstore brands — these are not pigmented enough and show up chalky. Avoid bronzers with orange undertones.',
       products: [
         { type: 'Foundation', brand: 'Fenty Beauty', name: 'Pro Filt\'r 460N', why: 'Cool deep foundation that matches ebony skin without pulling warm. One of the most accurate deep shades ever made.', link: 'https://www.jumia.com.ng/catalog/?q=fenty+pro+filtr+460' },
-        { type: 'Eyeshadow', brand: 'Juvia\'s Place', name: 'The Masquerade Mini Palette', why: 'Jewel tones — cobalt, emerald, deep purple — highly pigmented specifically for dark skin. These are the palettes that work.', link: 'https://www.jumia.com.ng/catalog/?q=juvias+masquerade' },
+        { type: 'Concealer', brand: 'Iman Cosmetics', name: 'Second to None Concealer — Earth Deep', why: 'Built specifically for deep Black skin. Cool undertone range that doesn\'t look ashy or orange on ebony skin.', link: 'https://www.jumia.com.ng/catalog/?q=iman+cosmetics+concealer' },
+        { type: 'Blush', brand: 'Sleek MakeUP', name: 'Blush by 3 — Rose Gold', why: 'Deep rose-berry blush pigmented enough to show on ebony skin. Build up — deep skin absorbs colour.', link: 'https://www.jumia.com.ng/catalog/?q=sleek+blush+rose+gold' },
+        { type: 'Highlighter', brand: 'NYX', name: 'Born to Glow Liquid Illuminator — Gleam', why: 'Silver-toned liquid highlighter that sits against cool ebony skin without looking warm or muddy.', link: 'https://www.jumia.com.ng/catalog/?q=nyx+liquid+illuminator' },
+        { type: 'Eyeshadow', brand: 'Juvia\'s Place', name: 'The Masquerade Mini Palette', why: 'Jewel tones — cobalt, emerald, deep purple — highly pigmented for dark skin. These are the palettes that work.', link: 'https://www.jumia.com.ng/catalog/?q=juvias+masquerade' },
         { type: 'Lip Colour', brand: 'Uoma Beauty', name: 'Say What?! Matte Lipstick', why: 'Made by and for Black women. Deep berry and classic red shades formulated to hit at full strength on ebony skin.', link: 'https://www.jumia.com.ng/catalog/?q=uoma+beauty+lipstick' }
       ]
     },
@@ -2459,7 +2483,10 @@
       avoid: 'All light foundation shades and anything with pink or grey undertones. Orange bronzers. Pale or frosted eyeshadows. Light-coloured blush. In general: nothing pale works on onyx skin.',
       products: [
         { type: 'Foundation', brand: 'Fenty Beauty', name: 'Pro Filt\'r 498', why: 'The deepest shade in the Fenty line. Created specifically because nothing else matched this depth. Cool undertone, full coverage.', link: 'https://www.jumia.com.ng/catalog/?q=fenty+pro+filtr+498' },
-        { type: 'Eyeshadow', brand: 'Juvia\'s Place', name: 'The Nubian Palette', why: 'Jewel and deep tones formulated to show up on the deepest skin tones. Cobalt, emerald, and deep purple at full saturation.', link: 'https://www.jumia.com.ng/catalog/?q=juvias+nubian+palette' },
+        { type: 'Concealer', brand: 'Black Radiance', name: 'True Complexion Concealer — Espresso', why: 'One of the few concealers that goes dark enough for onyx skin. Accessible price point, available on Jumia.', link: 'https://www.jumia.com.ng/catalog/?q=black+radiance+concealer' },
+        { type: 'Blush', brand: 'Juvia\'s Place', name: 'The Nubian Blush — Berry', why: 'Deep berry blush specifically made for the deepest skin tones. Apply heavily — only the deepest shades show on onyx skin.', link: 'https://www.jumia.com.ng/catalog/?q=juvias+place+blush' },
+        { type: 'Highlighter', brand: 'Fenty Beauty', name: 'Killawatt Highlighter — Trophy Wife', why: 'Deep gold highlighter that hits differently on the deepest skin tones. Intense pigmentation, no chalkiness.', link: 'https://www.jumia.com.ng/catalog/?q=fenty+killawatt' },
+        { type: 'Eyeshadow', brand: 'Juvia\'s Place', name: 'The Nubian Palette', why: 'Jewel and deep tones formulated for the deepest skin tones. Cobalt, emerald, and deep purple at full saturation.', link: 'https://www.jumia.com.ng/catalog/?q=juvias+nubian+palette' },
         { type: 'Lip Colour', brand: 'Iman Cosmetics', name: 'Luxury Lip Elixir — Deep', why: 'Formulated by Iman for the deepest skin tones. True deep reds and plums that land without looking muted.', link: 'https://www.jumia.com.ng/catalog/?q=iman+cosmetics+lip' }
       ]
     }
@@ -2536,8 +2563,16 @@
 
     const productsHTML = `
       <div class="makeup-product-row" style="margin-top:2px;">
-        ${makeupData.products.map(p => `
+        ${makeupData.products.map(p => {
+          const initial = (p.brand || '?').charAt(0).toUpperCase();
+          return `
           <div class="makeup-product-card">
+            <div class="makeup-product-img">
+              <div class="makeup-product-img-inner">
+                <div class="pip-initial">${initial}</div>
+                <div class="pip-brand">${p.brand}</div>
+              </div>
+            </div>
             <div class="makeup-product-type">${p.type}</div>
             <div class="makeup-product-brand">${p.brand}</div>
             <div class="makeup-product-name">${p.name}</div>
@@ -2545,8 +2580,8 @@
             <a href="${p.link}" target="_blank" rel="noopener" class="makeup-product-link">
               Shop <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
-          </div>
-        `).join('')}
+          </div>`;
+        }).join('')}
       </div>`;
 
     makeupContent.innerHTML = foundationHTML + lipsHTML + eyesHTML + productsHTML;

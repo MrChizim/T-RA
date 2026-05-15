@@ -26,7 +26,7 @@
   <!-- Firebase: check paid status + expose uid for payment -->
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-    import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
     import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
     const firebaseConfig = {
@@ -65,7 +65,14 @@
       } else {
         window.dispatchEvent(new Event('tora:unpaid'));
       }
+
+      const signOutBtn = document.getElementById('navSignOut');
+      if (signOutBtn) signOutBtn.style.display = '';
     });
+
+    window.__toraSignOut = () => {
+      signOut(auth).then(() => { window.location.href = 'index.html'; }).catch(err => console.error(err));
+    };
   </script>
 
   <style>
@@ -1249,6 +1256,7 @@
     <li><a href="shop.html">Shop <span class="d-arrow">→</span></a></li>
     <li><a href="quiz.html?retake=1">Retake Quiz <span class="d-arrow">→</span></a></li>
     <li><a href="results.html">My Profile <span class="d-arrow">→</span></a></li>
+    <li id="navSignOut" style="display:none;"><a href="#" onclick="window.__toraSignOut();return false;">Sign Out <span class="d-arrow">→</span></a></li>
   </ul>
   <div class="drawer-footer">Hair · Body · Scent · Skin</div>
 </div>
@@ -2562,17 +2570,6 @@
       </div>
     `).join('');
 
-    const eyesHTML = `
-      <div class="makeup-looks-grid" style="margin-top:2px;">
-        ${makeupData.eyes.map((eye, i) => `
-          <div class="makeup-look-card">
-            <div class="makeup-look-num">0${i+1}</div>
-            <div class="makeup-look-name">${eye.look} Eye</div>
-            <p class="makeup-look-desc">${eye.desc}</p>
-          </div>
-        `).join('')}
-      </div>`;
-
     const productsHTML = `
       <div class="makeup-product-row" style="margin-top:2px;">
         ${makeupData.products.map(p => {
@@ -2596,7 +2593,7 @@
         }).join('')}
       </div>`;
 
-    makeupContent.innerHTML = foundationHTML + lipsHTML + eyesHTML + productsHTML;
+    makeupContent.innerHTML = foundationHTML + lipsHTML + productsHTML;
   }
 
   // ── SKINCARE (women only) ──

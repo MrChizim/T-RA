@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TÓRA Shop | Your Personalised Products</title>
+  <meta name="description" content="Products picked for your specific curl type, skin tone, and body type. Every recommendation is matched to your TÓRA profile." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" type="image/png" href="images/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;0,9..40,900;1,9..40,300&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --black: #000;
+      --white: #fff;
+      --grey: #888;
+      --grey-light: #eee;
+      --grey-mid: #444;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--white);
+      color: var(--black);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    .site-logo {
+      position: fixed; top: 28px; left: 36px; z-index: 500;
+      font-size: 18px; font-weight: 900; letter-spacing: 6px;
+      text-transform: uppercase; color: var(--black); text-decoration: none;
+    }
+    .hamburger {
+      position: fixed; top: 28px; right: 28px; z-index: 500;
+      display: flex; flex-direction: column; gap: 6px;
+      background: none; border: none; cursor: pointer; padding: 6px;
+    }
+    .hamburger span {
+      display: block; width: 28px; height: 1.5px; background: var(--black);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+    .drawer {
+      position: fixed; inset: 0; background: var(--white); z-index: 400;
+      display: flex; flex-direction: column; justify-content: center; padding: 0 48px;
+      transform: translateY(-100%); transition: transform 0.5s cubic-bezier(0.76,0,0.24,1);
+    }
+    .drawer.open { transform: translateY(0); }
+    .drawer-nav { list-style: none; border-top: 1px solid var(--grey-light); }
+    .drawer-nav li { border-bottom: 1px solid var(--grey-light); }
+    .drawer-nav a {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 0; font-size: clamp(18px, 3.5vw, 28px); font-weight: 700;
+      color: var(--black); text-decoration: none; text-transform: uppercase; letter-spacing: 1px;
+      transition: color 0.2s;
+    }
+    .drawer-nav a:hover { color: var(--grey); }
+    .d-arrow { font-size: 18px; opacity: 0; transition: opacity 0.2s, transform 0.2s; transform: translateX(-8px); }
+    .drawer-nav a:hover .d-arrow { opacity: 1; transform: translateX(0); }
+    .drawer-footer {
+      position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+      font-size: 11px; font-weight: 500; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--grey); white-space: nowrap;
+    }
+
+    /* ── PAGE HEADER ── */
+    .shop-header {
+      padding: 140px 36px 72px;
+      border-bottom: 1px solid var(--grey-light);
+    }
+    .shop-eyebrow {
+      font-size: 10px; font-weight: 700; letter-spacing: 4px;
+      text-transform: uppercase; color: var(--grey); margin-bottom: 16px;
+    }
+    .shop-title {
+      font-size: clamp(40px, 8vw, 80px); font-weight: 900;
+      letter-spacing: -2px; line-height: 0.92;
+      text-transform: uppercase; margin-bottom: 20px;
+    }
+    .shop-subtitle {
+      font-size: 15px; font-weight: 300; line-height: 1.8;
+      color: var(--grey-mid); max-width: 540px;
+    }
+    .profile-tags {
+      display: flex; flex-wrap: wrap; gap: 6px; margin-top: 28px;
+    }
+    .profile-tag {
+      font-size: 10px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--black);
+      border: 1px solid rgba(0,0,0,0.2); padding: 5px 12px;
+    }
+
+    /* ── FILTER BAR ── */
+    .filter-bar {
+      padding: 20px 36px;
+      border-bottom: 1px solid var(--grey-light);
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+      position: sticky; top: 0; background: var(--white); z-index: 100;
+    }
+    .filter-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--grey); margin-right: 4px;
+    }
+    .filter-btn {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px; font-weight: 600; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--grey);
+      background: none; border: 1px solid var(--grey-light);
+      padding: 6px 14px; cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .filter-btn:hover { border-color: var(--black); color: var(--black); }
+    .filter-btn.active { background: var(--black); color: var(--white); border-color: var(--black); }
+
+    /* ── SECTION ── */
+    .shop-section {
+      padding: 72px 0;
+      border-bottom: 1px solid var(--grey-light);
+    }
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 36px; }
+    .section-header {
+      display: flex; align-items: baseline; gap: 20px; margin-bottom: 48px;
+    }
+    .section-num {
+      font-size: clamp(40px, 5vw, 60px); font-weight: 900;
+      color: var(--grey-light); letter-spacing: -2px; line-height: 1; flex-shrink: 0;
+    }
+    .section-title-block {}
+    .section-cat {
+      font-size: 10px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--grey); margin-bottom: 6px;
+    }
+    .section-heading {
+      font-size: clamp(22px, 3vw, 32px); font-weight: 700;
+      letter-spacing: -0.5px; line-height: 1.1;
+    }
+
+    /* ── PRODUCT GRID ── */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 2px;
+    }
+    .product-card {
+      background: var(--grey-light);
+      padding: 28px 24px;
+      display: flex; flex-direction: column;
+      transition: background 0.2s;
+    }
+    .product-card:hover { background: #e4e4e4; }
+    .product-card.featured {
+      grid-column: span 2;
+      background: var(--black); color: var(--white);
+    }
+    @media (max-width: 600px) {
+      .product-card.featured { grid-column: span 1; }
+    }
+    .product-match {
+      display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 16px;
+    }
+    .match-tag {
+      font-size: 9px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--grey);
+      background: rgba(0,0,0,0.05); padding: 3px 8px;
+    }
+    .product-card.featured .match-tag {
+      color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.07);
+    }
+    .product-type {
+      font-size: 10px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--grey); margin-bottom: 6px;
+    }
+    .product-card.featured .product-type { color: rgba(255,255,255,0.35); }
+    .product-brand {
+      font-size: 13px; font-weight: 700; color: var(--black); margin-bottom: 2px;
+    }
+    .product-card.featured .product-brand { color: var(--white); }
+    .product-name {
+      font-size: 15px; font-weight: 500; line-height: 1.3;
+      color: var(--black); margin-bottom: 10px;
+    }
+    .product-card.featured .product-name { color: var(--white); }
+    .product-why {
+      font-size: 13px; font-weight: 300; line-height: 1.7;
+      color: var(--grey-mid); flex: 1; margin-bottom: 20px;
+    }
+    .product-card.featured .product-why { color: rgba(255,255,255,0.45); }
+    .product-price {
+      font-size: 11px; font-weight: 600; letter-spacing: 1px;
+      color: var(--grey); margin-bottom: 10px; text-transform: uppercase;
+    }
+    .product-card.featured .product-price { color: rgba(255,255,255,0.35); }
+    .shop-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; text-decoration: none;
+      color: var(--black); border: 1px solid var(--black);
+      padding: 10px 18px; transition: background 0.15s, color 0.15s;
+      align-self: flex-start;
+    }
+    .shop-btn:hover { background: var(--black); color: var(--white); }
+    .product-card.featured .shop-btn {
+      color: var(--white); border-color: rgba(255,255,255,0.3);
+    }
+    .product-card.featured .shop-btn:hover {
+      background: var(--white); color: var(--black);
+    }
+
+    /* ── SKIN VISUAL ROW ── */
+    .skin-visual-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      margin-bottom: 2px;
+    }
+    @media (max-width: 600px) { .skin-visual-row { grid-template-columns: 1fr; } }
+    .skin-visual-card {
+      background: var(--black);
+      overflow: hidden;
+      position: relative;
+      min-height: 220px;
+      display: flex; flex-direction: column;
+    }
+    .skin-visual-card img {
+      width: 100%; height: 220px; object-fit: cover; object-position: center top; display: block;
+    }
+    .skin-visual-card .svc-label {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 14px 20px;
+      background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, transparent 100%);
+    }
+    .svc-cat { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 3px; }
+    .svc-name { font-size: 14px; font-weight: 700; color: var(--white); }
+    .svc-desc { font-size: 12px; font-weight: 300; color: rgba(255,255,255,0.55); margin-top: 2px; }
+
+    /* ── EMPTY STATE ── */
+    .shop-empty {
+      padding: 80px 36px; text-align: center;
+    }
+    .shop-empty p {
+      font-size: 15px; color: var(--grey); margin-bottom: 20px;
+    }
+    .shop-empty a {
+      font-size: 11px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--black); text-decoration: underline;
+    }
+
+    /* ── SECTION DIVIDER ── */
+    .section-intro {
+      background: var(--black); padding: 32px 36px; margin-bottom: 2px;
+    }
+    .section-intro-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 8px;
+    }
+    .section-intro-text {
+      font-size: 14px; font-weight: 300; line-height: 1.8; color: rgba(255,255,255,0.5);
+    }
+
+    /* ── GATE ── */
+    #shopGate {
+      min-height: 80vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center;
+      padding: 60px 36px; display: none;
+    }
+    #shopGate h2 { font-size: 28px; font-weight: 700; margin-bottom: 12px; }
+    #shopGate p { font-size: 14px; color: var(--grey); max-width: 380px; margin-bottom: 24px; line-height: 1.7; }
+    #shopGate a {
+      font-size: 11px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--white); background: var(--black);
+      padding: 14px 28px; text-decoration: none;
+    }
+
+    /* ── REVEAL ── */
+    .r { opacity: 0; transform: translateY(18px); transition: opacity 0.55s ease, transform 0.55s ease; }
+    .r.in { opacity: 1; transform: none; }
+
+    @media (max-width: 600px) {
+      .shop-header { padding: 120px 20px 48px; }
+      .filter-bar { padding: 16px 20px; }
+      .wrap { padding: 0 20px; }
+      .shop-section { padding: 48px 0; }
+      .products-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<a href="index.html" class="site-logo">TÓRA</a>
+<button class="hamburger" id="hamburger" aria-label="Menu">
+  <span></span><span></span><span></span>
+</button>
+<div class="drawer" id="drawer">
+  <nav>
+    <ul class="drawer-nav">
+      <li><a href="index.html">Home <span class="d-arrow">→</span></a></li>
+      <li><a href="results.html">My Profile <span class="d-arrow">→</span></a></li>
+      <li><a href="shop.html">Shop <span class="d-arrow">→</span></a></li>
+      <li><a href="quiz.html">Take the Quiz <span class="d-arrow">→</span></a></li>
+    </ul>
+  </nav>
+  <div class="drawer-footer">© TÓRA 2025</div>
+</div>
+
+<!-- GATE: shown when no quiz answers -->
+<div id="shopGate">
+  <h2>Take the quiz first</h2>
+  <p>Your shop is personalised to your curl type, skin tone, body type, and face shape. Complete the quiz to see your matched products.</p>
+  <a href="quiz.html">Take the quiz →</a>
+</div>
+
+<!-- MAIN SHOP -->
+<div id="shopMain" style="display:none;">
+
+  <!-- HEADER -->
+  <header class="shop-header">
+    <div class="shop-eyebrow">TÓRA — Personalised Shop</div>
+    <h1 class="shop-title">Your<br>Products</h1>
+    <p class="shop-subtitle">Every product here is matched to your specific combination. Not generic recommendations — yours.</p>
+    <div class="profile-tags" id="profileTags"></div>
+  </header>
+
+  <!-- FILTER BAR -->
+  <div class="filter-bar" id="filterBar">
+    <span class="filter-label">Filter:</span>
+    <button class="filter-btn active" data-cat="all">All</button>
+    <button class="filter-btn" data-cat="hair">Hair</button>
+    <button class="filter-btn" data-cat="skin">Skin</button>
+    <button class="filter-btn" data-cat="scent">Scent</button>
+    <button class="filter-btn" data-cat="makeup" id="filterMakeup" style="display:none;">Makeup</button>
+    <button class="filter-btn" data-cat="body" id="filterBody" style="display:none;">Body &amp; Style</button>
+  </div>
+
+  <!-- SECTION 01: HAIR CARE -->
+  <section class="shop-section" data-cat="hair" id="secHair">
+    <div class="wrap">
+      <div class="section-header r">
+        <div class="section-num">01</div>
+        <div class="section-title-block">
+          <div class="section-cat">Hair Care</div>
+          <div class="section-heading" id="hairSectionTitle">For your curl type</div>
+        </div>
+      </div>
+      <div id="hairIntro" class="section-intro r" style="margin-bottom:2px;"></div>
+      <div class="products-grid" id="hairProductsGrid"></div>
+    </div>
+  </section>
+
+  <!-- SECTION 02: SKINCARE + SKIN TONE + GLASSES -->
+  <section class="shop-section" data-cat="skin" id="secSkin">
+    <div class="wrap">
+      <div class="section-header r">
+        <div class="section-num">02</div>
+        <div class="section-title-block">
+          <div class="section-cat">Skin &amp; Style</div>
+          <div class="section-heading" id="skinSectionTitle">Your skin routine products</div>
+        </div>
+      </div>
+      <!-- Skin tone image + glasses image row -->
+      <div class="skin-visual-row r" id="skinVisualRow"></div>
+      <!-- Skincare products -->
+      <div class="products-grid" id="skinProductsGrid"></div>
+    </div>
+  </section>
+
+  <!-- SECTION 03: SCENT -->
+  <section class="shop-section" data-cat="scent" id="secScent">
+    <div class="wrap">
+      <div class="section-header r">
+        <div class="section-num">03</div>
+        <div class="section-title-block">
+          <div class="section-cat">Scent</div>
+          <div class="section-heading" id="scentSectionTitle">Fragrances for your undertone</div>
+        </div>
+      </div>
+      <div class="products-grid" id="scentProductsGrid"></div>
+    </div>
+  </section>
+
+  <!-- SECTION 04: MAKEUP (women only) -->
+  <section class="shop-section" data-cat="makeup" id="secMakeup" style="display:none;">
+    <div class="wrap">
+      <div class="section-header r">
+        <div class="section-num">04</div>
+        <div class="section-title-block">
+          <div class="section-cat">Makeup</div>
+          <div class="section-heading" id="makeupSectionTitle">Foundation, lips, and eyes for your tone</div>
+        </div>
+      </div>
+      <div class="products-grid" id="makeupProductsGrid"></div>
+    </div>
+  </section>
+
+  <!-- SECTION 05: BODY & STYLE (women only) -->
+  <section class="shop-section" data-cat="body" id="secBody" style="display:none;">
+    <div class="wrap">
+      <div class="section-header r">
+        <div class="section-num">05</div>
+        <div class="section-title-block">
+          <div class="section-cat">Body &amp; Style</div>
+          <div class="section-heading">Clothing and accessories for your body type</div>
+        </div>
+      </div>
+      <div class="products-grid" id="bodyProductsGrid"></div>
+    </div>
+  </section>
+
+</div><!-- /shopMain -->
+
+<script>
+  // ── NAV ──
+  const hamburger = document.getElementById('hamburger');
+  const drawer = document.getElementById('drawer');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    drawer.classList.toggle('open');
+  });
+
+  // ── REVEAL ──
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); observer.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+
+  // ── LOAD QUIZ ANSWERS ──
+  const raw = localStorage.getItem('tora_quiz');
+  const A = raw ? JSON.parse(raw) : null;
+
+  if (!A || !A.curlType) {
+    document.getElementById('shopGate').style.display = 'flex';
+  } else {
+    document.getElementById('shopMain').style.display = '';
+    buildShop(A);
+  }
+
+  function buildShop(A) {
+    const isWomen = A.gender === 'women';
+
+    // Profile tags
+    const tags = [
+      A.curlType && `${A.curlType.toUpperCase()} Curl`,
+      A.skinTone && `${cap(A.skinTone)} Skin`,
+      A.undertone && `${cap(A.undertone)} Undertone`,
+      A.bodyType && `${cap(A.bodyType)} Body`,
+      A.faceShape && `${cap(A.faceShape)} Face`,
+      A.skinType && `${cap(A.skinType)} Skin Type`,
+      isWomen ? 'Women' : 'Men'
+    ].filter(Boolean);
+    document.getElementById('profileTags').innerHTML = tags.map(t => `<div class="profile-tag">${t}</div>`).join('');
+
+    // Show women-only filter buttons and sections
+    if (isWomen) {
+      document.getElementById('filterMakeup').style.display = '';
+      document.getElementById('filterBody').style.display = '';
+      document.getElementById('secMakeup').style.display = '';
+      document.getElementById('secBody').style.display = '';
+    }
+
+    buildHairSection(A, isWomen);
+    buildSkinVisuals(A);
+    buildSkinSection(A);
+    buildScentSection(A);
+    if (isWomen) {
+      buildMakeupSection(A);
+      buildBodySection(A);
+    }
+
+    // Observe reveal elements
+    document.querySelectorAll('.r').forEach(el => observer.observe(el));
+
+    // Filter buttons
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const cat = btn.dataset.cat;
+        document.querySelectorAll('.shop-section[data-cat]').forEach(sec => {
+          const isMakeupOrBody = sec.id === 'secMakeup' || sec.id === 'secBody';
+          if (cat === 'all') {
+            if (isMakeupOrBody && !isWomen) { sec.style.display = 'none'; return; }
+            sec.style.display = '';
+          } else {
+            sec.style.display = sec.dataset.cat === cat ? '' : 'none';
+          }
+        });
+      });
+    });
+  }
+
+  // ── HAIR SECTION ──
+  const HAIR_PRODUCTS = {
+    '4c': [
+      { brand: 'Shea Moisture', name: 'Manuka Honey & Mafura Oil Masque', type: 'Deep Conditioner', price: 'Mid-range', why: 'Deep moisture for the tightest coils. 4C hair loses moisture faster than any other type — this masque replaces what daily life strips away. Use weekly under a shower cap with gentle heat.', link: 'https://www.jumia.com.ng/catalog/?q=shea+moisture+masque', goodFor: ['4C hair', 'Low porosity', 'High porosity'] },
+      { brand: 'Mielle Organics', name: 'Rosemary Mint Scalp & Hair Oil', type: 'Growth Oil', price: 'Affordable', why: 'Stimulates scalp circulation and adds moisture without heaviness. One of the few oils with evidence behind it for hair growth. Apply directly to scalp and massage in daily.', link: 'https://www.jumia.com.ng/catalog/?q=mielle+rosemary+oil', goodFor: ['4C hair', '4B hair', 'All curl types'] },
+      { brand: 'Cantu', name: 'Shea Butter Leave-In Conditioning Cream', type: 'Leave-In Conditioner', price: 'Affordable', why: 'Seals in moisture after washing and holds definition for twist-outs. Works on all porosity levels. Apply to soaking-wet hair in sections.', link: 'https://www.jumia.com.ng/catalog/?q=cantu+leave-in', goodFor: ['4C hair', '4B hair'] },
+      { brand: 'Eco Styler', name: 'Olive Oil Styling Gel', type: 'Styling Gel', price: 'Budget', why: 'Defines 4C hair for wash-and-gos and braid-outs. Lightweight, affordable, widely available across Nigeria. No white cast.', link: 'https://www.jumia.com.ng/catalog/?q=eco+styler+olive+oil', goodFor: ['4C hair', '4B hair'] }
+    ],
+    '4b': [
+      { brand: "Aunt Jackie's", name: 'Knot On My Watch Instant Detangler', type: 'Detangler', price: 'Affordable', why: '4B hair knots without warning. This detangler cuts detangling time in half and reduces breakage. Apply generously to wet hair before combing.', link: 'https://www.jumia.com.ng/catalog/?q=aunt+jackies+detangler', goodFor: ['4B hair', 'Dense hair'] },
+      { brand: 'Shea Moisture', name: 'Jamaican Black Castor Oil Strengthen Masque', type: 'Deep Conditioner', price: 'Mid-range', why: 'Strengthens the Z-coil pattern. Contains protein for fortifying weakened strands. Use weekly.', link: 'https://www.jumia.com.ng/catalog/?q=shea+moisture+castor+oil+masque', goodFor: ['4B hair', '4C hair'] },
+      { brand: 'Cantu', name: 'Shea Butter Leave-In Conditioning Cream', type: 'Leave-In Conditioner', price: 'Affordable', why: 'Seals moisture into 4B coils after washing. The thick formula is substantial enough for the dense Z-coil pattern.', link: 'https://www.jumia.com.ng/catalog/?q=cantu+leave-in', goodFor: ['4B hair', '4C hair'] },
+      { brand: 'Eco Styler', name: 'Olive Oil Styling Gel', type: 'Styling Gel', price: 'Budget', why: 'Defines 4B coils for twist-outs and wash-and-gos. Lightweight, widely available in Nigeria, no white cast.', link: 'https://www.jumia.com.ng/catalog/?q=eco+styler+olive+oil', goodFor: ['4B hair', '4C hair'] }
+    ],
+    '4a': [
+      { brand: 'Cantu', name: 'Define & Shine Custard', type: 'Curl Custard', price: 'Affordable', why: '4A coils hold definition well with the right product. This custard enhances the natural S-curl without crunch or flaking.', link: 'https://www.jumia.com.ng/catalog/?q=cantu+define+shine', goodFor: ['4A hair', 'Defined coils'] },
+      { brand: 'Shea Moisture', name: 'Coconut & Hibiscus Curl Enhancing Smoothie', type: 'Styling Cream', price: 'Mid-range', why: 'Lightweight enough for 4A hair, which needs definition without the heaviness that weighs down tighter coils.', link: 'https://www.jumia.com.ng/catalog/?q=shea+moisture+curl+smoothie', goodFor: ['4A hair', '3C hair'] },
+      { brand: 'Mielle Organics', name: 'Pomegranate & Honey Leave-In Conditioner', type: 'Leave-In Conditioner', price: 'Mid-range', why: 'Hydrates and defines simultaneously. 4A hair retains moisture better than 4B/4C — a lighter leave-in is all it needs.', link: 'https://www.jumia.com.ng/catalog/?q=mielle+pomegranate+leave-in', goodFor: ['4A hair', '3C hair'] },
+      { brand: 'Mielle Organics', name: 'Rosemary Mint Scalp & Hair Oil', type: 'Growth Oil', price: 'Mid-range', why: 'For scalp health and growth. Apply to scalp 3x per week and massage in circular motions to stimulate follicles.', link: 'https://www.jumia.com.ng/catalog/?q=mielle+rosemary+oil', goodFor: ['All curl types'] }
+    ],
+    '3c': [
+      { brand: 'Kinky Curly', name: 'Knot Today Leave-In Conditioner', type: 'Leave-In / Detangler', price: 'Mid-range', why: '3C hair tangles despite visible definition. This leave-in detangles and defines in one step.', link: 'https://www.jumia.com.ng/catalog/?q=kinky+curly+knot+today', goodFor: ['3C hair', 'Tangle-prone hair'] },
+      { brand: 'Shea Moisture', name: 'Curl & Style Milk', type: 'Styling Milk', price: 'Mid-range', why: 'Defines the tight corkscrew pattern of 3C hair without frizz. Performs well in high humidity.', link: 'https://www.jumia.com.ng/catalog/?q=shea+moisture+curl+milk', goodFor: ['3C hair', 'Humid climates'] },
+      { brand: 'Cantu', name: 'Wave Whip Curling Mousse', type: 'Curl Mousse', price: 'Affordable', why: 'Lightweight hold for 3C curls. Keeps definition without the weight of heavier products.', link: 'https://www.jumia.com.ng/catalog/?q=cantu+wave+whip', goodFor: ['3C hair', '3B hair'] },
+      { brand: 'DevaCurl', name: 'Heaven in Hair Mask', type: 'Deep Conditioner', price: 'Premium', why: 'A rich weekly moisture treatment for 3C hair. Intense hydration keeps corkscrews defined and reduces mid-week frizz.', link: 'https://www.jumia.com.ng/catalog/?q=devacurl+mask', goodFor: ['3C hair'] }
+    ],
+    '3b': [
+      { brand: 'DevaCurl', name: 'One Condition Original', type: 'Conditioner', price: 'Premium', why: '3B curls need hydration more than hold. Keeps spirals soft and bouncy without buildup. Can be used as a co-wash.', link: 'https://www.jumia.com.ng/catalog/?q=devacurl+one+condition', goodFor: ['3B hair', '3C hair'] },
+      { brand: 'Shea Moisture', name: 'Coconut & Hibiscus Frizz-Free Curl Mousse', type: 'Anti-Frizz Mousse', price: 'Mid-range', why: '3B hair frizzes in humidity. This mousse seals the cuticle and maintains definition through high heat and humidity.', link: 'https://www.jumia.com.ng/catalog/?q=shea+moisture+curl+mousse', goodFor: ['3B hair', 'Frizz-prone'] },
+      { brand: 'Cantu', name: 'Moisturizing Curl Activator Cream', type: 'Curl Activator', price: 'Affordable', why: 'Activates 3B curl definition after washing. Apply to soaking-wet hair and scrunch upward.', link: 'https://www.jumia.com.ng/catalog/?q=cantu+curl+activator', goodFor: ['3B hair'] },
+      { brand: "Not Your Mother's", name: 'Curl Talk Defining Cream', type: 'Curl Cream', price: 'Budget', why: 'Defines 3B spirals with flexible, non-crunchy hold. Available at most supermarkets and pharmacies. Beginner-friendly.', link: 'https://www.jumia.com.ng/catalog/?q=not+your+mothers+curl+talk', goodFor: ['3B hair', '3A hair'] }
+    ],
+    '3a': [
+      { brand: 'Ouidad', name: 'Curl Quencher Moisturizing Shampoo', type: 'Shampoo', price: 'Premium', why: '3A coils need gentler cleansing to preserve the spiral pattern. Sulphate-free, moisturising formula.', link: 'https://www.jumia.com.ng/catalog/?q=ouidad+curl+quencher', goodFor: ['3A hair', '3B hair'] },
+      { brand: "Not Your Mother's", name: 'Curl Talk Frizz Control Curl Cream', type: 'Curl Cream', price: 'Budget', why: '3A curls hold their pattern easily — a light cream is all you need. Anything heavier weighs them down.', link: 'https://www.jumia.com.ng/catalog/?q=not+your+mothers+curl+cream', goodFor: ['3A hair'] },
+      { brand: 'Shea Moisture', name: 'Jamaican Black Castor Oil Leave-In Conditioner', type: 'Leave-In Conditioner', price: 'Mid-range', why: 'Adds moisture and slip to 3A coils post-wash. Light enough to not flatten the pattern.', link: 'https://www.jumia.com.ng/catalog/?q=shea+moisture+castor+oil+leave+in', goodFor: ['3A hair', '3B hair'] },
+      { brand: 'Mielle Organics', name: 'Rosemary Mint Strengthening Shampoo', type: 'Growth Shampoo', price: 'Mid-range', why: 'Cleanses and stimulates the scalp simultaneously. Encourages growth while maintaining the spiral pattern.', link: 'https://www.jumia.com.ng/catalog/?q=mielle+rosemary+shampoo', goodFor: ['3A hair', 'All curl types'] }
+    ]
+  };
+
+  const SHAMPOO_GUIDE = {
+    '4c': { type: 'Moisture / Sulphate-Free', desc: 'Your hair needs the gentlest cleanser possible. Use a sulphate-free moisturising shampoo or co-wash every 1–2 weeks. Clarify once a month with a chelating shampoo to remove mineral and product build-up — especially important in Lagos where tap water is hard.' },
+    '4b': { type: 'Sulphate-Free / Moisturising', desc: 'A creamy, sulphate-free shampoo is essential for 4B. Look for moisturising or hydrating on the label. Avoid anything labelled "volumising" or "clarifying" as your regular wash. Clarify monthly to reset the hair.' },
+    '4a': { type: 'Gentle / Curl-Enhancing', desc: 'A gentle, curl-safe shampoo that doesn\'t strip definition. 4A coils retain moisture better than 4B/4C but still benefit from sulphate-free formulas. Look for "curl enhancing" or "coil-defining" shampoos.' },
+    '3c': { type: 'Hydrating / Anti-Frizz', desc: 'A hydrating shampoo that addresses frizz. Look for aloe vera, argan oil, or glycerin — these attract moisture and reduce frizz in humidity. Wash weekly.' },
+    '3b': { type: 'Curl-Safe / Lightweight', desc: 'A lightweight shampoo that preserves the spiral pattern. 3B hair can handle washing every 4–5 days. Sulphate-free preferred. Avoid anything too heavy.' },
+    '3a': { type: 'Sulphate-Free / Frequent Wash', desc: '3A hair gets oily faster and can handle more frequent cleansing — a gentle sulphate-free shampoo 2–3 times per week. Silicone-free is important to prevent buildup.' }
+  };
+
+  // ── SKIN VISUALS: tone image + glasses image ──
+  function buildSkinVisuals(A) {
+    const skinKey = A.skinTone || 'brown';
+    const undertone = A.undertone || 'neutral';
+    const skinImgMap = { honey:'honey skin.png', caramel:'caramel skin.png', brown:'brown skin.png', chestnut:'chestnut skin.png', ebony:'ebony skin.png', onyx:'onyx skin.png' };
+    const glassesImgMap = { warm:'glasses_warm.png', cool:'glasses_cool.png', neutral:'glasses_neutral.png' };
+    const skinNames = { honey:'Honey', caramel:'Caramel', brown:'Brown', chestnut:'Chestnut', ebony:'Ebony', onyx:'Onyx' };
+    const glassesDesc = {
+      warm: 'Tortoiseshell, warm brown acetate, or gold metal frames',
+      cool: 'Black acetate, silver metal, or gunmetal frames',
+      neutral: 'Rose gold, black, or tortoiseshell — all work'
+    };
+    const skinImg = skinImgMap[skinKey] || 'brown skin.png';
+    const glassesImg = glassesImgMap[undertone] || 'glasses_neutral.png';
+
+    document.getElementById('skinVisualRow').innerHTML = `
+      <div class="skin-visual-card r">
+        <img src="images/${skinImg}" alt="${skinNames[skinKey] || cap(skinKey)} skin tone" onerror="this.style.display='none'">
+        <div class="svc-label">
+          <div class="svc-cat">Your Skin Tone</div>
+          <div class="svc-name">${skinNames[skinKey] || cap(skinKey)}</div>
+          <div class="svc-desc">${cap(undertone)} undertone</div>
+        </div>
+      </div>
+      <div class="skin-visual-card r">
+        <img src="images/${glassesImg}" alt="${cap(undertone)} undertone glasses" onerror="this.style.display='none'">
+        <div class="svc-label">
+          <div class="svc-cat">Glasses for your undertone</div>
+          <div class="svc-name">${cap(undertone)} tones</div>
+          <div class="svc-desc">${glassesDesc[undertone] || glassesDesc['neutral']}</div>
+        </div>
+      </div>
+    `;
+  }
+
+  // ── SCENT SECTION ──
+  const SCENT_PRODUCTS = {
+    warm: [
+      { brand: 'Maison Margiela', name: 'Replica — By the Fireplace', type: 'Fragrance', price: 'Premium', why: 'Warm, woody, vanilla-forward. Warm skin amplifies the chestnut and vanilla base notes — this scent becomes richer the longer you wear it.', link: 'https://www.jumia.com.ng/catalog/?q=maison+margiela+replica+fireplace', goodFor: ['Warm undertone'] },
+      { brand: 'Zara', name: 'Gourmand / Black Amber Collection', type: 'Fragrance', price: 'Budget', why: 'Warm amber and sweet notes that sit naturally against warm skin. Widely available in Nigeria. Accessible entry into the gourmand scent family.', link: 'https://www.jumia.com.ng/catalog/?q=zara+perfume+amber', goodFor: ['Warm undertone', 'Budget pick'] },
+      { brand: 'Victoria\'s Secret', name: 'Bombshell Intense', type: 'Fragrance', price: 'Mid-range', why: 'Warm floral — peony, vanilla orchid, and sandalwood base. Warm undertones carry the vanilla and wood notes outward rather than pulling them flat.', link: 'https://www.jumia.com.ng/catalog/?q=victorias+secret+bombshell', goodFor: ['Warm undertone', 'Honey skin'] },
+      { brand: 'Yves Saint Laurent', name: 'Black Opium', type: 'Fragrance', price: 'Premium', why: 'Black coffee, vanilla, and white musk. One of the most complementary fragrances for warm-undertone Black skin — the warmth of the skin amplifies the coffee and vanilla base.', link: 'https://www.jumia.com.ng/catalog/?q=ysl+black+opium', goodFor: ['Warm undertone', 'Caramel skin'] }
+    ],
+    cool: [
+      { brand: 'Byredo', name: 'Blanche', type: 'Fragrance', price: 'Premium', why: 'Clean white musk and rose. Cool-undertone skin amplifies the crisp, airy quality of clean fragrances — this sits at its best on cooler skin.', link: 'https://www.jumia.com.ng/catalog/?q=byredo+blanche', goodFor: ['Cool undertone'] },
+      { brand: 'Jo Malone', name: 'Peony & Blush Suede', type: 'Fragrance', price: 'Premium', why: 'Powdery suede and soft peony. The cool skin tone reads the floral as clean and structured rather than sweet.', link: 'https://www.jumia.com.ng/catalog/?q=jo+malone+peony+blush', goodFor: ['Cool undertone', 'Ebony skin'] },
+      { brand: 'Zara', name: 'Frosted Berry', type: 'Fragrance', price: 'Budget', why: 'Fresh berry and light musk. Accessible, widely available in Nigeria. Cool fragrances in the berry family work naturally with cool-undertone skin.', link: 'https://www.jumia.com.ng/catalog/?q=zara+frosted+berry', goodFor: ['Cool undertone', 'Budget pick'] },
+      { brand: 'Lancôme', name: 'La Vie Est Belle', type: 'Fragrance', price: 'Mid-range', why: 'Iris, patchouli, and gourmand vanilla — but with a cool iris opening that suits cool-undertone skin beautifully.', link: 'https://www.jumia.com.ng/catalog/?q=lancome+la+vie+est+belle', goodFor: ['Cool undertone', 'Onyx skin'] }
+    ],
+    neutral: [
+      { brand: 'Tom Ford', name: 'Black Orchid', type: 'Fragrance', price: 'Premium', why: 'Dark floral with patchouli, black truffle, and orchid. Neutral undertones carry complex multi-note fragrances — every note shows because the skin doesn\'t pull in one direction.', link: 'https://www.jumia.com.ng/catalog/?q=tom+ford+black+orchid', goodFor: ['Neutral undertone'] },
+      { brand: 'Zara', name: 'Black Collection', type: 'Fragrance', price: 'Budget', why: 'Deep amber and warm spice. Accessible in Nigeria, both warm and cool scent elements balance against neutral skin.', link: 'https://www.jumia.com.ng/catalog/?q=zara+black+perfume', goodFor: ['Neutral undertone', 'Budget pick'] },
+      { brand: 'Dior', name: 'Miss Dior Blooming Bouquet', type: 'Fragrance', price: 'Premium', why: 'Peony, rose, and clean white musk. Works on neutral undertones because neither warm nor cool notes overpower.', link: 'https://www.jumia.com.ng/catalog/?q=dior+miss+dior+bouquet', goodFor: ['Neutral undertone', 'Brown skin'] },
+      { brand: 'Chanel', name: 'Coco Mademoiselle', type: 'Fragrance', price: 'Premium', why: 'Patchouli, vetiver, and rose. A universally flattering oriental fragrance — works especially well on neutral-undertone skin where neither the warm nor cool notes fight the base.', link: 'https://www.jumia.com.ng/catalog/?q=chanel+coco+mademoiselle', goodFor: ['Neutral undertone'] }
+    ]
+  };
+
+  function buildScentSection(A) {
+    const undertone = A.undertone || 'neutral';
+    const scentKey = SCENT_PRODUCTS[undertone] ? undertone : 'neutral';
+    const products = SCENT_PRODUCTS[scentKey];
+    document.getElementById('scentSectionTitle').textContent = `${cap(scentKey)} undertone — your scent family`;
+    const grid = document.getElementById('scentProductsGrid');
+    grid.innerHTML = products.map((p, i) => `
+      <div class="product-card${i === 0 ? ' featured' : ''} r">
+        <div class="product-match">
+          ${p.goodFor.map(g => `<span class="match-tag">${g}</span>`).join('')}
+        </div>
+        <div class="product-type">${p.type}</div>
+        <div class="product-brand">${p.brand}</div>
+        <div class="product-name">${p.name}</div>
+        <p class="product-why">${p.why}</p>
+        <div class="product-price">${p.price}</div>
+        <a href="${p.link}" target="_blank" rel="noopener" class="shop-btn">
+          Shop on Jumia
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    `).join('');
+  }
+
+  function buildHairSection(A, isWomen) {
+    const curlKey = A.curlType || '4c';
+    const products = HAIR_PRODUCTS[curlKey] || HAIR_PRODUCTS['4c'];
+    const shampoo = SHAMPOO_GUIDE[curlKey] || SHAMPOO_GUIDE['4c'];
+
+    document.getElementById('hairSectionTitle').textContent = `For ${curlKey.toUpperCase()} hair`;
+
+    const introEl = document.getElementById('hairIntro');
+    if (isWomen) {
+      introEl.innerHTML = `
+        <div class="section-intro-label">Shampoo Guide — ${curlKey.toUpperCase()}</div>
+        <div style="font-size:16px;font-weight:700;color:var(--white);margin-bottom:8px;">${shampoo.type}</div>
+        <p class="section-intro-text">${shampoo.desc}</p>
+      `;
+    } else {
+      introEl.style.display = 'none';
+    }
+
+    const grid = document.getElementById('hairProductsGrid');
+    grid.innerHTML = products.map((p, i) => `
+      <div class="product-card${i === 0 ? ' featured' : ''} r">
+        <div class="product-match">
+          ${p.goodFor.map(g => `<span class="match-tag">${g}</span>`).join('')}
+        </div>
+        <div class="product-type">${p.type}</div>
+        <div class="product-brand">${p.brand}</div>
+        <div class="product-name">${p.name}</div>
+        <p class="product-why">${p.why}</p>
+        <div class="product-price">${p.price}</div>
+        <a href="${p.link}" target="_blank" rel="noopener" class="shop-btn">
+          Shop on Jumia
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    `).join('');
+  }
+
+  // ── SKINCARE SECTION ──
+  const SKINCARE_PRODUCTS = {
+    oily: [
+      { step: 'Cleanser', brand: 'CeraVe', name: 'Foaming Facial Cleanser', price: 'Affordable', why: 'Gentle foaming cleanser for oily skin. Contains ceramides to maintain the barrier while removing oil. Widely available in Nigeria and the UK.', link: 'https://www.jumia.com.ng/catalog/?q=cerave+foaming+cleanser', goodFor: ['Oily skin', 'Acne-prone skin'] },
+      { step: 'Toner', brand: 'The Ordinary', name: 'Salicylic Acid 2% Solution', price: 'Budget', why: 'Direct BHA toner at a very accessible price. Clears oil from inside the pore. Apply with a cotton pad 3–4x a week.', link: 'https://www.jumia.com.ng/catalog/?q=ordinary+salicylic+acid', goodFor: ['Oily skin', 'Enlarged pores'] },
+      { step: 'Moisturiser', brand: 'Neutrogena', name: 'Hydro Boost Water Gel', price: 'Mid-range', why: 'Oil-free, water-based, absorbs instantly. Does not clog pores. One of the most recommended moisturisers for oily skin globally.', link: 'https://www.jumia.com.ng/catalog/?q=neutrogena+hydro+boost', goodFor: ['Oily skin', 'Combination skin'] },
+      { step: 'Serum', brand: 'The Ordinary', name: 'Niacinamide 10% + Zinc 1%', price: 'Budget', why: 'The most evidence-backed product for oily Black skin — regulates oil, fades dark marks, minimises pores. Use nightly.', link: 'https://www.jumia.com.ng/catalog/?q=ordinary+niacinamide', goodFor: ['Oily skin', 'Hyperpigmentation'] }
+    ],
+    dry: [
+      { step: 'Cleanser', brand: 'CeraVe', name: 'Hydrating Facial Cleanser', price: 'Affordable', why: 'Non-stripping cream cleanser. Maintains the barrier while cleansing — the opposite of what a foaming cleanser does.', link: 'https://www.jumia.com.ng/catalog/?q=cerave+hydrating+cleanser', goodFor: ['Dry skin', 'Sensitive skin'] },
+      { step: 'Serum', brand: 'The Ordinary', name: 'Hyaluronic Acid 2% + B5', price: 'Budget', why: 'Affordable, effective, globally accessible. Apply to damp skin — this is critical. Draws water into the skin at the cellular level.', link: 'https://www.jumia.com.ng/catalog/?q=ordinary+hyaluronic+acid', goodFor: ['Dry skin', 'Dehydrated skin'] },
+      { step: 'Moisturiser', brand: 'CeraVe', name: 'Moisturising Cream', price: 'Affordable', why: 'The best moisturiser for dry Black skin. Ceramides repair the barrier, hyaluronic acid retains moisture. Dermatologist recommended.', link: 'https://www.jumia.com.ng/catalog/?q=cerave+moisturising+cream', goodFor: ['Dry skin', 'All skin tones'] },
+      { step: 'Face Oil', brand: 'Biossance', name: 'Squalane Oil', price: 'Mid-range', why: 'Lightweight, non-comedogenic, absorbs completely. Adds glow without greasiness. Works on all skin tones.', link: 'https://www.jumia.com.ng/catalog/?q=squalane+oil', goodFor: ['Dry skin', 'Dull skin'] }
+    ],
+    combination: [
+      { step: 'Cleanser', brand: 'La Roche-Posay', name: 'Toleriane Hydrating Gentle Cleanser', price: 'Mid-range', why: 'Balances oily T-zone without stripping the drier cheeks. The gold standard cleanser for combination skin.', link: 'https://www.jumia.com.ng/catalog/?q=la+roche+posay+toleriane', goodFor: ['Combination skin', 'Sensitive skin'] },
+      { step: 'Toner', brand: 'Paula\'s Choice', name: 'Skin Balancing Pore-Reducing Toner', price: 'Mid-range', why: 'Hydrates dry patches and minimises pores in the T-zone simultaneously. Alcohol-free, niacinamide-based.', link: 'https://www.jumia.com.ng/catalog/?q=paulas+choice+toner', goodFor: ['Combination skin'] },
+      { step: 'Moisturiser', brand: 'Neutrogena', name: 'Hydro Boost Water Gel', price: 'Mid-range', why: 'Lightweight enough for the T-zone, hydrating enough for the cheeks. The best single-product solution for combination skin.', link: 'https://www.jumia.com.ng/catalog/?q=neutrogena+hydro+boost', goodFor: ['Combination skin', 'Oily skin'] },
+      { step: 'Treatment', brand: 'The Ordinary', name: 'Niacinamide 10% + Zinc 1%', price: 'Budget', why: 'Balances oil production across the T-zone, fades dark marks, minimises pores. The best single treatment for combination Black skin.', link: 'https://www.jumia.com.ng/catalog/?q=ordinary+niacinamide', goodFor: ['Combination skin', 'Hyperpigmentation'] }
+    ],
+    sensitive: [
+      { step: 'Cleanser', brand: 'Avène', name: 'Extremely Gentle Cleanser Lotion', price: 'Mid-range', why: 'Ultra-gentle lotion for reactive and sensitive skin. No fragrance, no soap, no rubbing required.', link: 'https://www.jumia.com.ng/catalog/?q=avene+cleanser', goodFor: ['Sensitive skin', 'Reactive skin'] },
+      { step: 'Serum', brand: 'The Ordinary', name: 'Hyaluronic Acid 2% + B5', price: 'Budget', why: 'Pure hydration without any actives that could irritate. The gentlest effective serum available.', link: 'https://www.jumia.com.ng/catalog/?q=ordinary+hyaluronic+acid', goodFor: ['Sensitive skin', 'Dry skin'] },
+      { step: 'Moisturiser', brand: 'Cetaphil', name: 'Moisturising Lotion', price: 'Affordable', why: 'The dermatologist-recommended standard for sensitive skin. Fragrance-free, tested, gentle, accessible globally.', link: 'https://www.jumia.com.ng/catalog/?q=cetaphil+moisturising+lotion', goodFor: ['Sensitive skin', 'All skin types'] },
+      { step: 'SPF', brand: 'La Roche-Posay', name: 'Anthelios Mineral SPF 50+', price: 'Premium', why: 'Mineral SPF — zinc oxide only, no chemical filters. The best option for sensitive skin that reacts to chemical sunscreens.', link: 'https://www.jumia.com.ng/catalog/?q=la+roche+posay+anthelios', goodFor: ['Sensitive skin', 'All skin tones'] }
+    ]
+  };
+
+  function buildSkinSection(A) {
+    const skinTypeKey = A.skinType || 'combination';
+    const products = SKINCARE_PRODUCTS[skinTypeKey] || SKINCARE_PRODUCTS['combination'];
+    const skinTypeLabel = { oily:'Oily Skin', dry:'Dry Skin', combination:'Combination Skin', sensitive:'Sensitive Skin' }[skinTypeKey] || 'Your Skin Type';
+
+    document.getElementById('skinSectionTitle').textContent = `${skinTypeLabel} — recommended products`;
+
+    const grid = document.getElementById('skinProductsGrid');
+    grid.innerHTML = products.map((p, i) => `
+      <div class="product-card${i === 0 ? ' featured' : ''} r">
+        <div class="product-match">
+          ${p.goodFor.map(g => `<span class="match-tag">${g}</span>`).join('')}
+        </div>
+        <div class="product-type">${p.step}</div>
+        <div class="product-brand">${p.brand}</div>
+        <div class="product-name">${p.name}</div>
+        <p class="product-why">${p.why}</p>
+        <div class="product-price">${p.price}</div>
+        <a href="${p.link}" target="_blank" rel="noopener" class="shop-btn">
+          Shop on Jumia
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    `).join('');
+  }
+
+  // ── MAKEUP SECTION ──
+  const MAKEUP_PRODUCTS = {
+    honey: [
+      { type: 'Foundation', brand: 'Black Opal', name: 'True Color Stick Foundation — Warm Beige', price: 'Affordable', why: 'Warm undertone range built for melanin-rich skin. Caramel shade is a near-perfect match for honey skin. Accessible in Nigeria.', link: 'https://www.jumia.com.ng/catalog/?q=black+opal+foundation', goodFor: ['Honey skin', 'Warm undertone'] },
+      { type: 'Lip Colour', brand: 'Fenty Beauty', name: 'Stunna Lip Paint — Uncensored', price: 'Premium', why: 'Universal red that works on every warm undertone. Full coverage, long-wear. The best bold lip for honey skin.', link: 'https://www.jumia.com.ng/catalog/?q=fenty+lip', goodFor: ['Honey skin', 'Caramel skin'] },
+      { type: 'Lip Colour', brand: 'NYX', name: 'Soft Matte Lip Cream — Terracotta', price: 'Budget', why: 'Earthy terracotta sits with the warmth of honey skin rather than against it. Budget-friendly, widely available.', link: 'https://www.jumia.com.ng/catalog/?q=nyx+terracotta+lip', goodFor: ['Honey skin', 'Warm undertone'] },
+      { type: 'Eyeshadow', brand: "Juvia's Place", name: 'The Zulu Palette', price: 'Mid-range', why: 'Copper, gold, and terracotta shades designed to show up on melanated skin. The warm tones complement honey skin beautifully.', link: 'https://www.jumia.com.ng/catalog/?q=juvias+place+palette', goodFor: ['Honey skin', 'Warm undertone'] },
+      { type: 'Blush', brand: 'Sleek MakeUP', name: 'Blush by 3 — Peach Collection', price: 'Affordable', why: 'Warm peach blush that registers clearly on honey skin without looking chalky. Available in Nigeria.', link: 'https://www.jumia.com.ng/catalog/?q=sleek+peach+blush', goodFor: ['Honey skin'] }
+    ],
+    caramel: [
+      { type: 'Foundation', brand: 'Fenty Beauty', name: "Pro Filt'r Soft Matte — 280W", price: 'Premium', why: 'Shade 280W matches warm caramel undertones precisely. Full coverage, no oxidising all day. Worth the investment.', link: 'https://www.jumia.com.ng/catalog/?q=fenty+pro+filtr', goodFor: ['Caramel skin', 'Warm undertone'] },
+      { type: 'Foundation', brand: 'Maybelline', name: 'Fit Me Matte — 330 Toffee', price: 'Budget', why: 'Drugstore-accessible warm range in the 300s. Widely available in Nigerian pharmacies and online. Best budget foundation for caramel skin.', link: 'https://www.jumia.com.ng/catalog/?q=maybelline+fit+me+toffee', goodFor: ['Caramel skin', 'Budget pick'] },
+      { type: 'Blush', brand: 'Sleek MakeUP', name: 'Blush by 3 — Lace', price: 'Affordable', why: 'Warm peachy-rose blush that shows up on caramel skin without looking chalky. Available in Nigeria.', link: 'https://www.jumia.com.ng/catalog/?q=sleek+blush', goodFor: ['Caramel skin', 'Brown skin'] },
+      { type: 'Lip Colour', brand: 'MAC', name: 'Velvet Teddy', price: 'Premium', why: 'The definitive warm neutral nude for caramel skin. Hugely popular globally for exactly this skin depth. No lip liner needed.', link: 'https://www.jumia.com.ng/catalog/?q=mac+velvet+teddy', goodFor: ['Caramel skin'] },
+      { type: 'Highlighter', brand: "Juvia's Place", name: 'I Am Magic Highlighter', price: 'Mid-range', why: 'Gold-toned highlighter formulated for deep and medium skin tones. Warm caramel skin amplifies the gold glow beautifully.', link: 'https://www.jumia.com.ng/catalog/?q=juvias+place+highlighter', goodFor: ['Caramel skin', 'Chestnut skin'] }
+    ],
+    brown: [
+      { type: 'Foundation', brand: "L'Oréal", name: 'True Match Liquid Foundation W6', price: 'Affordable', why: 'Accessible and widely available in Nigeria and the UK. Warm W6 or neutral N6 depending on your undertone lean.', link: 'https://www.jumia.com.ng/catalog/?q=loreal+true+match', goodFor: ['Brown skin', 'Medium-deep skin'] },
+      { type: 'Foundation', brand: 'Black Opal', name: 'True Color Foundation — True Tan', price: 'Affordable', why: 'Made specifically for Black women. Neutral undertone range that matches the balanced complexion of brown skin perfectly.', link: 'https://www.jumia.com.ng/catalog/?q=black+opal+true+tan', goodFor: ['Brown skin', 'Neutral undertone'] },
+      { type: 'Lip Colour', brand: 'MAC', name: 'Velvet Teddy', price: 'Premium', why: 'The best-selling neutral nude on medium-deep skin globally. Works on neutral-undertone brown skin better than almost anything else.', link: 'https://www.jumia.com.ng/catalog/?q=mac+velvet+teddy', goodFor: ['Brown skin', 'Neutral undertone'] },
+      { type: 'Lip Colour', brand: 'NYX', name: 'Soft Matte Lip Cream — Cannes', price: 'Budget', why: 'Deep berry-plum that sits with brown skin richly. Long-wear, affordable, widely available. Bold but wearable.', link: 'https://www.jumia.com.ng/catalog/?q=nyx+soft+matte+cannes', goodFor: ['Brown skin'] },
+      { type: 'Eyeshadow', brand: 'Morphe', name: '35O Nature Glow Palette', price: 'Mid-range', why: 'Neutral and warm tones pigmented enough for medium-deep skin. The most versatile palette at this price point for brown skin.', link: 'https://www.jumia.com.ng/catalog/?q=morphe+35o', goodFor: ['Brown skin', 'Caramel skin'] }
+    ],
+    chestnut: [
+      { type: 'Foundation', brand: 'Fenty Beauty', name: "Pro Filt'r 400W", price: 'Premium', why: 'Deep warm foundation built for exactly this depth. Stays true to the warm undertone all day without oxidising grey.', link: 'https://www.jumia.com.ng/catalog/?q=fenty+pro+filtr+400', goodFor: ['Chestnut skin', 'Warm undertone'] },
+      { type: 'Foundation', brand: 'Maybelline', name: 'Fit Me Matte — 356 Warm Coconut', price: 'Budget', why: 'Drugstore accessible. Deep warm range. Consistently recommended for warm-deep skin. Wide availability in Nigeria.', link: 'https://www.jumia.com.ng/catalog/?q=maybelline+fit+me+356', goodFor: ['Chestnut skin', 'Budget pick'] },
+      { type: 'Eyeshadow', brand: "Juvia's Place", name: 'The Nubian 2 Palette', price: 'Mid-range', why: 'Warm copper, bronze, and terracotta shades specifically for deep skin. The most complementary palette for chestnut skin tone.', link: 'https://www.jumia.com.ng/catalog/?q=juvias+nubian', goodFor: ['Chestnut skin', 'Deep warm skin'] },
+      { type: 'Lip Colour', brand: 'NYX', name: 'Soft Matte Lip Cream — Toulouse', price: 'Budget', why: 'Deep burgundy-wine that amplifies chestnut skin. Long-wear, affordable. The single best budget bold lip for this depth.', link: 'https://www.jumia.com.ng/catalog/?q=nyx+soft+matte+toulouse', goodFor: ['Chestnut skin', 'Deep skin'] },
+      { type: 'Blush', brand: 'Sleek MakeUP', name: 'Face Form Contour & Blush — Dark', price: 'Mid-range', why: 'Deep coral-brick blush designed for dark skin tones. Lighter shades disappear on chestnut skin — this one registers.', link: 'https://www.jumia.com.ng/catalog/?q=sleek+face+form+dark', goodFor: ['Chestnut skin'] }
+    ],
+    ebony: [
+      { type: 'Foundation', brand: 'Fenty Beauty', name: "Pro Filt'r 460N", price: 'Premium', why: 'Cool deep foundation that matches ebony skin without pulling warm. One of the most accurate deep shades ever made.', link: 'https://www.jumia.com.ng/catalog/?q=fenty+pro+filtr+460', goodFor: ['Ebony skin', 'Cool undertone'] },
+      { type: 'Foundation', brand: 'Iman Cosmetics', name: 'Second to None — Ebony', price: 'Mid-range', why: 'Created specifically for deep and very deep Black skin. Cool undertone options in the deep range. Long-established brand for ebony skin.', link: 'https://www.jumia.com.ng/catalog/?q=iman+cosmetics+foundation', goodFor: ['Ebony skin'] },
+      { type: 'Eyeshadow', brand: "Juvia's Place", name: 'The Masquerade Mini Palette', price: 'Mid-range', why: 'Cobalt, emerald, deep purple — highly pigmented for dark skin specifically. These jewel tones hit maximum intensity on ebony skin.', link: 'https://www.jumia.com.ng/catalog/?q=juvias+masquerade', goodFor: ['Ebony skin', 'Deep skin'] },
+      { type: 'Lip Colour', brand: 'Uoma Beauty', name: 'Say What?! Matte — Classic Red', price: 'Mid-range', why: 'Made by and for Black women. Classic red formulated to hit at full strength on ebony skin — no muting, no pulling dark.', link: 'https://www.jumia.com.ng/catalog/?q=uoma+beauty+lipstick', goodFor: ['Ebony skin'] },
+      { type: 'Blush', brand: 'Black Radiance', name: 'Color Perfect Blush — Berry', price: 'Budget', why: 'Deep berry blush formulated for dark skin. Accessible price point. Light blushes are invisible on ebony skin — this shade registers.', link: 'https://www.jumia.com.ng/catalog/?q=black+radiance+blush', goodFor: ['Ebony skin', 'Very deep skin'] }
+    ],
+    onyx: [
+      { type: 'Foundation', brand: 'Fenty Beauty', name: "Pro Filt'r 498", price: 'Premium', why: 'The deepest shade in the Fenty line. Created specifically because nothing else matched this depth. Cool undertone, full coverage.', link: 'https://www.jumia.com.ng/catalog/?q=fenty+pro+filtr+498', goodFor: ['Onyx skin', 'Very deep skin'] },
+      { type: 'Foundation', brand: 'Black Radiance', name: 'True Complexion — Espresso', price: 'Budget', why: 'Accessible price point, formulated for the deepest shades. One of the few budget foundations that actually matches onyx skin.', link: 'https://www.jumia.com.ng/catalog/?q=black+radiance+foundation', goodFor: ['Onyx skin', 'Budget pick'] },
+      { type: 'Eyeshadow', brand: "Juvia's Place", name: 'The Nubian Palette', price: 'Mid-range', why: 'Jewel tones — cobalt, emerald, deep purple — at full saturation on the deepest skin tones. Nothing else lands this hard on onyx skin.', link: 'https://www.jumia.com.ng/catalog/?q=juvias+nubian+palette', goodFor: ['Onyx skin', 'Deep skin'] },
+      { type: 'Lip Colour', brand: 'Iman Cosmetics', name: 'Luxury Lip Elixir — Deep Red', price: 'Mid-range', why: 'Formulated by Iman for the deepest skin tones. True deep reds that land without looking muted or brown on onyx skin.', link: 'https://www.jumia.com.ng/catalog/?q=iman+cosmetics+lip', goodFor: ['Onyx skin'] },
+      { type: 'Lip Colour', brand: 'NYX', name: 'Soft Matte Lip Cream — Deep Plum', price: 'Budget', why: 'Deep plum-purple that becomes a statement lip colour on onyx skin. Budget-accessible, long-wear formula.', link: 'https://www.jumia.com.ng/catalog/?q=nyx+deep+plum+lip', goodFor: ['Onyx skin'] }
+    ]
+  };
+
+  const MAKEUP_KEY_MAP = { light:'honey', light_cool:'caramel', medium_warm:'caramel', medium_cool:'brown', deep_warm:'chestnut', deep_cool:'ebony' };
+
+  function buildMakeupSection(A) {
+    const skinKey = A.skinTone || 'brown';
+    const makeupKey = MAKEUP_PRODUCTS[skinKey] ? skinKey : (MAKEUP_KEY_MAP[skinKey] || 'brown');
+    const products = MAKEUP_PRODUCTS[makeupKey];
+    const toneLabel = cap(makeupKey);
+
+    document.getElementById('makeupSectionTitle').textContent = `${toneLabel} skin — your matched makeup`;
+
+    const grid = document.getElementById('makeupProductsGrid');
+    grid.innerHTML = products.map((p, i) => `
+      <div class="product-card${i === 0 ? ' featured' : ''} r">
+        <div class="product-match">
+          ${p.goodFor.map(g => `<span class="match-tag">${g}</span>`).join('')}
+        </div>
+        <div class="product-type">${p.type}</div>
+        <div class="product-brand">${p.brand}</div>
+        <div class="product-name">${p.name}</div>
+        <p class="product-why">${p.why}</p>
+        <div class="product-price">${p.price}</div>
+        <a href="${p.link}" target="_blank" rel="noopener" class="shop-btn">
+          Shop on Jumia
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    `).join('');
+  }
+
+  // ── BODY & STYLE SECTION ──
+  const STYLE_BY_BODY = {
+    hourglass: [
+      { brand: 'ASOS', name: 'Wrap Midi Dress', type: 'Clothing', price: 'Affordable', why: 'Wrap silhouettes follow the natural curve-to-waist-to-hip ratio of an hourglass figure. No extra volume needed — the shape does the work.', link: 'https://www.jumia.com.ng/catalog/?q=wrap+midi+dress', goodFor: ['Hourglass body', 'Defined waist'] },
+      { brand: 'Jumia Fashion', name: 'Wide Waist Belt', type: 'Accessory', price: 'Budget', why: 'Emphasises the natural waist — the most defining feature of an hourglass figure. Adds structure to flowy tops and dresses.', link: 'https://www.jumia.com.ng/catalog/?q=wide+belt+women', goodFor: ['Hourglass body'] },
+      { brand: 'ASOS', name: 'Bodycon Midi Skirt', type: 'Clothing', price: 'Affordable', why: 'Follows the curve from hip to knee without adding volume. The midi length is the most balanced silhouette for hourglass figures.', link: 'https://www.jumia.com.ng/catalog/?q=bodycon+midi+skirt', goodFor: ['Hourglass body'] },
+      { brand: 'Jumia Fashion', name: 'Gold Hoop Earrings', type: 'Jewellery', price: 'Budget', why: 'A medium hoop at mid-cheek height frames the face without competing with the curves of an hourglass silhouette.', link: 'https://www.jumia.com.ng/catalog/?q=gold+hoop+earrings', goodFor: ['Hourglass body', 'Warm undertone'] }
+    ],
+    pear: [
+      { brand: 'ASOS', name: 'A-Line Midi Skirt', type: 'Clothing', price: 'Affordable', why: 'Flows over hips and thighs without clinging. The A-line silhouette balances the pear shape by creating visual width at the hem.', link: 'https://www.jumia.com.ng/catalog/?q=a-line+midi+skirt', goodFor: ['Pear body', 'Hip-forward figure'] },
+      { brand: 'ASOS', name: 'Structured Blazer', type: 'Clothing', price: 'Mid-range', why: 'Creates shoulder width to balance a pear figure. The structured shoulder draws the eye upward and balances wider hips below.', link: 'https://www.jumia.com.ng/catalog/?q=women+structured+blazer', goodFor: ['Pear body'] },
+      { brand: 'Jumia Fashion', name: 'Statement Shoulder Bag', type: 'Accessory', price: 'Budget', why: 'Worn at shoulder height, draws the eye upward. Creates visual balance for pear body types by adding width at the shoulder line.', link: 'https://www.jumia.com.ng/catalog/?q=shoulder+bag+women', goodFor: ['Pear body'] },
+      { brand: 'Jumia Fashion', name: 'Statement Necklace', type: 'Jewellery', price: 'Budget', why: 'A bold necklace sits at collarbone level and draws attention upward — the single most effective jewellery choice for pear figures.', link: 'https://www.jumia.com.ng/catalog/?q=statement+necklace+women', goodFor: ['Pear body'] }
+    ],
+    apple: [
+      { brand: 'ASOS', name: 'Empire Waist Dress', type: 'Clothing', price: 'Affordable', why: 'Cinches at the narrowest point just below the bust, then flows away from the midsection. The most flattering cut for apple body types.', link: 'https://www.jumia.com.ng/catalog/?q=empire+waist+dress', goodFor: ['Apple body'] },
+      { brand: 'ASOS', name: 'Wrap Blouse', type: 'Clothing', price: 'Affordable', why: 'Creates a defined waistline through draping rather than structured tailoring. Flatters apple figures by creating the illusion of a waist.', link: 'https://www.jumia.com.ng/catalog/?q=wrap+blouse+women', goodFor: ['Apple body'] },
+      { brand: 'Jumia Fashion', name: 'Long Pendant Necklace', type: 'Jewellery', price: 'Budget', why: 'Creates a vertical line that elongates the torso visually — ideal for apple body types. Draws the eye down and in.', link: 'https://www.jumia.com.ng/catalog/?q=long+pendant+necklace', goodFor: ['Apple body'] },
+      { brand: 'Jumia Fashion', name: 'V-Neck Tops', type: 'Clothing', price: 'Budget', why: 'The V-neckline creates a vertical line from chin to chest, elongating the torso — the most reliable daily choice for apple figures.', link: 'https://www.jumia.com.ng/catalog/?q=v+neck+top+women', goodFor: ['Apple body'] }
+    ],
+    rectangle: [
+      { brand: 'ASOS', name: 'Peplum Top', type: 'Clothing', price: 'Affordable', why: 'Creates the illusion of a waist and hip curve for rectangle body types. The peplum adds volume precisely at the hip line.', link: 'https://www.jumia.com.ng/catalog/?q=peplum+top+women', goodFor: ['Rectangle body'] },
+      { brand: 'ASOS', name: 'High-Waist Flared Trousers', type: 'Clothing', price: 'Affordable', why: 'High waist creates definition; the flare adds hip curve. Together these create the hourglass silhouette that rectangle figures can play with.', link: 'https://www.jumia.com.ng/catalog/?q=high+waist+flared+trousers+women', goodFor: ['Rectangle body'] },
+      { brand: 'Jumia Fashion', name: 'Waist-Tie Belt', type: 'Accessory', price: 'Budget', why: 'Creates definition at the waist on straight silhouettes — the key move for rectangle body types who want curve.', link: 'https://www.jumia.com.ng/catalog/?q=waist+belt+women', goodFor: ['Rectangle body'] },
+      { brand: 'Jumia Fashion', name: 'Shoulder Jewellery / Cuff', type: 'Jewellery', price: 'Budget', why: 'Bold shoulder-line accessories add width and drama to a straight silhouette, helping to define shape.', link: 'https://www.jumia.com.ng/catalog/?q=shoulder+cuff+women', goodFor: ['Rectangle body'] }
+    ],
+    inverted: [
+      { brand: 'ASOS', name: 'Wide-Leg Trousers', type: 'Clothing', price: 'Affordable', why: 'Adds visual weight below the waist to balance broader shoulders — the defining style move for inverted triangle body types.', link: 'https://www.jumia.com.ng/catalog/?q=wide+leg+trousers+women', goodFor: ['Inverted triangle body'] },
+      { brand: 'ASOS', name: 'A-Line Maxi Skirt', type: 'Clothing', price: 'Affordable', why: 'Flares dramatically from the waist down, adding lower body volume to counter broader shoulders. The maxi length amplifies the balancing effect.', link: 'https://www.jumia.com.ng/catalog/?q=a-line+maxi+skirt', goodFor: ['Inverted triangle body'] },
+      { brand: 'Jumia Fashion', name: 'Drop Earrings (Long)', type: 'Jewellery', price: 'Budget', why: 'Long drop earrings draw the eye downward and elongate the face, balancing a broader shoulder line below.', link: 'https://www.jumia.com.ng/catalog/?q=long+drop+earrings', goodFor: ['Inverted triangle body'] },
+      { brand: 'Jumia Fashion', name: 'Belted Wrap Skirt', type: 'Clothing', price: 'Budget', why: 'Creates hip volume and defines the waist simultaneously — both things that balance an inverted triangle figure at once.', link: 'https://www.jumia.com.ng/catalog/?q=wrap+skirt+women', goodFor: ['Inverted triangle body'] }
+    ]
+  };
+
+  function buildBodySection(A) {
+    const bodyKey = A.bodyType || 'hourglass';
+    const products = STYLE_BY_BODY[bodyKey] || STYLE_BY_BODY['hourglass'];
+    const bodyLabel = cap(bodyKey);
+
+    const grid = document.getElementById('bodyProductsGrid');
+    grid.innerHTML = products.map((p, i) => `
+      <div class="product-card${i === 0 ? ' featured' : ''} r">
+        <div class="product-match">
+          ${p.goodFor.map(g => `<span class="match-tag">${g}</span>`).join('')}
+        </div>
+        <div class="product-type">${p.type}</div>
+        <div class="product-brand">${p.brand}</div>
+        <div class="product-name">${p.name}</div>
+        <p class="product-why">${p.why}</p>
+        <div class="product-price">${p.price}</div>
+        <a href="${p.link}" target="_blank" rel="noopener" class="shop-btn">
+          Shop on Jumia
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    `).join('');
+  }
+
+  // ── UTILS ──
+  function cap(s) {
+    if (!s) return '';
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  }
+</script>
+</body>
+</html>

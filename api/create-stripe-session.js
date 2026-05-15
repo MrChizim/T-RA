@@ -3,8 +3,13 @@ import Stripe from 'stripe';
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
 
-  const { uid, email } = req.body;
+  const { uid, email, currency = 'gbp', amount = 500 } = req.body;
   if (!uid) return res.status(400).json({ error: 'Missing uid' });
+
+  // Validate currency is one we support
+  const ALLOWED = { gbp: 500, usd: 700, eur: 700 };
+  const safeCurrency = ALLOWED[currency] !== undefined ? currency : 'gbp';
+  const safeAmount   = ALLOWED[currency] !== undefined ? amount   : 500;
 
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -14,8 +19,8 @@ export default async function handler(req, res) {
     customer_email: email || undefined,
     line_items: [{
       price_data: {
-        currency: 'gbp',
-        unit_amount: 500, // £5.00
+        currency: safeCurrency,
+        unit_amount: safeAmount,
         product_data: {
           name: 'TÓRA Full Profile',
           description: 'One-time access — complete personalised style brief',

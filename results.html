@@ -48,7 +48,16 @@
       window.__toraEmail = user.email;
 
       const snap = await getDoc(doc(db, 'users', user.uid));
-      const paid = snap.exists() && snap.data().paid === true;
+      const data = snap.exists() ? snap.data() : {};
+      const paid = data.paid === true;
+
+      // Restore quiz answers from Firestore if localStorage is empty
+      if (!localStorage.getItem('tora_quiz') && data.answers) {
+        localStorage.setItem('tora_quiz', JSON.stringify(data.answers));
+        // Reload so main script picks up the restored answers
+        window.location.reload();
+        return;
+      }
 
       if (paid) {
         window.dispatchEvent(new Event('tora:paid'));
@@ -251,7 +260,6 @@
       object-fit: cover;
       object-position: center top;
       display: block;
-      filter: grayscale(100%);
     }
     .curl-profile-content {
       padding: 40px 36px;
@@ -322,7 +330,6 @@
       object-fit: cover;
       object-position: center top;
       display: block;
-      filter: grayscale(100%);
       transition: transform 0.5s ease;
     }
     .style-rec-card:hover img { transform: scale(1.04); }
@@ -402,6 +409,94 @@
     }
     .hair-cta-link:hover { color: var(--grey); border-color: var(--grey); }
 
+    /* ── HAIR GROWTH SECTION ── */
+    .growth-tips-block {
+      margin-top: 48px;
+      border-top: 1px solid var(--grey-light);
+      padding-top: 40px;
+    }
+    .growth-tips-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--grey); margin-bottom: 20px;
+    }
+    .growth-tips-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+    .growth-tip-card {
+      background: var(--grey-light);
+      padding: 28px 24px;
+    }
+    .growth-tip-num {
+      font-size: 32px; font-weight: 900; color: rgba(0,0,0,0.06);
+      letter-spacing: -1px; margin-bottom: 12px; line-height: 1;
+    }
+    .growth-tip-title {
+      font-size: 13px; font-weight: 700; letter-spacing: 0.5px;
+      margin-bottom: 8px; color: var(--black);
+    }
+    .growth-tip-text {
+      font-size: 13px; font-weight: 300; line-height: 1.7; color: var(--grey-mid);
+    }
+    @media (max-width: 800px) {
+      .growth-tips-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .growth-tips-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── BEARD SECTION (men only) ── */
+    .beard-section { padding: 96px 0; border-bottom: 1px solid var(--grey-light); display: none; }
+    .beard-section.show { display: block; }
+    .beard-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin-bottom: 40px;
+    }
+    .beard-card {
+      background: var(--grey-light);
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 2/3;
+    }
+    .beard-card img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+    .beard-card:hover img { transform: scale(1.04); }
+    .beard-card-label {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 28px 14px 14px;
+      background: linear-gradient(to top, rgba(0,0,0,0.75), transparent);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--white);
+    }
+    .beard-note {
+      border: 1px solid var(--grey-light);
+      padding: 28px 32px;
+      margin-bottom: 24px;
+    }
+    .beard-note-title {
+      font-size: 11px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--grey); margin-bottom: 12px;
+    }
+    .beard-note-text {
+      font-size: 15px; font-weight: 300; line-height: 1.8; color: var(--grey-mid);
+    }
+    @media (max-width: 800px) {
+      .beard-grid { grid-template-columns: repeat(2, 1fr); }
+      .beard-section { padding: 64px 0; }
+    }
+
     /* ── BODY SECTION ── */
     .body-profile-row {
       display: grid;
@@ -420,7 +515,6 @@
       object-fit: cover;
       object-position: center top;
       display: block;
-      filter: grayscale(100%);
     }
     .body-archetype-name {
       font-size: clamp(28px, 4vw, 48px);
@@ -487,7 +581,6 @@
       object-fit: cover;
       object-position: center top;
       display: block;
-      filter: grayscale(100%);
       transition: transform 0.5s ease;
     }
     .outfit-img-card:hover img { transform: scale(1.03); }
@@ -728,7 +821,6 @@
       width: 100%; height: 100%;
       object-fit: cover;
       object-position: center top;
-      filter: grayscale(100%);
       display: block;
     }
     .skin-info-panel {
@@ -779,7 +871,6 @@
     .acc-img-wrap img {
       width: 100%; height: 100%;
       object-fit: cover;
-      filter: grayscale(100%);
       transition: transform 0.4s ease;
       display: block;
     }
@@ -806,7 +897,7 @@
     /* ── PRODUCT RECS (hair + body) ── */
     .product-recs-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 1px;
       background: var(--grey-light);
       border: 1px solid var(--grey-light);
@@ -814,7 +905,7 @@
     }
     .product-card { background: var(--white); padding: 28px 24px; }
     .product-img-wrap { aspect-ratio: 1/1; background: var(--grey-light); margin: -28px -24px 20px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-    .product-img-wrap img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%); }
+    .product-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
     .product-brand { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--grey); margin-bottom: 6px; }
     .product-name { font-size: 15px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.2px; }
     .product-why { font-size: 13px; font-weight: 300; line-height: 1.6; color: var(--grey-mid); margin-bottom: 14px; }
@@ -857,6 +948,168 @@
       .height-note { grid-template-columns: 1fr; gap: 16px; padding: 24px 20px; }
     }
 
+    /* ── MAKEUP SECTION ── */
+    .makeup-foundation-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      margin-bottom: 2px;
+    }
+    .makeup-panel {
+      background: var(--black);
+      padding: 40px 36px;
+    }
+    .makeup-panel.light { background: var(--grey-light); }
+    .makeup-panel-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 16px;
+    }
+    .makeup-panel.light .makeup-panel-label { color: var(--grey); }
+    .makeup-panel-title {
+      font-size: clamp(18px, 2.5vw, 26px); font-weight: 700;
+      color: var(--white); letter-spacing: -0.3px; margin-bottom: 12px;
+    }
+    .makeup-panel.light .makeup-panel-title { color: var(--black); }
+    .makeup-panel-desc {
+      font-size: 14px; font-weight: 300; line-height: 1.75;
+      color: rgba(255,255,255,0.45); margin-bottom: 20px;
+    }
+    .makeup-panel.light .makeup-panel-desc { color: var(--grey-mid); }
+    .makeup-shade-row {
+      display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;
+    }
+    .makeup-shade {
+      display: flex; flex-direction: column; align-items: center; gap: 5px;
+    }
+    .makeup-shade-dot {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.15);
+    }
+    .makeup-panel.light .makeup-shade-dot { border-color: rgba(0,0,0,0.1); }
+    .makeup-shade-name {
+      font-size: 9px; font-weight: 600; letter-spacing: 0.5px;
+      color: rgba(255,255,255,0.4); text-align: center; max-width: 52px;
+    }
+    .makeup-panel.light .makeup-shade-name { color: var(--grey); }
+    .makeup-avoid {
+      font-size: 12px; font-weight: 400; color: rgba(255,255,255,0.3);
+      border-top: 1px solid rgba(255,255,255,0.08); padding-top: 14px; line-height: 1.6;
+    }
+    .makeup-panel.light .makeup-avoid {
+      color: var(--grey); border-color: rgba(0,0,0,0.08);
+    }
+    .makeup-looks-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin-bottom: 2px;
+    }
+    .makeup-look-card {
+      background: var(--grey-light);
+      padding: 28px 24px;
+    }
+    .makeup-look-num {
+      font-size: 28px; font-weight: 900; color: rgba(0,0,0,0.06);
+      letter-spacing: -1px; margin-bottom: 10px; line-height: 1;
+    }
+    .makeup-look-name {
+      font-size: 14px; font-weight: 700; margin-bottom: 6px;
+    }
+    .makeup-look-desc {
+      font-size: 13px; font-weight: 300; line-height: 1.7; color: var(--grey-mid);
+    }
+    .makeup-product-note {
+      background: var(--black);
+      padding: 32px 36px;
+      margin-top: 2px;
+    }
+    .makeup-product-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin-top: 2px;
+    }
+    .makeup-product-card {
+      background: var(--grey-light);
+      padding: 24px 22px;
+    }
+    .makeup-product-type {
+      font-size: 10px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--grey); margin-bottom: 6px;
+    }
+    .makeup-product-brand { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--grey-mid); margin-bottom: 4px; }
+    .makeup-product-name { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+    .makeup-product-why { font-size: 12px; font-weight: 300; line-height: 1.65; color: var(--grey-mid); margin-bottom: 10px; }
+    .makeup-product-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--black);
+      text-decoration: none; border-bottom: 1px solid var(--grey-light);
+      padding-bottom: 2px; transition: border-color 0.2s;
+    }
+    .makeup-product-link:hover { border-color: var(--black); }
+    @media (max-width: 800px) {
+      .makeup-foundation-row { grid-template-columns: 1fr; }
+      .makeup-looks-grid { grid-template-columns: 1fr 1fr; }
+      .makeup-product-row { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .makeup-looks-grid { grid-template-columns: 1fr; }
+      .makeup-product-row { grid-template-columns: 1fr; }
+    }
+
+    /* ── SKINCARE SECTION ── */
+    .skincare-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin-bottom: 2px;
+    }
+    .skincare-step-card {
+      background: var(--grey-light);
+      padding: 28px 24px;
+    }
+    .skincare-step-num {
+      font-size: 28px; font-weight: 900; color: rgba(0,0,0,0.06);
+      letter-spacing: -1px; margin-bottom: 10px; line-height: 1;
+    }
+    .skincare-step-name {
+      font-size: 13px; font-weight: 700; letter-spacing: 0.3px; margin-bottom: 6px;
+    }
+    .skincare-step-desc {
+      font-size: 13px; font-weight: 300; line-height: 1.7; color: var(--grey-mid);
+    }
+    .skincare-product-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2px;
+      margin-top: 2px;
+    }
+    .skincare-product-card {
+      background: var(--white);
+      border: 1px solid var(--grey-light);
+      padding: 24px 22px;
+    }
+    .skincare-product-step { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--grey); margin-bottom: 5px; }
+    .skincare-product-brand { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--grey-mid); margin-bottom: 4px; }
+    .skincare-product-name { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+    .skincare-product-why { font-size: 12px; font-weight: 300; line-height: 1.65; color: var(--grey-mid); margin-bottom: 10px; }
+    .skincare-product-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--black);
+      text-decoration: none; border-bottom: 1px solid var(--grey-light);
+      padding-bottom: 2px; transition: border-color 0.2s;
+    }
+    .skincare-product-link:hover { border-color: var(--black); }
+    @media (max-width: 800px) {
+      .skincare-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .skincare-grid { grid-template-columns: 1fr; }
+      .skincare-product-grid { grid-template-columns: 1fr; }
+    }
+
     /* ── SCROLL REVEAL ── */
     .r { opacity: 0; transform: translateY(24px); transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1); }
     .r.in { opacity: 1; transform: none; }
@@ -884,11 +1137,11 @@
       .skin-undertone-card { grid-template-columns: 1fr; }
       .skin-ref-img-wrap { min-height: 200px; aspect-ratio: 16/9; }
       .accessories-grid { grid-template-columns: repeat(3, 1fr); }
-      .product-recs-grid { grid-template-columns: 1fr 1fr; }
+      .product-recs-grid { grid-template-columns: 1fr 1fr; } /* already 2 col */
     }
     @media (max-width: 560px) {
       .accessories-grid { grid-template-columns: 1fr 1fr; }
-      .product-recs-grid { grid-template-columns: 1fr; }
+      .product-recs-grid { grid-template-columns: 1fr 1fr; }
     }
     @media (max-width: 480px) {
       .style-recs-grid { grid-template-columns: 1fr; }
@@ -968,7 +1221,9 @@
     <li><a href="hair.html">Hair <span class="d-arrow">→</span></a></li>
     <li><a href="body.html">Body <span class="d-arrow">→</span></a></li>
     <li><a href="scent.html">Scent <span class="d-arrow">→</span></a></li>
+    <li><a href="shop.html">Shop <span class="d-arrow">→</span></a></li>
     <li><a href="quiz.html">Retake Quiz <span class="d-arrow">→</span></a></li>
+    <li><a href="results.html">My Profile <span class="d-arrow">→</span></a></li>
   </ul>
   <div class="drawer-footer">Hair · Body · Scent · Skin</div>
 </div>
@@ -978,6 +1233,7 @@
   <p class="hero-eyebrow">Your TÓRA Profile</p>
   <h1 class="hero-title" id="heroTitle">YOUR<br>PROFILE</h1>
   <div class="hero-combination" id="heroCombination"></div>
+  <a href="shop.html" class="hero-retake" style="right:auto;left:36px;bottom:72px;">Shop your products →</a>
   <a href="quiz.html" class="hero-retake">Retake Quiz →</a>
 </div>
 
@@ -1016,9 +1272,27 @@
       </div>
     </div>
 
-    <a href="hair.html" class="hair-cta-link r d3">
+    <div id="hairGrowthSection" class="growth-tips-block r d3">
+      <!-- filled by JS -->
+    </div>
+
+    <a href="hair.html" class="hair-cta-link r" style="margin-top:32px;display:inline-flex;">
       Read the full hair guide →
     </a>
+  </div>
+</section>
+
+<!-- SECTION 01B — BEARD (men only, filled by JS) -->
+<section class="beard-section" id="beardSection">
+  <div class="wrap">
+    <div class="section-header r">
+      <div class="section-number" style="color:var(--grey-light);">01B</div>
+      <div class="section-title-block">
+        <p class="section-label">Beard Profile</p>
+        <h2 class="section-title" id="beardSectionTitle">Your beard type</h2>
+      </div>
+    </div>
+    <div id="beardContent"><!-- filled by JS --></div>
   </div>
 </section>
 
@@ -1081,11 +1355,35 @@
     <div class="accessories-grid r d2" id="accessoriesGrid">
       <!-- filled by JS -->
     </div>
+    <!-- MAKEUP (women only) -->
+    <div id="makeupSection" style="display:none;">
+      <div class="section-header r" style="margin-top:64px;">
+        <div class="section-number" style="opacity:0.08;">05</div>
+        <div class="section-title-block">
+          <p class="section-label">Makeup</p>
+          <h2 class="section-title">Your shades &amp; colours</h2>
+        </div>
+      </div>
+      <div id="makeupContent" class="r d1"><!-- filled by JS --></div>
+    </div>
+
+    <!-- SKINCARE ROUTINE (women only) -->
+    <div id="skincareSection" style="display:none;">
+      <div class="section-header r" style="margin-top:64px;">
+        <div class="section-number" style="opacity:0.08;">06</div>
+        <div class="section-title-block">
+          <p class="section-label">Skincare</p>
+          <h2 class="section-title" id="skincareSectionTitle">Your routine</h2>
+        </div>
+      </div>
+      <div id="skincareContent" class="r d1"><!-- filled by JS --></div>
+    </div>
+
     <div class="section-header r" style="margin-top:64px;">
-      <div class="section-number" style="opacity:0.08;">05</div>
+      <div class="section-number" style="opacity:0.08;">07</div>
       <div class="section-title-block">
         <p class="section-label">Recommended Products</p>
-        <h2 class="section-title">For your hair type</h2>
+        <h2 class="section-title" id="productSectionTitle">For your hair type</h2>
       </div>
     </div>
     <div class="product-recs-grid r d1" id="productRecsGrid">
@@ -1187,9 +1485,15 @@
 
 <script>
   // ── Guard: redirect if no quiz data ──
+  // Wait a moment for Firebase to potentially restore answers before redirecting
   const rawAnswers = localStorage.getItem('tora_quiz');
   if (!rawAnswers) {
-    window.location.href = 'quiz.html';
+    // Give Firebase up to 4 seconds to restore from Firestore, then redirect
+    setTimeout(() => {
+      if (!localStorage.getItem('tora_quiz')) {
+        window.location.href = 'quiz.html';
+      }
+    }, 4000);
   }
   const A = JSON.parse(rawAnswers || '{}');
 
@@ -1581,6 +1885,150 @@
     });
   }
 
+  // ── HAIR GROWTH TIPS ──
+  const GROWTH_TIPS = {
+    '4c': [
+      { title: 'Moisture is the foundation', text: 'Your hair loses moisture faster than any other type. The LOC method (Liquid → Oil → Cream) applied on wash day to soaking-wet hair is the most effective moisture-retention system for 4C coils.' },
+      { title: 'Protective styling helps length', text: 'Protective styles like box braids, twists, and cornrows reduce daily manipulation and prevent breakage at the ends — which is where most length loss happens. Aim for 4–6 week rotations with a wash day in between.' },
+      { title: 'Low manipulation = length retention', text: 'The less you touch your hair, the more length it retains. Detangle gently, finger-detangle before a comb, and never manipulate dry hair. Each breakage event is a setback you can avoid.' },
+      { title: 'Trim, but strategically', text: 'Trimming split ends prevents breakage from travelling up the hair shaft. Trim every 3–4 months — no more. Protective styles between trims preserve progress.' },
+      { title: 'Scalp health drives growth', text: 'Growth happens at the scalp. A clean, moisturised scalp with good circulation grows hair faster. Massage your scalp for 2–3 minutes on wash day. Keep oil between washes — not heavy, just enough.' },
+      { title: 'Track your growth', text: 'Stretch a section of hair once a month and photograph it. Growth can be invisible on 4C due to 80% shrinkage — you may be growing steadily without noticing. Seeing the data is motivating.' }
+    ],
+    '4b': [
+      { title: 'Detangle before washing', text: '4B knots up easily when wet if not pre-detangled. Gently finger-detangle in small sections before getting in the shower. This alone cuts breakage on wash day significantly.' },
+      { title: 'Deep condition weekly', text: 'The Z-pattern in 4B hair makes moisture distribution uneven — deep conditioning with heat penetrates the coil structure and replaces what daily life strips away. This is non-negotiable for length retention.' },
+      { title: 'Seal your ends', text: 'Ends are the oldest and driest part of the hair. After moisturising, seal with a light oil — shea butter, castor oil, or jojoba. Sealed ends break less.' },
+      { title: 'Low-manipulation styles', text: 'Updos, flat twists, and protective styles reduce the daily friction that causes split ends. Rotate styles rather than wearing the same look every day.' },
+      { title: 'Hard water damage is real', text: 'Lagos tap water is hard — mineral build-up coats the hair shaft and blocks moisture. Clarify monthly with an apple cider vinegar rinse or a chelating shampoo to strip the build-up.' },
+      { title: 'Satin or silk at night', text: 'Cotton pillowcases rob moisture and create friction. A satin bonnet or silk pillowcase retains the work you put in on wash day and extends styles significantly.' }
+    ],
+    '4a': [
+      { title: 'Define, then seal', text: '4A coils hold definition better than 4B/4C but still need sealing. Apply a curl cream to wet hair, then seal with a light oil to lock in definition and prevent frizz.' },
+      { title: 'Clarify regularly', text: 'Product build-up weighs down 4A coils. Use a clarifying shampoo once a month to reset the hair — you will notice significantly more definition and bounce afterwards.' },
+      { title: 'Stretch for length checks', text: '4A hair has around 50% shrinkage. Stretch-drying (banding or twist-outs) lets you see your actual length and reduces single-strand knots from coils tangling on each other.' },
+      { title: 'Protective styles between washes', text: 'Twists, braids, and buns protect your ends between wash days. This reduces daily manipulation and preserves length at the tips where breakage is most common.' },
+      { title: 'Consistent protein treatment', text: '4A hair responds well to light protein treatments every 4–6 weeks. Protein reinforces the cuticle and prevents the curl pattern from going limp.' },
+      { title: 'Satin or silk at night', text: 'Cotton draws moisture from the hair overnight. A satin bonnet or silk pillowcase preserves moisture, definition, and reduces frizz the next morning.' }
+    ],
+    '3c': [
+      { title: 'Shrinkage is your signal', text: 'High shrinkage on 3C means your hair is healthy and retaining moisture. Stretched length is your real measurement — use twist-outs or braidouts to see your true progress.' },
+      { title: 'Anti-frizz humidity protection', text: 'Humidity turns 3C coils into a frizz cloud. A light gel or anti-humidity spray on top of your styling product creates a barrier. Apply before leaving the house in Lagos or Accra weather.' },
+      { title: 'Detangle in sections', text: 'Dense 3C coils tangle deeply. Work in four to six sections, detangle with a wide-tooth comb from tip to root, and never rush through knots. Pulling creates breakage that ends up as short pieces you thought you lost.' },
+      { title: 'Protein balance matters', text: 'If your twists always look flat or your coils lose their spring, you probably need more protein. Try a protein-rich deep conditioner once a month and see if definition improves.' },
+      { title: 'Protective styles extend growth', text: '3C hair tangles on itself when loose. Protective styles — twists, braids, or updos — reduce this and protect the ends where length is held.' },
+      { title: 'Refresh with water', text: 'Re-wet 3C coils with water to refresh them rather than adding more product. Over-product build-up weighs the coil down and kills definition faster than weather does.' }
+    ],
+    '3b': [
+      { title: 'Hydration over hold', text: '3B curls need moisture more than they need hold. Over-styling with gels creates crunch. A hydrating leave-in followed by a light curl cream gives you soft, defined curls without the stiffness.' },
+      { title: 'Pineapple at night', text: 'Gather your curls loosely at the top of your head before bed — this preserves the curl pattern overnight without flattening it. Use a silk scrunchie, not a tight elastic.' },
+      { title: 'Diffuse, don\'t air dry flat', text: 'Air drying with 3B hair flat against your head flattens the curl. Diffuse with your head upside down, or dry your hair while standing — gravity helps the curls set in the right direction.' },
+      { title: 'Clarify monthly', text: 'Product build-up on 3B curls shows up quickly — as limpness and lost definition. Monthly clarifying resets the hair and restores the bounce you had after your last wash day.' },
+      { title: 'Avoid heat regularly', text: 'Repeated heat use on 3B curls causes heat damage that permanently loosens or straightens the curl pattern. Once the curl pattern is disrupted, it does not come back without new growth.' },
+      { title: 'Trim the ends', text: 'Split ends in 3B hair are visible. Once you can see fraying at the tip, the split has already travelled further up. Trim every 3 months to keep the curl looking defined at the tip.' }
+    ],
+    '3a': [
+      { title: 'Less product is more', text: '3A curls are easily weighed down. Use a dime-sized amount of curl cream on soaking-wet hair — any more and the curl drops. Build up slowly rather than applying too much at once.' },
+      { title: 'Wash frequently', text: '3A hair tends to get oily faster than tighter types. Washing 2–3 times a week with a gentle shampoo or co-wash keeps the curls bouncy and defined.' },
+      { title: 'Gentle cleansing', text: 'Sulphate-free shampoos preserve the spiral pattern and prevent the frizz that harsh cleansers cause. Look for labels that say "gentle", "moisturising", or "curl-safe".' },
+      { title: 'Refresh between washes', text: 'Spritz with water and a tiny amount of leave-in between wash days. Scrunch upward while the hair is wet to reactivate the curl pattern.' },
+      { title: 'Avoid silicones', text: 'Many mainstream conditioners coat 3A curls with silicones that feel smooth but block moisture. Look for silicone-free products — the difference in curl health is noticeable within a few weeks.' },
+      { title: 'Protect at night', text: 'Even 3A curls benefit from sleeping on satin. A silk pillowcase or loose pineapple updo prevents morning frizz and extends the style by 1–2 days.' }
+    ]
+  };
+
+  const growthSection = document.getElementById('hairGrowthSection');
+  const growthCurlKey = A.curlType || '4c';
+  const growthTips = GROWTH_TIPS[growthCurlKey] || GROWTH_TIPS['4c'];
+  if (growthSection && growthTips) {
+    growthSection.innerHTML = `
+      <p class="growth-tips-label">Hair growth & retention — for your curl type</p>
+      <div class="growth-tips-grid">
+        ${growthTips.map((tip, i) => `
+          <div class="growth-tip-card">
+            <div class="growth-tip-num">0${i + 1}</div>
+            <div class="growth-tip-title">${tip.title}</div>
+            <p class="growth-tip-text">${tip.text}</p>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  // ── SECTION 01B — BEARD (men only) ──
+  const BEARD_BY_FACE = {
+    oval:    { type: 'Full Beard', note: 'Oval face shapes suit almost any beard style. A full beard, stubble, or goatee all work — use personal preference to decide. You can also experiment freely with length.', styles: ['beard_full', 'beard_stubble', 'beard_goatee'], styleNames: ['Full Beard', 'Stubble', 'Goatee'] },
+    round:   { type: 'Angular Beard', note: 'Round faces benefit from a beard that adds length and angular structure. A full beard kept longer at the chin with shorter sides creates the illusion of an oval shape. Avoid fully round or very full beards that add width.', styles: ['beard_full', 'beard_goatee', 'beard_stubble'], styleNames: ['Full Beard (chin-length)', 'Goatee', 'Light Stubble'] },
+    square:  { type: 'Soft Beard', note: 'Your jawline is already strong — a beard should complement it, not compete. Medium stubble or a neat full beard softens the jaw edge slightly. Avoid very sharp line-ups that harden an already angular face.', styles: ['beard_stubble', 'beard_full', 'beard_coily'], styleNames: ['Medium Stubble', 'Neat Full Beard', 'Coily Beard'] },
+    oblong:  { type: 'Full Width Beard', note: 'Long faces need width. A full, rounded beard kept thick at the sides adds the horizontal presence you need. Avoid long pointed beards that add further length to the face.', styles: ['beard_full', 'beard_coily', 'beard_stubble'], styleNames: ['Full Rounded Beard', 'Coily/Natural Beard', 'Stubble'] },
+    narrow:  { type: 'Full Beard', note: 'A full, rounded beard adds width and presence to a narrow frame. Keep it maintained but not over-trimmed — natural volume is the goal.', styles: ['beard_full', 'beard_coily', 'beard_stubble'], styleNames: ['Full Beard', 'Natural Coily', 'Stubble'] },
+    wide:    { type: 'Defined Beard', note: 'A well-lined, defined beard works well for wider faces. Clean line-ups at the cheeks keep things sharp. Medium full with neat edges is the strongest look.', styles: ['beard_full', 'beard_lowfade', 'beard_stubble'], styleNames: ['Defined Full', 'Low Fade Beard', 'Stubble'] }
+  };
+
+  if (!isWomen) {
+    const beardSection = document.getElementById('beardSection');
+    beardSection.classList.add('show');
+
+    const headShapeKey = A.headShape || faceKey || 'oval';
+    const beardFaceKey = A.faceShape || 'oval';
+    const beardRec = BEARD_BY_FACE[beardFaceKey] || BEARD_BY_FACE['oval'];
+
+    document.getElementById('beardSectionTitle').textContent = beardRec.type + ' Recommendations';
+
+    const beardContent = document.getElementById('beardContent');
+    let beardGridHTML = '<div class="beard-grid r d1">';
+    beardRec.styles.forEach((styleFile, i) => {
+      const name = beardRec.styleNames[i] || styleFile;
+      beardGridHTML += `
+        <div class="beard-card">
+          <img src="images/${styleFile}.png" alt="${name}"
+               onerror="this.style.display='none';this.closest('.beard-card').style.background='#f0f0f0'">
+          <div class="beard-card-label">${name}</div>
+        </div>`;
+    });
+    beardGridHTML += '</div>';
+
+    beardGridHTML += `
+      <div class="beard-note r d2">
+        <div class="beard-note-title">Your face shape — beard note</div>
+        <p class="beard-note-text">${beardRec.note}</p>
+      </div>
+      <div class="growth-tips-grid r d2" style="margin-top:2px;">
+        <div class="growth-tip-card">
+          <div class="growth-tip-num">01</div>
+          <div class="growth-tip-title">Moisturise daily</div>
+          <p class="growth-tip-text">Coily beard hair dries out faster than straight hair. Apply a light beard oil or balm every morning — even if you don't feel it's dry. Dry beard hair looks patchy, sparse, and dull regardless of density. Jojoba or argan oil absorbs without greasiness.</p>
+        </div>
+        <div class="growth-tip-card">
+          <div class="growth-tip-num">02</div>
+          <div class="growth-tip-title">Ingrown hairs — prevention</div>
+          <p class="growth-tip-text">Coily beard hair curls back into the skin easily, especially after a close shave. Use a single-blade razor or electric clippers instead of a multi-blade razor. Exfoliate the beard area 2–3 times a week to lift hairs before they re-enter the skin. Shave in the direction of hair growth.</p>
+        </div>
+        <div class="growth-tip-card">
+          <div class="growth-tip-num">03</div>
+          <div class="growth-tip-title">Ingrown hairs — treatment</div>
+          <p class="growth-tip-text">If you have an ingrown, don't squeeze or shave over it. Apply a warm compress for 5 minutes to soften the skin, then use a clean needle to gently lift the hair tip out. Apply a salicylic acid spot treatment to reduce inflammation and prevent infection. Avoid shaving that area until healed.</p>
+        </div>
+        <div class="growth-tip-card">
+          <div class="growth-tip-num">04</div>
+          <div class="growth-tip-title">Beard growth</div>
+          <p class="growth-tip-text">Beard growth rate is largely genetic, but scalp health matters too. Keep your skin clean and moisturised — a dry, flaky face slows growth and causes patchiness. Minoxidil (Rogaine) applied to the beard area has clinical evidence for increasing density on patchy beards. Biotin supplements have weaker evidence but no downside.</p>
+        </div>
+        <div class="growth-tip-card">
+          <div class="growth-tip-num">05</div>
+          <div class="growth-tip-title">Patchy beards</div>
+          <p class="growth-tip-text">Patchy beards almost always fill in with time. The mistake most men make is shaping too early — resist trimming for 6–8 weeks and assess the pattern fully grown before committing to a style. Many patches disappear at medium length when surrounding hair covers them. If the beard is genuinely sparse, shorter stubble (3–5mm) looks denser than a longer patchy beard.</p>
+        </div>
+        <div class="growth-tip-card">
+          <div class="growth-tip-num">06</div>
+          <div class="growth-tip-title">Maintenance schedule</div>
+          <p class="growth-tip-text">Line-ups every 1–2 weeks. Beard wash 2–3 times a week — not daily, as daily washing strips the natural oils. Condition once a week with a leave-in beard conditioner. Trim strays every 2 weeks. Use a boar bristle brush to train coily beard hair and distribute oil evenly through the length.</p>
+        </div>
+      </div>`;
+
+    beardContent.innerHTML = beardGridHTML;
+  }
+
   // ── SECTION 02 — BODY ──
   if (bodyData) {
     document.getElementById('bodySectionTitle').textContent = isWomen ? 'Your body archetype' : 'Your body type';
@@ -1755,34 +2203,40 @@
 
   const HAIR_PRODUCTS = {
     '4c': [
-      { brand: 'Shea Moisture', name: 'Manuka Honey & Mafura Oil Masque', why: 'Deep moisture for the tightest coils. 4c hair loses moisture faster than any other type — this masque replaces what daily life strips away.', img: '', link: 'https://www.jumia.com.ng/' },
-      { brand: 'Mielle Organics', name: 'Rosemary Mint Scalp & Hair Oil', why: 'Stimulates the scalp and adds moisture without heaviness. One of the few oils that works as a daily scalp treatment for 4c hair.', img: '', link: 'https://www.jumia.com.ng/' },
-      { brand: 'Cantu', name: 'Shea Butter Leave-In Conditioning Cream', why: 'Seals in moisture after washing. Works on all porosity types for 4c hair and holds definition for twist-outs and braid-outs.', img: '', link: 'https://www.jumia.com.ng/' }
+      { brand: 'Shea Moisture', name: 'Manuka Honey & Mafura Oil Masque', type: 'Deep Conditioner', why: 'Deep moisture for the tightest coils. 4C hair loses moisture faster than any other type — this masque replaces what daily life strips away. Use weekly under a shower cap with gentle heat.', img: '', link: 'https://www.jumia.com.ng/catalog/?q=shea+moisture+masque' },
+      { brand: 'Mielle Organics', name: 'Rosemary Mint Scalp & Hair Oil', type: 'Scalp & Growth Oil', why: 'Stimulates scalp circulation and adds moisture without heaviness. One of the few oils with evidence behind it for hair growth. Apply directly to scalp and massage in. Best used daily.', img: '', link: 'https://www.jumia.com.ng/catalog/?q=mielle+rosemary+oil' },
+      { brand: 'Cantu', name: 'Shea Butter Leave-In Conditioning Cream', type: 'Leave-In Conditioner', why: 'Seals in moisture after washing and holds definition for twist-outs. Works on all porosity levels. Apply to soaking-wet hair in sections for best results. Widely available in Nigeria.', img: '', link: 'https://www.jumia.com.ng/catalog/?q=cantu+leave-in' },
+      { brand: 'Eco Styler', name: 'Olive Oil Styling Gel', type: 'Styling Gel', why: 'Defines 4C hair for wash-and-gos and braid-outs. Lightweight, affordable, and widely available across Nigeria. Lay edges or define coils without white residue.', img: '', link: 'https://www.jumia.com.ng/catalog/?q=eco+styler+olive+oil' }
     ],
     '4b': [
-      { brand: 'Aunt Jackie\'s', name: 'Knot On My Watch Instant Detangler', why: '4b hair knots under your fingers without warning. This detangler cuts detangling time in half and reduces breakage significantly.', img: '', link: 'https://www.jumia.com.ng/' },
-      { brand: 'Shea Moisture', name: 'Jamaican Black Castor Oil Strengthen Masque', why: 'Strengthens the Z-coil pattern that 4b hair is prone to losing under stress. Use weekly as a treatment.', img: '', link: 'https://www.jumia.com.ng/' },
-      { brand: 'Eco Styler', name: 'Olive Oil Gel', why: 'Defines 4b coils for wash-and-gos and twist-outs. Lightweight, affordable, and widely available in Nigeria.', img: '', link: 'https://www.jumia.com.ng/' }
+      { brand: 'Aunt Jackie\'s', name: 'Knot On My Watch Instant Detangler', type: 'Detangler', why: '4B hair knots under your fingers without warning. This detangler cuts detangling time in half and reduces breakage significantly. Apply generously to wet hair before a comb.', img: '', link: 'https://www.jumia.com.ng/catalog/?q=aunt+jackies+detangler' },
+      { brand: 'Shea Moisture', name: 'Jamaican Black Castor Oil Strengthen Masque', type: 'Deep Conditioner', why: 'Strengthens the Z-coil pattern that 4B hair is prone to losing under stress. Contains protein for fortifying weakened strands. Use weekly.', img: '', link: 'https://www.jumia.com.ng/catalog/?q=shea+moisture+castor+oil+masque' },
+      { brand: 'Cantu', name: 'Shea Butter Leave-In Conditioning Cream', type: 'Leave-In Conditioner', why: 'Seals moisture into 4B coils after washing. The thick formula is substantial enough for the dense Z-coil pattern.', img: '', link: 'https://www.jumia.com.ng/catalog/?q=cantu+leave-in' },
+      { brand: 'Eco Styler', name: 'Olive Oil Styling Gel', type: 'Styling Gel', why: 'Defines 4B coils for twist-outs and wash-and-gos. Lightweight, widely available in Nigeria, no white cast.', img: '', link: 'https://www.jumia.com.ng/catalog/?q=eco+styler+olive+oil' }
     ],
     '4a': [
-      { brand: 'Cantu', name: 'Define & Shine Custard', why: '4a coils hold definition well with the right product. This custard enhances the natural S-curl without crunch.', img: '', link: 'https://www.jumia.com.ng/' },
-      { brand: 'Shea Moisture', name: 'Coconut & Hibiscus Curl Enhancing Smoothie', why: 'Lightweight enough for 4a hair, which needs definition without the heaviness that weighs down tighter coils.', img: '', link: 'https://www.jumia.com.ng/' },
-      { brand: 'Mielle Organics', name: 'Pomegranate & Honey Leave-In Conditioner', why: 'Hydrates and defines simultaneously. 4a hair retains more moisture than 4b and 4c — a lighter leave-in is all it needs.', img: '', link: 'https://www.jumia.com.ng/' }
+      { brand: 'Cantu', name: 'Define & Shine Custard', type: 'Curl Custard', why: '4A coils hold definition well with the right product. This custard enhances the natural S-curl without crunch or flaking.', img: '', link: 'https://www.jumia.com.ng/catalog/?q=cantu+define+shine' },
+      { brand: 'Shea Moisture', name: 'Coconut & Hibiscus Curl Enhancing Smoothie', type: 'Styling Cream', why: 'Lightweight enough for 4A hair, which needs definition without the heaviness that weighs down tighter coils. Enhances curl clumping.', img: '', link: 'https://www.jumia.com.ng/catalog/?q=shea+moisture+curl+smoothie' },
+      { brand: 'Mielle Organics', name: 'Pomegranate & Honey Leave-In Conditioner', type: 'Leave-In Conditioner', why: 'Hydrates and defines simultaneously. 4A hair retains moisture better than 4B/4C — a lighter leave-in is all it needs.', img: '', link: 'https://www.jumia.com.ng/catalog/?q=mielle+pomegranate+leave-in' },
+      { brand: 'Mielle Organics', name: 'Rosemary Mint Scalp & Hair Oil', type: 'Growth Oil', why: 'For scalp health and growth. Apply to scalp 3x per week and massage in circular motions to stimulate follicles.', img: '', link: 'https://www.jumia.com.ng/catalog/?q=mielle+rosemary+oil' }
     ],
     '3c': [
-      { brand: 'Kinky Curly', name: 'Knot Today Leave-In Conditioner', why: '3c hair is prone to tangling despite having more visible definition. This leave-in detangles and defines in one step.', img: '', link: 'https://www.jumia.com.ng/' },
-      { brand: 'Shea Moisture', name: 'Curl & Style Milk', why: 'Defines the tight corkscrew pattern of 3c hair without frizz. Works in high humidity — relevant for Lagos and Accra.', img: '', link: 'https://www.jumia.com.ng/' },
-      { brand: 'Cantu', name: 'Wave Whip Curling Mousse', why: 'Lightweight hold for 3c curls. Keeps definition without the weight of heavier products that flatten the pattern.', img: '', link: 'https://www.jumia.com.ng/' }
+      { brand: 'Kinky Curly', name: 'Knot Today Leave-In Conditioner', type: 'Leave-In / Detangler', why: '3C hair is prone to tangling despite having more visible definition. This leave-in detangles and defines in one step.', img: '', link: 'https://www.jumia.com.ng/catalog/?q=kinky+curly+knot+today' },
+      { brand: 'Shea Moisture', name: 'Curl & Style Milk', type: 'Styling Milk', why: 'Defines the tight corkscrew pattern of 3C hair without frizz. Performs well in high humidity — relevant for Lagos and Accra weather.', img: '', link: 'https://www.jumia.com.ng/catalog/?q=shea+moisture+curl+milk' },
+      { brand: 'Cantu', name: 'Wave Whip Curling Mousse', type: 'Curl Mousse', why: 'Lightweight hold for 3C curls. Keeps definition without the weight of heavier products that flatten the corkscrew pattern.', img: '', link: 'https://www.jumia.com.ng/catalog/?q=cantu+wave+whip' },
+      { brand: 'DevaCurl', name: 'Heaven in Hair Mask', type: 'Deep Conditioner', why: 'A rich weekly moisture treatment for 3C hair. The intense hydration keeps corkscrews defined and reduces mid-week frizz.', img: '', link: 'https://www.jumia.com.ng/catalog/?q=devacurl+mask' }
     ],
     '3b': [
-      { brand: 'DevaCurl', name: 'One Condition Original', why: '3b curls need hydration more than hold. This conditioner keeps spirals soft and bouncy without buildup.', img: '', link: 'https://www.jumia.com.ng/' },
-      { brand: 'Shea Moisture', name: 'Coconut & Hibiscus Frizz-Free Curl Mousse', why: '3b hair frizzes in humidity. This mousse seals the cuticle and maintains definition through Lagos-level heat.', img: '', link: 'https://www.jumia.com.ng/' },
-      { brand: 'Cantu', name: 'Moisturizing Curl Activator Cream', why: 'Activates 3b curl definition after washing. Apply to soaking wet hair and scrunch upward for best results.', img: '', link: 'https://www.jumia.com.ng/' }
+      { brand: 'DevaCurl', name: 'One Condition Original', type: 'Conditioner', why: '3B curls need hydration more than hold. This conditioner keeps spirals soft and bouncy without buildup. Can be used as a co-wash.', img: '', link: 'https://www.jumia.com.ng/catalog/?q=devacurl+one+condition' },
+      { brand: 'Shea Moisture', name: 'Coconut & Hibiscus Frizz-Free Curl Mousse', type: 'Anti-Frizz Mousse', why: '3B hair frizzes in humidity. This mousse seals the cuticle and maintains definition through Lagos-level heat and humidity.', img: '', link: 'https://www.jumia.com.ng/catalog/?q=shea+moisture+curl+mousse' },
+      { brand: 'Cantu', name: 'Moisturizing Curl Activator Cream', type: 'Curl Activator', why: 'Activates 3B curl definition after washing. Apply to soaking-wet hair and scrunch upward for best results.', img: '', link: 'https://www.jumia.com.ng/catalog/?q=cantu+curl+activator' },
+      { brand: 'Not Your Mother\'s', name: 'Curl Talk Defining Cream', type: 'Curl Cream', why: 'Defines 3B spirals with a flexible, non-crunchy hold. Available at most Nigerian supermarkets and pharmacies. Beginner-friendly.', img: '', link: 'https://www.jumia.com.ng/catalog/?q=not+your+mothers+curl+talk' }
     ],
     '3a': [
-      { brand: 'Ouidad', name: 'Curl Quencher Moisturizing Shampoo', why: '3a coils need gentler cleansing to preserve the spiral pattern. Sulphate-free and lightweight.', img: '', link: 'https://www.jumia.com.ng/' },
-      { brand: 'Not Your Mother\'s', name: 'Curl Talk Frizz Control Curl Cream', why: '3a curls hold their pattern easily — a light cream is all you need. Anything heavier weighs them down.', img: '', link: 'https://www.jumia.com.ng/' },
-      { brand: 'Shea Moisture', name: 'Jamaican Black Castor Oil Leave-In Conditioner', why: 'Adds moisture and slip to 3a coils post-wash. Light enough to not flatten the pattern.', img: '', link: 'https://www.jumia.com.ng/' }
+      { brand: 'Ouidad', name: 'Curl Quencher Moisturizing Shampoo', type: 'Shampoo', why: '3A coils need gentler cleansing to preserve the spiral pattern. This sulphate-free, moisturising formula cleans without stripping.', img: '', link: 'https://www.jumia.com.ng/catalog/?q=ouidad+curl+quencher' },
+      { brand: 'Not Your Mother\'s', name: 'Curl Talk Frizz Control Curl Cream', type: 'Curl Cream', why: '3A curls hold their pattern easily — a light cream is all you need. Anything heavier weighs them down significantly.', img: '', link: 'https://www.jumia.com.ng/catalog/?q=not+your+mothers+curl+cream' },
+      { brand: 'Shea Moisture', name: 'Jamaican Black Castor Oil Leave-In Conditioner', type: 'Leave-In Conditioner', why: 'Adds moisture and slip to 3A coils post-wash. Light enough to not flatten the pattern, and available across Nigeria.', img: '', link: 'https://www.jumia.com.ng/catalog/?q=shea+moisture+castor+oil+leave+in' },
+      { brand: 'Mielle Organics', name: 'Rosemary Mint Strengthening Shampoo', type: 'Growth Shampoo', why: 'Cleanses and stimulates the scalp simultaneously. Use once a week to encourage growth while maintaining the 3A spiral pattern.', img: '', link: 'https://www.jumia.com.ng/catalog/?q=mielle+rosemary+shampoo' }
     ]
   };
 
@@ -1865,12 +2319,416 @@
     `).join('');
   }
 
+  // ── MAKEUP (women only) ──
+  const MAKEUP_DATA = {
+    honey: {
+      foundation: { shade: 'NC25–NC35 range', brands: [
+        { name: 'Fenty Beauty Pro Filt\'r', shade: 'shade 160W–190W', why: 'Built for warm undertones on lighter brown skin. The warm undertone range sits naturally without looking grey or ashy.' },
+        { name: 'Black Opal True Color', shade: 'Warm Beige / Caramel', why: 'Formulated specifically for Black women. Warm undertone range, accessible price point, available on Jumia.' },
+        { name: 'Maybelline Fit Me Matte', shade: '220 Natural Beige', why: 'Drugstore accessible, warm range. Apply with a damp sponge for a natural finish on warm honey skin.' }
+      ]},
+      lips: [
+        { name: 'Warm Nudes', shades: [{n:'Caramel',h:'#C68642'},{n:'Warm Beige',h:'#D4A870'},{n:'Peach Nude',h:'#E8A87C'}], desc: 'Warm nude shades sit with your natural lip tone rather than washing it out. Avoid cool pink nudes — they read grey on warm undertones.' },
+        { name: 'Bold Colours', shades: [{n:'Terracotta',h:'#C4622D'},{n:'Rust Red',h:'#B7410E'},{n:'Burnt Orange',h:'#D2691E'}], desc: 'Earthy reds and terracottas are your boldest statement. These amplify the warmth already in your skin.' }
+      ],
+      eyes: [
+        { look: 'Everyday', desc: 'Warm brown eyeshadow in the crease, champagne or gold on the lid. Tightline with brown kohl — not black liner, which can harden a warm face.' },
+        { look: 'Defined', desc: 'Bronze cut crease with gold highlight at the inner corner. Deep brown in the outer V. Mascara only — no liner needed when the crease is defined.' },
+        { look: 'Bold', desc: 'Full smoky eye in warm copper and terracotta shades. Gold foil on the lid centre. Minimal lip — a warm nude balances the heavy eye.' }
+      ],
+      blush: { shades: [{n:'Peach',h:'#FFCBA4'},{n:'Coral',h:'#FF7F50'},{n:'Warm Bronze',h:'#CD7F32'}], note: 'Apply blush high on the cheekbones in a warm peach or coral — avoid cool pinks and mauves which pull grey against warm skin.' },
+      avoid: 'Cool-toned pinks, icy lavenders, and blue-based reds. These fight your undertone and create a muddy, unbalanced finish.',
+      products: [
+        { type: 'Foundation', brand: 'Black Opal', name: 'True Color Stick Foundation', why: 'Warm undertone range built for melanin-rich skin. Caramel shade is a near-perfect match for honey skin.', link: 'https://www.jumia.com.ng/catalog/?q=black+opal+foundation' },
+        { type: 'Lip Colour', brand: 'Fenty Beauty', name: 'Stunna Lip Paint — Uncensored', why: 'Universal red that works on every skin tone including warm undertones. Full coverage, long-wear.', link: 'https://www.jumia.com.ng/catalog/?q=fenty+lip' },
+        { type: 'Eyeshadow', brand: 'Juvia\'s Place', name: 'The Zulu Palette', why: 'Made for deep and warm skin tones. Copper, gold, and terracotta shades that are designed to show up on melanated skin.', link: 'https://www.jumia.com.ng/catalog/?q=juvias+place+palette' }
+      ]
+    },
+    caramel: {
+      foundation: { shade: 'NC35–NC42 range', brands: [
+        { name: 'Fenty Beauty Pro Filt\'r', shade: '260W–310W', why: 'The warm undertone shades are exactly matched for caramel skin. Buildable coverage, long-wear.' },
+        { name: 'Maybelline Fit Me Matte', shade: '330 Toffee', why: 'Drugstore accessible. Warm undertone range in the 300s. Widely available in Nigerian pharmacies and online.' },
+        { name: 'NYX Can\'t Stop Won\'t Stop', shade: 'Caramel / Warm Honey', why: 'Long-wear formula that oxidises into the warm undertone rather than against it.' }
+      ]},
+      lips: [
+        { name: 'Warm Nudes', shades: [{n:'Toffee',h:'#916030'},{n:'Warm Brown',h:'#7B4F3A'},{n:'Nude Mauve',h:'#B07060'}], desc: 'Medium-warm nude shades that add definition without washing out. Avoid anything too light — pale nudes look chalky on caramel skin.' },
+        { name: 'Bold Colours', shades: [{n:'Wine Red',h:'#722F37'},{n:'Terracotta',h:'#C4622D'},{n:'Deep Berry',h:'#8B2252'}], desc: 'Deep wines, berries, and brick reds are your strongest colours. These sit with the richness of caramel skin perfectly.' }
+      ],
+      eyes: [
+        { look: 'Everyday', desc: 'Warm taupe in the crease, gold or champagne on the lid. Brown pencil tightline. Keep it clean and your natural warm tone does the work.' },
+        { look: 'Defined', desc: 'Burnt sienna cut crease with a copper lid. Dark brown or deep burgundy in the outer V. Fluffy lash mascara.' },
+        { look: 'Bold', desc: 'Deep burgundy or forest green smoky eye — both amplify caramel skin dramatically. Gold foil on the lid centre. Nude lip.' }
+      ],
+      blush: { shades: [{n:'Warm Rose',h:'#C06050'},{n:'Peach',h:'#FFCBA4'},{n:'Terracotta',h:'#C4622D'}], note: 'Warm rose or light terracotta blush applied to the apples of the cheeks and blended upward. Avoid pale pink which disappears on caramel skin.' },
+      avoid: 'Ash-toned foundations, cool pink blushes, and stark white highlighters. Grey-based highlighters look dusty — choose gold or champagne.',
+      products: [
+        { type: 'Foundation', brand: 'Fenty Beauty', name: 'Pro Filt\'r Soft Matte Foundation', why: 'Shade 280W matches warm caramel undertones precisely. Full coverage, no oxidising.', link: 'https://www.jumia.com.ng/catalog/?q=fenty+pro+filtr' },
+        { type: 'Blush', brand: 'Sleek MakeUP', name: 'Blush by 3 — Lace', why: 'Warm peachy-rose blush that shows up on caramel skin without looking chalky. Available in Nigeria.', link: 'https://www.jumia.com.ng/catalog/?q=sleek+blush' },
+        { type: 'Highlighter', brand: 'Juvia\'s Place', name: 'I Am Magic Highlighter', why: 'Gold-toned highlighter formulated for deep and medium skin tones. Warm caramel skin amplifies the gold glow.', link: 'https://www.jumia.com.ng/catalog/?q=juvias+place+highlighter' }
+      ]
+    },
+    brown: {
+      foundation: { shade: 'NC42–NC50 range', brands: [
+        { name: 'Fenty Beauty Pro Filt\'r', shade: '330–360 range', why: 'Medium-deep range with neutral to cool options. One of the few lines that actually matches the full medium-brown spectrum.' },
+        { name: 'Black Opal True Color', shade: 'True Tan / Rich Caramel', why: 'Made for Black skin specifically. Neutral undertone range matches the balanced complexion of brown skin tones.' },
+        { name: 'L\'Oréal True Match', shade: 'W6 Sun Beige / C6', why: 'Available widely in Nigeria and the UK. Both warm and cool options in the deeper range — pick based on your undertone (warm or cool).' }
+      ]},
+      lips: [
+        { name: 'Neutral Nudes', shades: [{n:'Mocha',h:'#7B4F3A'},{n:'Rosewood',h:'#9B5B5B'},{n:'Dusty Rose',h:'#C49A9A'}], desc: 'Neutral-undertone brown skin works with both warm and cool nudes. Rosewood and mocha are universally flattering here.' },
+        { name: 'Bold Colours', shades: [{n:'Classic Red',h:'#C0392B'},{n:'Plum',h:'#8E4585'},{n:'Emerald',h:'#2E8B57'}], desc: 'Classic red, plum, and deep berry all land powerfully on brown skin. This undertone type is the most versatile for bold lip colour.' }
+      ],
+      eyes: [
+        { look: 'Everyday', desc: 'Warm-neutral taupe across the lid and into the crease. Black or brown kohl on the waterline. Curl lashes and apply mascara — keeps it clean and open.' },
+        { look: 'Defined', desc: 'Medium brown in the crease, satin copper on the lid, bronze in the outer corner. Both warm and cool formulas read well on neutral brown skin.' },
+        { look: 'Bold', desc: 'Deep jewel tones — emerald, sapphire, or plum — sit dramatically against medium brown skin. All three work. Pick the one that matches the rest of your look.' }
+      ],
+      blush: { shades: [{n:'Warm Rose',h:'#C06050'},{n:'Deep Peach',h:'#E8A87C'},{n:'Mauve',h:'#997799'}], note: 'Brown skin with neutral undertones accepts both warm and cool blush — the widest range. Mauve and warm rose are your safest choices.' },
+      avoid: 'Very pale or chalky foundation shades. Grey-toned products generally. Frosted eyeshadows from older formulations — these are not pigmented enough for medium-deep skin.',
+      products: [
+        { type: 'Foundation', brand: 'L\'Oréal', name: 'True Match Liquid Foundation W6', why: 'Accessible, widely available in Nigeria and the UK. Warm W6 or neutral N6 depending on your lean within the brown tone range.', link: 'https://www.jumia.com.ng/catalog/?q=loreal+true+match' },
+        { type: 'Lip Colour', brand: 'MAC', name: 'Velvet Teddy / Chestnut', why: 'Both are universally flattering on brown skin. Velvet Teddy is the best-selling neutral nude on medium-deep skin globally.', link: 'https://www.jumia.com.ng/catalog/?q=mac+lipstick' },
+        { type: 'Eyeshadow', brand: 'Morphe', name: '35O Nature Glow Palette', why: 'Neutral and warm tones that show up well on brown skin. Accessible price point, pigmented for medium-deep skin.', link: 'https://www.jumia.com.ng/catalog/?q=morphe+35o' }
+      ]
+    },
+    chestnut: {
+      foundation: { shade: 'NC50–NC55 range', brands: [
+        { name: 'Fenty Beauty Pro Filt\'r', shade: '370W–400', why: 'Warm deep range. The 370W–400 spectrum was built for exactly this depth with warm undertones.' },
+        { name: 'Black Opal True Color', shade: 'Deep Caramel / Mahogany', why: 'Deep warm range that doesn\'t oxidise grey. One of the most reliable foundations for warm chestnut skin.' },
+        { name: 'Maybelline Fit Me Matte', shade: '356 Warm Coconut / 362', why: 'Drugstore accessible. Deep warm range. The 356 and 362 are consistently recommended for warm-deep skin.' }
+      ]},
+      lips: [
+        { name: 'Warm Nudes', shades: [{n:'Deep Mocha',h:'#6B3A2A'},{n:'Warm Brown',h:'#7B4F3A'},{n:'Brick',h:'#9B4D3A'}], desc: 'Deep warm nudes — brick, mocha, and warm brown — define the lip without washing it out. Avoid anything pale or cool-toned.' },
+        { name: 'Bold Colours', shades: [{n:'Deep Burgundy',h:'#722F37'},{n:'Copper Red',h:'#B7410E'},{n:'Warm Plum',h:'#6B2737'}], desc: 'Deep burgundy and warm plum are the most powerful bold choices for chestnut skin. These shades deepen and intensify your natural warmth.' }
+      ],
+      eyes: [
+        { look: 'Everyday', desc: 'Warm bronze eyeshadow lightly across the lid and blended into the crease. Brown kohl on the waterline. Keep it minimal — warm chestnut skin reads polished without much effort.' },
+        { look: 'Defined', desc: 'Copper-red lid with a dark burgundy outer V and crease. Highlight the inner corner with a warm gold. Dramatic and suited to chestnut\'s depth.' },
+        { look: 'Bold', desc: 'Burnt orange or deep rust smoky eye. Terracotta on the lid, dark brown at the outer edges. The boldest eye looks land on chestnut skin because the depth carries them.' }
+      ],
+      blush: { shades: [{n:'Deep Coral',h:'#D45B47'},{n:'Warm Brick',h:'#B7410E'},{n:'Deep Rose',h:'#A0484F'}], note: 'Go deeper with blush — lighter shades disappear on chestnut skin. A deep coral or warm brick applied heavily to the cheekbones reads beautifully.' },
+      avoid: 'Anything pale, frosted, or ash-toned. Cool pinks vanish entirely. Avoid foundation shades with grey or pink undertones — they look ashy against warm chestnut skin.',
+      products: [
+        { type: 'Foundation', brand: 'Fenty Beauty', name: 'Pro Filt\'r 400W', why: 'Deep warm foundation built for exactly this depth. Stays true to the warm undertone all day without oxidising.', link: 'https://www.jumia.com.ng/catalog/?q=fenty+pro+filtr+400' },
+        { type: 'Eyeshadow', brand: 'Juvia\'s Place', name: 'The Nubian 2 Palette', why: 'Formulated for deep skin tones specifically. Warm copper, bronze, and terracotta shades hit the deepest on chestnut skin.', link: 'https://www.jumia.com.ng/catalog/?q=juvias+nubian' },
+        { type: 'Lip Colour', brand: 'NYX', name: 'Soft Matte Lip Cream — Toulouse / Cannes', why: 'Deep wine and warm berry shades that amplify chestnut skin. Long-wear, affordable, available in Nigeria.', link: 'https://www.jumia.com.ng/catalog/?q=nyx+soft+matte+lip' }
+      ]
+    },
+    ebony: {
+      foundation: { shade: 'N to NC60 range', brands: [
+        { name: 'Fenty Beauty Pro Filt\'r', shade: '440N–460N', why: 'The deep neutral-to-cool range. Fenty\'s deep shades are among the most accurate for cool-undertone ebony skin.' },
+        { name: 'Iman Cosmetics', name2: 'Second to None Foundation', shade: 'Earth Deep / Ebony', why: 'Created specifically for deep and very deep Black skin. Cool undertone options in the deep range.' },
+        { name: 'Make Up For Ever Ultra HD', shade: 'Y505 / R530', why: 'Professional-grade formula. The R530 (pink undertone) works beautifully for cool ebony skin.' }
+      ]},
+      lips: [
+        { name: 'Bold Statement Lips', shades: [{n:'Classic Red',h:'#C0392B'},{n:'Deep Berry',h:'#8B2252'},{n:'Dark Plum',h:'#4B0082'}], desc: 'Ebony skin carries bold lip colours more powerfully than any other depth. Classic red, deep berry, and dark plum hit at full intensity. Go bold — it\'s designed for you.' },
+        { name: 'Defined Nudes', shades: [{n:'Deep Nude',h:'#6B3A2A'},{n:'Brown Berry',h:'#7B4040'},{n:'Mocha',h:'#5C3022'}], desc: 'True nudes on ebony skin are deep brown and brown-berry shades — not beige or pink. A too-light nude looks stark; the right nude looks effortless.' }
+      ],
+      eyes: [
+        { look: 'Everyday', desc: 'Black or deep brown eyeliner on the upper lash line, blended slightly for a smoky effect. White or nude on the waterline to open the eye. Mascara. Clean and strong.' },
+        { look: 'Defined', desc: 'Jewel-toned lid — cobalt, emerald, or deep purple. Black eyeshadow in the crease and outer V to define the shape. Silver or white foil at the inner corner.' },
+        { look: 'Bold', desc: 'Full cobalt or emerald smoky eye — these shades land at maximum intensity on ebony skin and look like nothing else. Pair with a nude or deep berry lip.' }
+      ],
+      blush: { shades: [{n:'Deep Plum',h:'#6B2737'},{n:'Berry',h:'#8B2252'},{n:'Rich Rose',h:'#A0484F'}], note: 'Deep berry, plum, and rich rose are your blush colours. Light blushes are invisible. Apply generously — ebony skin absorbs colour, so build it up.' },
+      avoid: 'Pale, chalky, or cool-pink foundations. Frost and shimmer eyeshadows from drugstore brands — these are not pigmented enough and show up chalky. Avoid bronzers with orange undertones.',
+      products: [
+        { type: 'Foundation', brand: 'Fenty Beauty', name: 'Pro Filt\'r 460N', why: 'Cool deep foundation that matches ebony skin without pulling warm. One of the most accurate deep shades ever made.', link: 'https://www.jumia.com.ng/catalog/?q=fenty+pro+filtr+460' },
+        { type: 'Eyeshadow', brand: 'Juvia\'s Place', name: 'The Masquerade Mini Palette', why: 'Jewel tones — cobalt, emerald, deep purple — highly pigmented specifically for dark skin. These are the palettes that work.', link: 'https://www.jumia.com.ng/catalog/?q=juvias+masquerade' },
+        { type: 'Lip Colour', brand: 'Uoma Beauty', name: 'Say What?! Matte Lipstick', why: 'Made by and for Black women. Deep berry and classic red shades formulated to hit at full strength on ebony skin.', link: 'https://www.jumia.com.ng/catalog/?q=uoma+beauty+lipstick' }
+      ]
+    },
+    onyx: {
+      foundation: { shade: 'N to W60+ range', brands: [
+        { name: 'Fenty Beauty Pro Filt\'r', shade: '490N–498', why: 'The deepest range in Fenty\'s line. 490N and 498 were created specifically for very deep cool skin tones.' },
+        { name: 'Iman Cosmetics', name2: 'Cover Cream Foundation', shade: 'Ebony / Onyx Deep', why: 'One of the very few brands that has formulated specifically for the deepest skin tones since the 1990s.' },
+        { name: 'Black Radiance', name2: 'True Complexion Foundation', shade: 'Ebony / Espresso', why: 'Accessible price point, formulated for the deepest shades. Cool undertone options available.' }
+      ]},
+      lips: [
+        { name: 'Full Pigment Lips', shades: [{n:'True Red',h:'#B22222'},{n:'Deep Plum',h:'#4B0082'},{n:'Cobalt Berry',h:'#2C3571'}], desc: 'Onyx skin is the only canvas where deep jewel tones on the lips make complete sense. True red, deep plum, and even cobalt-tinted berry lip colours become wearable statements rather than risks.' },
+        { name: 'Deep Nudes', shades: [{n:'Espresso',h:'#3B1F10'},{n:'Deep Raisin',h:'#5C2E3A'},{n:'Dark Mocha',h:'#4A2020'}], desc: 'The correct nude for onyx skin is a deep espresso, raisin, or dark mocha — not beige, not pink. Anything lighter looks stark and disconnected.' }
+      ],
+      eyes: [
+        { look: 'Everyday', desc: 'White or nude pencil on the waterline to open and brighten. Black liner on the upper lash line. Keep lids clean. Your skin tone creates the drama — let it.' },
+        { look: 'Defined', desc: 'Deep jewel tone on the lid — cobalt, emerald, or deep purple — with black in the crease and outer corner. Silver foil at the inner corner. This look is designed for your depth.' },
+        { look: 'Bold', desc: 'Full emerald or cobalt cut crease. Black outer V and crease blended hard. Silver liner at the inner corner. Nude or deep plum lip. The most dramatic look in any makeup language.' }
+      ],
+      blush: { shades: [{n:'Deep Berry',h:'#8B2252'},{n:'Dark Plum',h:'#4B0082'},{n:'Wine',h:'#722F37'}], note: 'Only the deepest blush shades register on onyx skin. Apply very generously — deep berry, wine, and plum are your range. Anything lighter simply disappears.' },
+      avoid: 'All light foundation shades and anything with pink or grey undertones. Orange bronzers. Pale or frosted eyeshadows. Light-coloured blush. In general: nothing pale works on onyx skin.',
+      products: [
+        { type: 'Foundation', brand: 'Fenty Beauty', name: 'Pro Filt\'r 498', why: 'The deepest shade in the Fenty line. Created specifically because nothing else matched this depth. Cool undertone, full coverage.', link: 'https://www.jumia.com.ng/catalog/?q=fenty+pro+filtr+498' },
+        { type: 'Eyeshadow', brand: 'Juvia\'s Place', name: 'The Nubian Palette', why: 'Jewel and deep tones formulated to show up on the deepest skin tones. Cobalt, emerald, and deep purple at full saturation.', link: 'https://www.jumia.com.ng/catalog/?q=juvias+nubian+palette' },
+        { type: 'Lip Colour', brand: 'Iman Cosmetics', name: 'Luxury Lip Elixir — Deep', why: 'Formulated by Iman for the deepest skin tones. True deep reds and plums that land without looking muted.', link: 'https://www.jumia.com.ng/catalog/?q=iman+cosmetics+lip' }
+      ]
+    }
+  };
+
+  // Fallback mappings for legacy skin keys
+  const MAKEUP_KEY_MAP = { light:'honey', light_cool:'caramel', medium_warm:'caramel', medium_cool:'brown', deep_warm:'chestnut', deep_cool:'ebony' };
+  const makeupKey = MAKEUP_DATA[skinKey] ? skinKey : (MAKEUP_KEY_MAP[skinKey] || 'brown');
+  const makeupData = MAKEUP_DATA[makeupKey];
+
+  if (isWomen && makeupData) {
+    document.getElementById('makeupSection').style.display = '';
+    const makeupContent = document.getElementById('makeupContent');
+
+    const foundationHTML = `
+      <div class="makeup-foundation-row">
+        <div class="makeup-panel">
+          <div class="makeup-panel-label">Foundation Range</div>
+          <div class="makeup-panel-title">${makeupData.foundation.shade}</div>
+          <p class="makeup-panel-desc" style="margin-bottom:0;">What to look for when shade-matching:</p>
+          <div style="margin-top:16px;display:flex;flex-direction:column;gap:12px;">
+            ${makeupData.foundation.brands.map(b => `
+              <div>
+                <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:3px;">${b.name}${b.name2 ? ' / '+b.name2 : ''} <span style="color:rgba(255,255,255,0.35);font-weight:400;">— ${b.shade}</span></div>
+                <div style="font-size:13px;font-weight:300;color:rgba(255,255,255,0.4);line-height:1.6;">${b.why}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+        <div class="makeup-panel" style="background:var(--grey-light);">
+          <div class="makeup-panel-label" style="color:var(--grey);">Blush</div>
+          <div class="makeup-panel-title" style="color:var(--black);">Your blush shades</div>
+          <div class="makeup-shade-row">
+            ${makeupData.blush.shades.map(s => `
+              <div class="makeup-shade">
+                <div class="makeup-shade-dot" style="background:${s.h};border-color:rgba(0,0,0,0.1);"></div>
+                <div class="makeup-shade-name" style="color:var(--grey);">${s.n}</div>
+              </div>
+            `).join('')}
+          </div>
+          <p style="font-size:13px;font-weight:300;line-height:1.7;color:var(--grey-mid);">${makeupData.blush.note}</p>
+          <div style="margin-top:20px;padding-top:16px;border-top:1px solid rgba(0,0,0,0.08);">
+            <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-bottom:8px;">Avoid</div>
+            <p style="font-size:13px;font-weight:300;line-height:1.7;color:var(--grey-mid);">${makeupData.avoid}</p>
+          </div>
+        </div>
+      </div>`;
+
+    const lipsHTML = makeupData.lips.map(lip => `
+      <div class="makeup-panel" style="background:var(--grey-light);margin-top:2px;">
+        <div class="makeup-panel-label" style="color:var(--grey);">Lip — ${lip.name}</div>
+        <div class="makeup-shade-row">
+          ${lip.shades.map(s => `
+            <div class="makeup-shade">
+              <div class="makeup-shade-dot" style="background:${s.h};border-color:rgba(0,0,0,0.1);"></div>
+              <div class="makeup-shade-name" style="color:var(--grey);">${s.n}</div>
+            </div>
+          `).join('')}
+        </div>
+        <p style="font-size:13px;font-weight:300;line-height:1.7;color:var(--grey-mid);margin-top:4px;">${lip.desc}</p>
+      </div>
+    `).join('');
+
+    const eyesHTML = `
+      <div class="makeup-looks-grid" style="margin-top:2px;">
+        ${makeupData.eyes.map((eye, i) => `
+          <div class="makeup-look-card">
+            <div class="makeup-look-num">0${i+1}</div>
+            <div class="makeup-look-name">${eye.look} Eye</div>
+            <p class="makeup-look-desc">${eye.desc}</p>
+          </div>
+        `).join('')}
+      </div>`;
+
+    const productsHTML = `
+      <div class="makeup-product-row" style="margin-top:2px;">
+        ${makeupData.products.map(p => `
+          <div class="makeup-product-card">
+            <div class="makeup-product-type">${p.type}</div>
+            <div class="makeup-product-brand">${p.brand}</div>
+            <div class="makeup-product-name">${p.name}</div>
+            <p class="makeup-product-why">${p.why}</p>
+            <a href="${p.link}" target="_blank" rel="noopener" class="makeup-product-link">
+              Shop <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        `).join('')}
+      </div>`;
+
+    makeupContent.innerHTML = foundationHTML + lipsHTML + eyesHTML + productsHTML;
+  }
+
+  // ── SKINCARE (women only) ──
+  const SKINCARE_DATA = {
+    oily: {
+      label: 'Oily Skin',
+      desc: 'Excess sebum throughout the day, enlarged pores, frequent breakouts. Your skin produces more oil than it needs — the goal is regulating production without stripping the barrier.',
+      am: [
+        { step: '1 — Cleanser', name: 'Gel or Foam Cleanser', desc: 'A gentle gel cleanser removes overnight oil without stripping. Avoid anything that leaves skin squeaky-clean — that triggers more oil production as a response.' },
+        { step: '2 — Toner', name: 'BHA Toner (Salicylic Acid)', desc: 'Salicylic acid penetrates the pore lining and clears excess oil from inside the follicle. Use in the morning and evening, 3–4 times a week.' },
+        { step: '3 — Moisturiser', name: 'Oil-Free Gel Moisturiser', desc: 'Oily skin still needs hydration — skipping moisturiser makes it produce more oil to compensate. Use a water-based gel formula, not cream.' },
+        { step: '4 — SPF', name: 'Lightweight SPF 30+', desc: 'Non-negotiable. Use a gel or fluid SPF — heavy cream SPFs will clog pores and sit greasy. SPF prevents hyperpigmentation which oily skin is prone to after breakouts.' }
+      ],
+      pm: [
+        { step: '1 — Cleanser', name: 'Double Cleanse', desc: 'Start with a micellar water or light cleansing oil to dissolve SPF and makeup, then follow with your gel cleanser. One cleanser alone rarely removes everything.' },
+        { step: '2 — Treatment', name: 'Niacinamide 5–10%', desc: 'Niacinamide regulates sebum production, minimises pores, and fades post-breakout dark marks — the number one problem for oily Black skin. Use nightly.' },
+        { step: '3 — Spot Treatment', name: 'Salicylic Acid or Benzoyl Peroxide', desc: 'Apply only to active breakouts, not all over the face. Benzoyl Peroxide (2.5%) kills acne bacteria. Salicylic acid unblocks pores.' },
+        { step: '4 — Moisturiser', name: 'Gel Moisturiser', desc: 'Same as AM. Keep it light. If your skin feels tight after washing, your cleanser is too harsh — switch before adding more products.' }
+      ],
+      products: [
+        { step: 'Cleanser', brand: 'CeraVe', name: 'Foaming Facial Cleanser', why: 'Gentle foaming cleanser for oily skin. Contains ceramides to maintain the barrier while removing oil. Widely available in Nigeria and the UK.', link: 'https://www.jumia.com.ng/catalog/?q=cerave+foaming+cleanser' },
+        { step: 'Toner', brand: 'The Ordinary', name: 'Salicylic Acid 2% Solution', why: 'Direct BHA toner at a very accessible price. Apply with a cotton pad after cleansing, 3–4x a week. Available globally.', link: 'https://www.jumia.com.ng/catalog/?q=ordinary+salicylic+acid' },
+        { step: 'Moisturiser', brand: 'Neutrogena', name: 'Hydro Boost Water Gel', why: 'Oil-free, water-based, absorbs instantly. Does not clog pores. One of the most recommended moisturisers for oily skin globally.', link: 'https://www.jumia.com.ng/catalog/?q=neutrogena+hydro+boost' },
+        { step: 'Treatment', brand: 'The Ordinary', name: 'Niacinamide 10% + Zinc 1%', why: 'The most evidence-backed product for oily Black skin — regulates oil, fades dark marks, minimises pores. Use nightly.', link: 'https://www.jumia.com.ng/catalog/?q=ordinary+niacinamide' }
+      ]
+    },
+    dry: {
+      label: 'Dry Skin',
+      desc: 'Skin feels tight, sometimes flaky, and lacks natural glow. The skin barrier is not retaining enough moisture — the goal is hydration from the inside of the skin layer and sealing it in.',
+      am: [
+        { step: '1 — Cleanser', name: 'Cream or Milk Cleanser', desc: 'Avoid foaming cleansers entirely — they strip the little oil dry skin produces. Use a creamy or milk cleanser that leaves a slight slip after rinsing.' },
+        { step: '2 — Hydrating Toner/Essence', name: 'Hyaluronic Acid Essence', desc: 'Apply to damp skin. Hyaluronic acid draws water into the skin cells. Applying to dry skin can backfire — it pulls moisture from inside the skin instead.' },
+        { step: '3 — Moisturiser', name: 'Rich Cream Moisturiser', desc: 'A thick cream with ceramides and fatty acids. Dry skin needs barrier support, not just hydration. CeraVe Moisturising Cream is the benchmark.' },
+        { step: '4 — SPF', name: 'Hydrating SPF 30+', desc: 'Look for SPF formulas with added hyaluronic acid or glycerin. These do double duty — protect and hydrate simultaneously.' }
+      ],
+      pm: [
+        { step: '1 — Cleanser', name: 'Gentle Milk Cleanser', desc: 'Same or milder than your AM cleanser. Dry skin does not need double cleansing unless you wore heavy makeup.' },
+        { step: '2 — Treatment', name: 'Hyaluronic Acid Serum', desc: 'Apply to damp skin on clean face. This is the most important step for dry skin — lock in water at the cellular level before it evaporates.' },
+        { step: '3 — Face Oil', name: 'Rosehip or Squalane Oil', desc: 'A few drops after serum, before moisturiser. Face oils seal the hydration in rather than adding more. Squalane is lightweight; rosehip adds glow.' },
+        { step: '4 — Rich Moisturiser', name: 'Thick Barrier Cream', desc: 'The most important step. Apply generously. Sleeping Masks (like the Laneige one) can be used 2–3x a week over your regular moisturiser for extra repair.' }
+      ],
+      products: [
+        { step: 'Cleanser', brand: 'CeraVe', name: 'Hydrating Facial Cleanser', why: 'Non-stripping cream cleanser. Maintains the barrier while cleansing — the opposite of what a foaming cleanser does.', link: 'https://www.jumia.com.ng/catalog/?q=cerave+hydrating+cleanser' },
+        { step: 'Serum', brand: 'The Ordinary', name: 'Hyaluronic Acid 2% + B5', why: 'Affordable, effective, accessible globally. Apply to damp skin — this is critical. The most underrated rule in skincare.', link: 'https://www.jumia.com.ng/catalog/?q=ordinary+hyaluronic+acid' },
+        { step: 'Moisturiser', brand: 'CeraVe', name: 'Moisturising Cream', why: 'The best moisturiser for dry Black skin. Ceramides repair the barrier, hyaluronic acid retains moisture. Dermatologist recommended.', link: 'https://www.jumia.com.ng/catalog/?q=cerave+moisturising+cream' },
+        { step: 'Face Oil', brand: 'Biossance', name: 'Squalane Oil', why: 'Lightweight, non-comedogenic, absorbs completely. Derived from sugarcane. Adds glow without greasiness. Works on all skin tones.', link: 'https://www.jumia.com.ng/catalog/?q=squalane+oil' }
+      ]
+    },
+    combination: {
+      label: 'Combination Skin',
+      desc: 'Oily T-zone (forehead, nose, chin) with normal to dry cheeks. The most common skin type. The challenge is not to over-treat the oily areas while neglecting the drier patches.',
+      am: [
+        { step: '1 — Cleanser', name: 'Gentle Gel Cleanser', desc: 'A gel cleanser is the best balance — removes T-zone oil without stripping the drier cheeks. CeraVe or La Roche-Posay Toleriane range work well.' },
+        { step: '2 — Toner', name: 'Alcohol-Free Toner', desc: 'A hydrating toner with niacinamide balances both zones — calms the oily areas while adding a layer of hydration to the dry patches.' },
+        { step: '3 — Moisturiser', name: 'Lightweight Lotion', desc: 'Use a lotion, not a heavy cream. Apply more to the cheeks and less to the T-zone. Some people use two separate moisturisers — gel on the T-zone, cream on cheeks.' },
+        { step: '4 — SPF', name: 'Fluid SPF 30+', desc: 'A non-greasy fluid SPF that layers without heaviness. Avoid stick SPFs on the T-zone — they add too much product to an already oily area.' }
+      ],
+      pm: [
+        { step: '1 — Cleanser', name: 'Gentle Gel or Micellar Water', desc: 'Double cleanse if you wore SPF or makeup. Micellar water first, then your gel cleanser.' },
+        { step: '2 — Treatment', name: 'Niacinamide Serum', desc: 'The most useful single treatment for combination skin. Regulates oil on the T-zone, improves texture everywhere, and fades dark marks — the top skincare issue for Black skin.' },
+        { step: '3 — Moisturiser', name: 'Multi-task your moisturiser', desc: 'Lighter gel on the T-zone, richer cream on the cheeks. This takes 30 seconds more but makes a visible difference to how your skin behaves over time.' },
+        { step: '4 — Weekly Exfoliant', name: 'AHA/BHA Exfoliant', desc: 'Use 1–2x a week at night, not daily. An AHA (glycolic or lactic acid) exfoliates the surface and improves glow. BHA (salicylic) clears the T-zone pores.' }
+      ],
+      products: [
+        { step: 'Cleanser', brand: 'La Roche-Posay', name: 'Toleriane Hydrating Gentle Cleanser', why: 'Gentle enough for dry patches, effective enough for the T-zone. The balance that combination skin needs.', link: 'https://www.jumia.com.ng/catalog/?q=la+roche+posay+toleriane' },
+        { step: 'Treatment', brand: 'The Ordinary', name: 'Niacinamide 10% + Zinc 1%', why: 'The most versatile treatment for combination Black skin — controls T-zone oil, improves texture, fades dark spots. Use nightly.', link: 'https://www.jumia.com.ng/catalog/?q=ordinary+niacinamide' },
+        { step: 'Moisturiser', brand: 'Neutrogena', name: 'Hydro Boost Water Gel', why: 'Works on both zones — lightweight enough for the T-zone, hydrating enough for cheeks. One product that handles the whole face.', link: 'https://www.jumia.com.ng/catalog/?q=neutrogena+hydro+boost' },
+        { step: 'Exfoliant', brand: 'Paula\'s Choice', name: 'Skin Perfecting 2% BHA Liquid', why: 'The benchmark BHA exfoliant for combination skin. Clears pores, smooths texture, reduces blackheads on the T-zone. Use 1–2x a week.', link: 'https://www.jumia.com.ng/catalog/?q=paulas+choice+bha' }
+      ]
+    },
+    sensitive: {
+      label: 'Sensitive Skin',
+      desc: 'Skin reacts easily — redness, irritation, stinging, or flaring after new products. The goal is a minimal, fragrance-free, barrier-focused routine with no unnecessary actives.',
+      am: [
+        { step: '1 — Cleanser', name: 'Ultra-Gentle Cream Cleanser', desc: 'Fragrance-free, no essential oils, no foaming agents. CeraVe Hydrating Cleanser or Vanicream Gentle Facial Cleanser are the standards.' },
+        { step: '2 — Toner (optional)', name: 'Thermal Spring Water Mist', desc: 'If you use a toner, make it a thermal spring water mist (Avène or La Roche-Posay). No acids, no alcohol, no fragrance. Just a calming, soothing layer.' },
+        { step: '3 — Moisturiser', name: 'Fragrance-Free Barrier Cream', desc: 'Sensitive skin needs barrier repair above all. Use a ceramide-rich, fragrance-free cream. Introduce only one new product at a time.' },
+        { step: '4 — Mineral SPF', name: 'Zinc Oxide or Titanium Dioxide SPF', desc: 'Chemical SPF often irritates sensitive skin. Mineral SPF sits on top of the skin rather than absorbing — less likely to react. Look for tinted formulas to avoid white cast on deep skin.' }
+      ],
+      pm: [
+        { step: '1 — Cleanser', name: 'Same gentle cleanser as AM', desc: 'Do not double cleanse unless you wore heavy makeup. Micellar water is fine as a first step if needed — Avène and La Roche-Posay are fragrance-free.' },
+        { step: '2 — Treatment (when skin is calm)', name: 'Azelaic Acid 10%', desc: 'Azelaic acid is the gentlest treatment for sensitive skin — it fades dark marks, reduces redness, and treats breakouts without the irritation of retinol or AHAs.' },
+        { step: '3 — Moisturiser', name: 'Thick Barrier Cream', desc: 'Sensitive skin benefits from over-moisturising at night. A thick, ceramide-rich cream repairs the barrier while you sleep.' },
+        { step: '4 — Patch test everything', name: 'The rule above all rules', desc: 'Before using any new product: apply to the inner arm for 3 days before putting it on your face. Sensitive skin reacts to things healthy skin ignores — protect your face.' }
+      ],
+      products: [
+        { step: 'Cleanser', brand: 'Vanicream', name: 'Gentle Facial Cleanser', why: 'Free of dyes, fragrance, masking fragrance, lanolin, parabens, and formaldehyde — the most restricted formulation for sensitive skin.', link: 'https://www.jumia.com.ng/catalog/?q=vanicream+cleanser' },
+        { step: 'Moisturiser', brand: 'CeraVe', name: 'Moisturising Cream', why: 'Ceramide-based barrier repair. Fragrance-free, non-comedogenic. The safest rich moisturiser for sensitive skin.', link: 'https://www.jumia.com.ng/catalog/?q=cerave+moisturising+cream' },
+        { step: 'Treatment', brand: 'The Ordinary', name: 'Azelaic Acid Suspension 10%', why: 'The gentlest evidence-backed treatment for dark marks and breakouts on sensitive skin. Introduced slowly — every other night to start.', link: 'https://www.jumia.com.ng/catalog/?q=ordinary+azelaic+acid' },
+        { step: 'SPF', brand: 'Black Girl Sunscreen', name: 'SPF 30 Moisturising Sunscreen', why: 'Mineral-based, no white cast on deep skin, fragrance-free. Made specifically for Black women. One of the few sunscreens that works without leaving a grey cast.', link: 'https://www.jumia.com.ng/catalog/?q=black+girl+sunscreen' }
+      ]
+    }
+  };
+
+  // Show skincare section for women — use quiz answer if captured, else default to combination
+  const skinTypeKey = A.skinType || 'combination';
+  const skincareData = SKINCARE_DATA[skinTypeKey] || SKINCARE_DATA['combination'];
+
+  if (isWomen) {
+    document.getElementById('skincareSection').style.display = '';
+    document.getElementById('skincareSectionTitle').textContent = skincareData.label + ' — your routine';
+    const skincareContent = document.getElementById('skincareContent');
+
+    const introHTML = `
+      <div style="background:var(--black);padding:36px 36px 32px;margin-bottom:2px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:12px;">Skin Type</div>
+        <div style="font-size:clamp(20px,3vw,28px);font-weight:700;color:var(--white);margin-bottom:12px;">${skincareData.label}</div>
+        <p style="font-size:14px;font-weight:300;line-height:1.8;color:rgba(255,255,255,0.45);">${skincareData.desc}</p>
+      </div>`;
+
+    const amHTML = `
+      <div style="margin-bottom:2px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--grey);padding:20px 0 12px;">Morning Routine</div>
+        <div class="skincare-grid">
+          ${skincareData.am.map((s, i) => `
+            <div class="skincare-step-card">
+              <div class="skincare-step-num">0${i+1}</div>
+              <div class="skincare-step-name">${s.step}</div>
+              <div style="font-size:12px;font-weight:700;color:var(--black);margin-bottom:6px;">${s.name}</div>
+              <p class="skincare-step-desc">${s.desc}</p>
+            </div>
+          `).join('')}
+        </div>
+      </div>`;
+
+    const pmHTML = `
+      <div style="margin-bottom:2px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--grey);padding:20px 0 12px;">Evening Routine</div>
+        <div class="skincare-grid">
+          ${skincareData.pm.map((s, i) => `
+            <div class="skincare-step-card" style="background:#f0f0f0;">
+              <div class="skincare-step-num">0${i+1}</div>
+              <div class="skincare-step-name">${s.step}</div>
+              <div style="font-size:12px;font-weight:700;color:var(--black);margin-bottom:6px;">${s.name}</div>
+              <p class="skincare-step-desc">${s.desc}</p>
+            </div>
+          `).join('')}
+        </div>
+      </div>`;
+
+    const productsHTML = `
+      <div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--grey);padding:20px 0 12px;">Beginner-Friendly Products</div>
+      <div class="skincare-product-grid">
+        ${skincareData.products.map(p => `
+          <div class="skincare-product-card">
+            <div class="skincare-product-step">${p.step}</div>
+            <div class="skincare-product-brand">${p.brand}</div>
+            <div class="skincare-product-name">${p.name}</div>
+            <p class="skincare-product-why">${p.why}</p>
+            <a href="${p.link}" target="_blank" rel="noopener" class="skincare-product-link">
+              Shop <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        `).join('')}
+      </div>`;
+
+    skincareContent.innerHTML = introHTML + amHTML + pmHTML + productsHTML;
+  }
+
   // ── PRODUCT RECS ──
+  const SHAMPOO_GUIDE = {
+    '4c': { type: 'Moisture / Sulphate-Free', desc: 'Your hair needs the gentlest cleanser possible. Sulphates strip the oils that 4C hair struggles to hold. Use a sulphate-free moisturising shampoo or co-wash (conditioner wash) every 1–2 weeks. Clarify once a month with a chelating shampoo to remove mineral and product build-up — especially important in Lagos where tap water is hard.' },
+    '4b': { type: 'Sulphate-Free / Moisturising', desc: 'A creamy, sulphate-free shampoo is essential for 4B. Look for moisturising or hydrating on the label. Avoid anything labelled "volumising" or "clarifying" as your regular wash — these dry out the Z-coil pattern quickly. Clarify monthly to reset the hair.' },
+    '4a': { type: 'Gentle / Curl-Enhancing', desc: 'A gentle, curl-safe shampoo that doesn\'t strip definition. 4A coils retain moisture better than 4B/4C but still benefit from sulphate-free formulas. Wash every 1–2 weeks. Look for "curl enhancing" or "coil-defining" shampoos — these deposit slip and help set the pattern while cleansing.' },
+    '3c': { type: 'Hydrating / Anti-Frizz', desc: 'A hydrating shampoo that also addresses frizz. Look for shampoos with aloe vera, argan oil, or glycerin — these attract moisture into the coil and reduce the frizz that 3C hair produces in humidity. Wash weekly. Avoid clarifying shampoos as your main wash.' },
+    '3b': { type: 'Curl-Safe / Lightweight', desc: 'A lightweight shampoo that preserves the spiral pattern. 3B hair can handle more frequent washing than 4 types — every 4–5 days is fine if needed. Sulphate-free is still preferred. Avoid anything too heavy or creamy — 3B curls weigh down easily.' },
+    '3a': { type: 'Sulphate-Free / Frequent Wash', desc: '3A hair tends to get oily faster and can handle more frequent cleansing. A gentle sulphate-free shampoo, 2–3 times per week if needed. Silicone-free is important — silicones build up on 3A curls quickly and flatten the spiral pattern.' }
+  };
+
   const curlKeyForProducts = A.curlType || '4c';
   const products = HAIR_PRODUCTS[curlKeyForProducts] || HAIR_PRODUCTS['4c'];
+  const shampooInfo = SHAMPOO_GUIDE[curlKeyForProducts] || SHAMPOO_GUIDE['4c'];
   const productGrid = document.getElementById('productRecsGrid');
   if (productGrid && products) {
-    productGrid.innerHTML = products.map(p => `
+    // Prepend a shampoo guide card (women only)
+    const shampooCardHTML = isWomen ? `
+      <div class="product-card" style="grid-column:1/-1;background:var(--black);color:var(--white);">
+        <div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:8px;">Shampoo Type</div>
+        <div style="font-size:18px;font-weight:700;color:var(--white);margin-bottom:10px;letter-spacing:-0.2px;">${shampooInfo.type}</div>
+        <p style="font-size:14px;font-weight:300;line-height:1.75;color:rgba(255,255,255,0.5);">${shampooInfo.desc}</p>
+      </div>
+    ` : '';
+    productGrid.innerHTML = shampooCardHTML + products.map(p => `
       <div class="product-card">
         <div class="product-img-wrap">
           ${p.img ? `<img src="${p.img}" alt="${p.name}" onerror="this.parentElement.innerHTML='<div style=\\'padding:20px;text-align:center;color:var(--grey);font-size:11px;font-weight:700;letter-spacing:2px;\\'>${p.brand}</div>'">`
@@ -1878,6 +2736,7 @@
         </div>
         <div class="product-brand">${p.brand}</div>
         <div class="product-name">${p.name}</div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--grey);margin-bottom:6px;">${p.type || 'Hair Care'}</div>
         <p class="product-why">${p.why}</p>
         <a href="${p.link}" target="_blank" rel="noopener" class="product-link">
           Shop on Jumia <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -1934,14 +2793,21 @@
   const payModalNote = document.getElementById('payModalNote');
   const payModalError = document.getElementById('payModalError');
 
-  // Detect Nigeria by timezone
-  const isNigeria = Intl.DateTimeFormat().resolvedOptions().timeZone === 'Africa/Lagos';
+  // Detect region by timezone
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const isNigeria = tz === 'Africa/Lagos' || tz.startsWith('Africa/');
+  const isUS      = tz.startsWith('America/') && !tz.startsWith('America/Sao') && !tz.startsWith('America/Argentina') && !tz.startsWith('America/Bogota') && !tz.startsWith('America/Lima');
+  const isEurope  = tz.startsWith('Europe/');
 
+  const priceDisplay  = isNigeria ? '₦5,000' : isUS ? '$7' : isEurope ? '€7' : '£5';
+  const priceCurrency = isNigeria ? 'ngn'     : isUS ? 'usd' : isEurope ? 'eur' : 'gbp';
+  const priceAmount   = isNigeria ? 500000    : isUS ? 700   : isEurope ? 700   : 500;
+
+  const gatePrice = document.getElementById('gatePrice');
   if (!isNigeria) {
-    payModalPrice.textContent = '£5';
-    payModalNote.textContent = 'Secured by Stripe · All major cards accepted';
-    const gatePrice = document.getElementById('gatePrice');
-    if (gatePrice) gatePrice.textContent = '£5';
+    payModalPrice.textContent = priceDisplay;
+    payModalNote.textContent  = 'Secured by Stripe · All major cards accepted';
+    if (gatePrice) gatePrice.textContent = priceDisplay;
   }
 
   function openPayModal() { payModal.classList.add('open'); document.body.style.overflow = 'hidden'; }
@@ -1977,7 +2843,7 @@
       const handler = PaystackPop.setup({
         key: paystackKey,
         email: email || `user_${uid}@tora.app`,
-        amount: 500000, // ₦5,000 in kobo
+        amount: priceAmount, // ₦5,000 in kobo
         currency: 'NGN',
         ref: 'tora_' + uid + '_' + Date.now(),
         metadata: { uid },
@@ -2012,7 +2878,7 @@
         const resp = await fetch('/api/create-stripe-session', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ uid, email })
+          body: JSON.stringify({ uid, email, currency: priceCurrency, amount: priceAmount })
         });
         const data = await resp.json();
         if (data.url) {

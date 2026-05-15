@@ -53,6 +53,18 @@
           createdAt: serverTimestamp(),
           paid: false
         });
+      } else {
+        // Restore answers to localStorage so results page can use them
+        const data = snap.data();
+        if (data.answers && !localStorage.getItem('tora_quiz')) {
+          localStorage.setItem('tora_quiz', JSON.stringify(data.answers));
+        }
+        // If already completed quiz, go straight to results
+        if (data.answers && data.quizCompletedAt) {
+          window.__toraUser = user;
+          window.location.href = 'results.html';
+          return;
+        }
       }
       // expose globally for quiz save step
       window.__toraUser = user;
@@ -61,7 +73,10 @@
     // Check auth on load — if already signed in, go straight to quiz
     onAuthStateChanged(auth, user => {
       if (user) {
-        recordUser(user).then(() => window.dispatchEvent(new Event('tora:authed')));
+        recordUser(user).then(() => {
+          // Only dispatch if we didn't redirect to results
+          if (window.__toraUser) window.dispatchEvent(new Event('tora:authed'));
+        });
       }
     });
 
@@ -288,9 +303,10 @@
       text-transform: uppercase;
       color: var(--black);
       text-decoration: none;
-      transition: color 0.4s ease;
+      transition: color 0.4s ease, opacity 0.3s ease;
     }
     .site-logo.light { color: var(--white); }
+    .site-logo.hidden-for-back { opacity: 0; pointer-events: none; }
 
     /* ── PROGRESS BAR ── */
     .progress-rail {
@@ -312,10 +328,10 @@
     /* ── BACK BUTTON ── */
     .back-btn {
       position: fixed;
-      top: 22px; left: 36px;
-      z-index: 600;
-      background: none;
-      border: none;
+      top: 20px; left: 36px;
+      z-index: 601;
+      background: rgba(0,0,0,0.08);
+      border: 1px solid rgba(0,0,0,0.14);
       cursor: pointer;
       display: none;
       align-items: center;
@@ -326,11 +342,18 @@
       letter-spacing: 2px;
       text-transform: uppercase;
       color: var(--black);
-      padding: 6px 0;
-      transition: color 0.3s;
+      padding: 8px 16px;
+      border-radius: 2px;
+      transition: color 0.3s, background 0.3s, border-color 0.3s;
     }
     .back-btn.visible { display: flex; }
-    .back-btn.light { color: var(--white); }
+    .back-btn.light {
+      color: var(--white);
+      background: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.2);
+    }
+    .back-btn.light:hover { background: rgba(255,255,255,0.22); }
+    .back-btn:hover { background: rgba(0,0,0,0.14); }
     .back-btn svg { transition: transform 0.2s; }
     .back-btn:hover svg { transform: translateX(-3px); }
 
@@ -511,7 +534,6 @@
       object-fit: cover;
       object-position: center top;
       display: block;
-      filter: grayscale(100%);
       transition: transform 0.5s ease;
     }
     .img-option:hover img { transform: scale(1.04); }
@@ -676,7 +698,6 @@
       object-fit: cover;
       object-position: center top;
       display: block;
-      filter: grayscale(100%);
       transition: transform 0.4s ease;
     }
     .skin-option:hover .skin-option-img { transform: scale(1.03); }
@@ -758,7 +779,7 @@
       .img-options.cols-4 { grid-template-columns: repeat(2, 1fr); }
       .gender-cards { grid-template-columns: 1fr; max-width: 100%; }
       .site-logo { left: 20px; }
-      .back-btn { left: 20px; }
+      .back-btn { left: 20px; top: 16px; }
       .step-counter { right: 20px; }
       .continue-btn { right: 20px; bottom: 28px; }
     }
@@ -855,6 +876,24 @@
       <p class="step-num">Step 02</p>
       <h2 class="step-question">What is your curl type?</h2>
       <p class="step-sub">Choose the pattern closest to your natural texture — most people sit between types.</p>
+      <button type="button" id="curlHelpToggle" style="background:none;border:none;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--grey);letter-spacing:1px;cursor:pointer;text-decoration:underline;padding:0 0 16px;text-align:left;" onclick="document.getElementById('curlHelpPanel').style.display=document.getElementById('curlHelpPanel').style.display==='block'?'none':'block'">
+        Not sure? How to find your curl type →
+      </button>
+      <div id="curlHelpPanel" style="display:none;background:#f7f7f7;padding:24px 28px;margin-bottom:24px;max-width:700px;">
+        <p style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-bottom:16px;">How to find your curl type</p>
+        <p style="font-size:14px;font-weight:400;line-height:1.75;color:var(--grey-mid);margin-bottom:16px;"><strong>Step 1 — Wash it.</strong> The only way to see your real curl pattern is on clean, product-free hair. Build-up, heat damage, and old product all change how the curl sits.</p>
+        <p style="font-size:14px;font-weight:400;line-height:1.75;color:var(--grey-mid);margin-bottom:16px;"><strong>Wet vs dry:</strong> Your curl pattern is visible when wet. 3A–3C hair stays loose and springy when dry. 4A–4C hair shrinks dramatically when dry — what looks like tight coils wet may look like a dense afro when dry. Look at it wet to type it.</p>
+        <p style="font-size:14px;font-weight:400;line-height:1.75;color:var(--grey-mid);margin-bottom:12px;"><strong>Quick guide:</strong></p>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+          <li style="font-size:13px;font-weight:300;color:var(--grey-mid);padding-left:14px;position:relative;line-height:1.6;"><span style="position:absolute;left:0;">—</span><strong>3A:</strong> Loose spirals, about the size of a finger. Shiny when wet.</li>
+          <li style="font-size:13px;font-weight:300;color:var(--grey-mid);padding-left:14px;position:relative;line-height:1.6;"><span style="position:absolute;left:0;">—</span><strong>3B:</strong> Springy, tight curls. Still holds definition when dry.</li>
+          <li style="font-size:13px;font-weight:300;color:var(--grey-mid);padding-left:14px;position:relative;line-height:1.6;"><span style="position:absolute;left:0;">—</span><strong>3C:</strong> Dense corkscrews, lots of volume. Shrinks noticeably when dry.</li>
+          <li style="font-size:13px;font-weight:300;color:var(--grey-mid);padding-left:14px;position:relative;line-height:1.6;"><span style="position:absolute;left:0;">—</span><strong>4A:</strong> Tight coils. Pull one strand — you can see a faint S or Z pattern.</li>
+          <li style="font-size:13px;font-weight:300;color:var(--grey-mid);padding-left:14px;position:relative;line-height:1.6;"><span style="position:absolute;left:0;">—</span><strong>4B:</strong> Z-pattern coil. No visible curl when dry. Looks almost flat without product.</li>
+          <li style="font-size:13px;font-weight:300;color:var(--grey-mid);padding-left:14px;position:relative;line-height:1.6;"><span style="position:absolute;left:0;">—</span><strong>4C:</strong> No visible pattern at all. Highest shrinkage. The most common texture across West Africa.</li>
+        </ul>
+        <p style="font-size:12px;font-weight:400;color:var(--grey);margin-top:16px;font-style:italic;">If you're still unsure, choose 4C — it's the most common type and its recommendations are the most broadly applicable for West African hair.</p>
+      </div>
       <div class="img-options" id="curlOptions">
         <div class="img-option" data-value="3a">
           <img src="images/3a.png" alt="3A curl type" loading="eager">
@@ -1125,29 +1164,6 @@
     </div>
   </div>
 
-  <!-- STEP 3M: Height (Men) -->
-  <div class="quiz-step light-bg" id="step-3m" data-step="3">
-    <div class="step-inner">
-      <p class="step-num">Step 03</p>
-      <h2 class="step-question">How tall are you?</h2>
-      <p class="step-sub">Height affects proportion — what works on a 6'2" frame reads differently on a 5'6" one.</p>
-      <div class="text-options" id="heightOptions">
-        <div class="text-option" data-value="short">
-          <span>Under 5'7" &nbsp;<span style="font-weight:300;color:var(--grey);">/ Under 170cm</span></span>
-          <span class="text-option-arrow">→</span>
-        </div>
-        <div class="text-option" data-value="average">
-          <span>5'7" – 6'0" &nbsp;<span style="font-weight:300;color:var(--grey);">/ 170 – 183cm</span></span>
-          <span class="text-option-arrow">→</span>
-        </div>
-        <div class="text-option" data-value="tall">
-          <span>Over 6'0" &nbsp;<span style="font-weight:300;color:var(--grey);">/ Over 183cm</span></span>
-          <span class="text-option-arrow">→</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- STEP 6M: Climate (Men) -->
   <div class="quiz-step light-bg" id="step-6m" data-step="6">
     <div class="step-inner">
@@ -1373,7 +1389,7 @@
     if (g === 'women') {
       return ['step-1','step-2w','step-3w','step-4w','step-5w','step-6w','step-7'];
     } else {
-      return ['step-1','step-2m','step-3m','step-4m','step-5m','step-6m','step-7'];
+      return ['step-1','step-2m','step-4m','step-5m','step-6m','step-7'];
     }
   }
 
@@ -1403,11 +1419,13 @@
     const pct = (stepIndex / (stepSequence.length - 1)) * 100;
     progressFill.style.width = Math.max(pct, 8) + '%';
 
-    // Back button
+    // Back button — hide logo when back button is shown (same position)
     if (stepIndex === 0) {
       backBtn.classList.remove('visible');
+      siteLogo.classList.remove('hidden-for-back');
     } else {
       backBtn.classList.add('visible');
+      siteLogo.classList.add('hidden-for-back');
     }
 
     // Step counter

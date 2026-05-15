@@ -890,6 +890,8 @@
     <li><a href="scent.html" class="dl">Scent <span class="arrow">→</span></a></li>
     <li><a href="skin.html" class="dl">Skin <span class="arrow">→</span></a></li>
     <li><a href="quiz.html" class="dl">Style Quiz <span class="arrow">→</span></a></li>
+    <li><a href="shop.html" class="dl">Shop <span class="arrow">→</span></a></li>
+    <li id="drawerProfileLink" style="display:none;"><a href="results.html" class="dl">My Profile <span class="arrow">→</span></a></li>
   </ul>
   <div class="drawer-footer">Hair · Body · Scent · Skin</div>
 </div>
@@ -1338,6 +1340,37 @@
   }, { threshold: 0.08, rootMargin: '0px 0px -20px 0px' });
   rEls.forEach(el => obs.observe(el));
 
+</script>
+
+<!-- Firebase: show profile link if user has completed quiz -->
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+  import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+  import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+  const app  = initializeApp({ apiKey:"AIzaSyAhjVgu4yLMPvGWBoICffQbgJADKI0mfBw", authDomain:"tora-c492b.firebaseapp.com", projectId:"tora-c492b", storageBucket:"tora-c492b.firebasestorage.app", messagingSenderId:"355607987054", appId:"1:355607987054:web:ff070087e94a43e9a0377f" });
+  const auth = getAuth(app);
+  const db   = getFirestore(app);
+
+  onAuthStateChanged(auth, async user => {
+    if (!user) return;
+    const snap = await getDoc(doc(db, 'users', user.uid));
+    if (snap.exists() && snap.data().quizCompletedAt) {
+      // Restore answers if missing
+      if (!localStorage.getItem('tora_quiz') && snap.data().answers) {
+        localStorage.setItem('tora_quiz', JSON.stringify(snap.data().answers));
+      }
+      // Show My Profile link in drawer
+      const profileLink = document.getElementById('drawerProfileLink');
+      if (profileLink) profileLink.style.display = '';
+      // Replace quiz button with profile link
+      const quizBtn = document.querySelector('a.quiz-btn');
+      if (quizBtn) {
+        quizBtn.href = 'results.html';
+        quizBtn.innerHTML = 'View My Profile <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+      }
+    }
+  });
 </script>
 </body>
 </html>

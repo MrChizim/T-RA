@@ -703,6 +703,14 @@
       max-width: 1080px;
       margin: 0 auto;
     }
+    .premium-section.unlocked .premium-blurred-content {
+      filter: none !important;
+      pointer-events: auto !important;
+      user-select: auto !important;
+    }
+    .premium-section.unlocked .premium-gate-overlay {
+      display: none !important;
+    }
     .premium-gate-overlay {
       position: absolute;
       inset: 0;
@@ -2982,10 +2990,12 @@
 
   // ── Premium gate: show/hide based on paid status ──
   function unlockPremium() {
+    const section = document.getElementById('premiumSection');
     const overlay = document.getElementById('premiumGateOverlay');
     const blurred = document.getElementById('premiumBlurred');
-    if (overlay) overlay.style.display = 'none';
-    if (blurred) { blurred.style.filter = 'none'; blurred.style.pointerEvents = ''; blurred.style.userSelect = ''; }
+    if (overlay) { overlay.style.display = 'none'; overlay.style.visibility = 'hidden'; }
+    if (blurred) { blurred.style.cssText = 'filter:none!important;pointer-events:auto!important;user-select:auto!important;padding:0 36px 96px;max-width:1080px;margin:0 auto;'; }
+    if (section) section.classList.add('unlocked');
   }
 
   window.addEventListener('tora:paid', unlockPremium);

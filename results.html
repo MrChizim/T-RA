@@ -60,12 +60,14 @@
       const userRef = doc(db, 'users', user.uid);
       const snap = await getDoc(userRef);
       const data = snap.exists() ? snap.data() : {};
-      const isAdmin = ADMIN_EMAILS.includes(user.email);
+      const userEmailLower = (user.email || '').toLowerCase().trim();
+      const isAdmin = ADMIN_EMAILS.includes(userEmailLower);
       const paid = data.paid === true || isAdmin;
+      console.log('[TÓRA] uid:', user.uid, '| email:', user.email, '| isAdmin:', isAdmin, '| paid:', paid);
 
       // Self-heal: write paid:true to Firestore for admin accounts so it's consistent
       if (isAdmin && !data.paid) {
-        setDoc(userRef, { paid: true, email: user.email }, { merge: true });
+        setDoc(userRef, { paid: true, email: userEmailLower }, { merge: true });
       }
 
       // Restore quiz answers from Firestore if localStorage is empty

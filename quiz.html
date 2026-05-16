@@ -70,7 +70,7 @@
         const isRetake = new URLSearchParams(window.location.search).get('retake') === '1';
         if (!isRetake && data.answers && data.quizCompletedAt) {
           window.__toraUser = user;
-          const isPaid = ADMIN_EMAILS.includes(emailLower) || data.paid === true;
+          const isPaid = ADMIN_EMAILS.includes((user.email || '').toLowerCase().trim()) || data.paid === true;
           if (isPaid) sessionStorage.setItem('tora_paid', '1');
           window.location.href = 'results.html';
           return;

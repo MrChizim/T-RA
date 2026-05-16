@@ -3152,16 +3152,13 @@
 
       const paid = isAdmin || data.paid === true;
 
-      // Restore quiz answers from Firestore if localStorage is empty
+      // Unlock immediately — don't wait for any reload
+      if (paid) unlockPremium();
+
+      // Restore quiz answers from Firestore if localStorage is empty, then re-render
       if (!localStorage.getItem('tora_quiz') && data.answers) {
         localStorage.setItem('tora_quiz', JSON.stringify(data.answers));
         window.location.reload();
-        return;
-      }
-
-      // Unlock or keep gate
-      if (paid) {
-        unlockPremium();
       }
     });
   });

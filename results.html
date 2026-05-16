@@ -57,15 +57,16 @@
       }
 
       const ADMIN_EMAILS = ['chizimvictory@gmail.com', 'lilnutellx@gmail.com'];
+      const ADMIN_UIDS   = ['xookhNHIZFZJ9ZpomQnL5PV5psf1'];
       const userRef = doc(db, 'users', user.uid);
       const snap = await getDoc(userRef);
       const data = snap.exists() ? snap.data() : {};
       const userEmailLower = (user.email || '').toLowerCase().trim();
-      const isAdmin = ADMIN_EMAILS.includes(userEmailLower) || data.paid === true;
+      const isAdmin = ADMIN_EMAILS.includes(userEmailLower) || ADMIN_UIDS.includes(user.uid) || data.paid === true;
       const paid = isAdmin;
 
       // Self-heal: write paid:true to Firestore for admin accounts so it's consistent
-      if (ADMIN_EMAILS.includes(userEmailLower) && !data.paid) {
+      if ((ADMIN_EMAILS.includes(userEmailLower) || ADMIN_UIDS.includes(user.uid)) && !data.paid) {
         setDoc(userRef, { paid: true, email: userEmailLower }, { merge: true });
       }
 

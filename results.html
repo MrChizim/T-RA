@@ -3000,6 +3000,10 @@
 
   window.addEventListener('tora:paid', unlockPremium);
   if (window.__toraPaid === true) unlockPremium();
+  // DEBUG: confirm listener registered and try immediate unlock
+  const dbg2 = document.getElementById('__dbg');
+  if (dbg2) dbg2.textContent += ' | listenerOK:true | toraPaid=' + window.__toraPaid;
+  unlockPremium(); // force attempt regardless
 
   // If payment=success in URL (Stripe redirect), wait for auth then verify
   if (window.location.search.includes('payment=success')) {

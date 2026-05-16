@@ -788,6 +788,116 @@
       color: rgba(255,255,255,0.4);
     }
 
+    /* ── PREMIUM SKIN INTEL ── */
+    .psi-section { margin-bottom: 2px; }
+    .psi-header {
+      background: var(--black); padding: 32px 48px 28px;
+      display: flex; align-items: baseline; gap: 16px;
+    }
+    .psi-header-num {
+      font-size: 10px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: rgba(255,255,255,0.2);
+    }
+    .psi-header-title {
+      font-size: 18px; font-weight: 700; color: var(--white); letter-spacing: -0.3px;
+    }
+    .psi-two-col {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-bottom: 2px;
+    }
+    .psi-col { background: var(--black); padding: 32px 36px; }
+    .psi-col-light { background: #f4f4f4; padding: 32px 36px; }
+    .psi-col-title {
+      font-size: 10px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; margin-bottom: 18px;
+    }
+    .psi-col-title.good { color: #4caf50; }
+    .psi-col-title.bad  { color: #e57373; }
+    .psi-col-title.dark-label { color: rgba(255,255,255,0.3); }
+    .psi-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0; }
+    .psi-list li {
+      font-size: 13px; font-weight: 300; line-height: 1.65;
+      color: rgba(255,255,255,0.6); padding: 9px 0 9px 16px;
+      position: relative; border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .psi-list li:last-child { border-bottom: none; }
+    .psi-list li strong { color: var(--white); font-weight: 700; }
+    .psi-list.light li { color: var(--grey-mid); border-bottom-color: rgba(0,0,0,0.07); }
+    .psi-list.light li strong { color: var(--black); }
+    .psi-list li::before { content: '—'; position: absolute; left: 0; color: rgba(255,255,255,0.2); }
+    .psi-list.light li::before { color: #ccc; }
+    .psi-list.avoid li::before { content: '×'; color: #e57373; }
+    .psi-tone-block {
+      background: var(--white); border: 1px solid var(--grey-light);
+      padding: 32px 36px; margin-bottom: 2px;
+    }
+    .psi-tone-title {
+      font-size: 10px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--grey); margin-bottom: 16px;
+    }
+    .psi-tone-note {
+      font-size: 14px; font-weight: 300; line-height: 1.8; color: var(--grey-mid);
+    }
+    .psi-tone-note strong { color: var(--black); font-weight: 700; }
+    .psi-swatches {
+      display: flex; flex-wrap: wrap; gap: 16px; margin: 20px 0 8px;
+    }
+    .psi-swatch {
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+    }
+    .psi-swatch-dot {
+      width: 36px; height: 36px; border-radius: 50%;
+    }
+    .psi-swatch-name {
+      font-size: 10px; font-weight: 600; color: var(--grey); text-align: center; line-height: 1.2;
+    }
+    .psi-buying-rules {
+      background: #f7f7f7; padding: 36px 48px;
+    }
+    .psi-buying-title {
+      font-size: 10px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--grey); margin-bottom: 20px;
+    }
+    .psi-rules-list { list-style: none; padding: 0; counter-reset: psi; }
+    .psi-rules-list li {
+      font-size: 14px; font-weight: 300; line-height: 1.7;
+      color: var(--grey-mid); padding: 12px 0 12px 40px;
+      position: relative; border-bottom: 1px solid var(--grey-light);
+      counter-increment: psi;
+    }
+    .psi-rules-list li:last-child { border-bottom: none; }
+    .psi-rules-list li::before {
+      content: counter(psi, decimal-leading-zero);
+      position: absolute; left: 0; top: 16px;
+      font-size: 10px; font-weight: 700; letter-spacing: 1px; color: var(--grey);
+    }
+    .psi-rules-list li strong { color: var(--black); font-weight: 700; }
+    .psi-metals-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-bottom: 2px;
+    }
+    .psi-metal-card { background: var(--black); padding: 28px 32px; }
+    .psi-metal-name {
+      font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 4px; letter-spacing: -0.2px;
+    }
+    .psi-metal-sub {
+      font-size: 10px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: rgba(255,255,255,0.25); margin-bottom: 14px;
+    }
+    .psi-metal-points { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+    .psi-metal-points li {
+      font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.45);
+      padding-left: 14px; position: relative; line-height: 1.5;
+    }
+    .psi-metal-points li::before { content: '—'; position: absolute; left: 0; color: rgba(255,255,255,0.2); }
+    .psi-metal-points li.yours { color: rgba(255,255,255,0.8); }
+    .psi-metal-points li.yours::before { color: #4caf50; content: '✓'; }
+    @media (max-width: 800px) {
+      .psi-two-col { grid-template-columns: 1fr; }
+      .psi-metals-grid { grid-template-columns: 1fr; }
+      .psi-header { padding: 24px 20px 20px; }
+      .psi-col, .psi-col-light { padding: 24px 20px; }
+      .psi-buying-rules { padding: 28px 20px; }
+    }
+
     /* ── SKIN TONE SECTION ── */
     .skin-results-section { padding: 96px 0; background: var(--white); }
     .skin-undertone-card {
@@ -1430,6 +1540,9 @@
       </p>
     </div>
 
+    <!-- Personalised skin intel — filled by JS -->
+    <div id="premiumSkinIntel" style="margin-top:2px;"></div>
+
   </div>
 
   <!-- Gate overlay -->
@@ -1449,6 +1562,9 @@
         <li>4 outfit recommendations matched to your body type — plus direct shop links</li>
         <li>Face shape and body type combined style insights</li>
         <li>Personalised fragrance family ranking for your climate</li>
+        <li>Ingredients to seek and avoid — specific to your skin type</li>
+        <li>Your skin tone notes — SPF, hyperpigmentation, and what actually works on your depth</li>
+        <li>Your colour palette and metal (gold, silver, or rose gold) based on your undertone</li>
         <li>Your complete style brief — written for your exact combination</li>
       </ul>
       <div class="gate-price" id="gatePrice">₦5,000</div>
@@ -2915,6 +3031,259 @@
     if (hairGrid) hairstyles.forEach(h => hairGrid.appendChild(makeCard(h)));
   }
   buildPremiumRecs();
+
+  // ── Premium skin intel ──
+  (function buildSkinIntel() {
+    const el = document.getElementById('premiumSkinIntel');
+    if (!el) return;
+
+    const skinType  = A.skinType  || 'combination';
+    const skinTone  = A.skinTone  || 'brown';
+    const undertone = A.undertone || 'cool';
+
+    // Per-skin-type ingredients data
+    const INGREDIENTS = {
+      oily: {
+        seek: [
+          { name: 'Niacinamide 5–10%', note: 'Regulates sebum, fades dark marks, minimises pores. The most important ingredient for oily Black skin.' },
+          { name: 'Salicylic Acid (BHA)', note: 'Dissolves oil inside pores. Use 2–3x a week — daily use strips the barrier.' },
+          { name: 'Glycolic Acid (AHA)', note: 'Weekly surface exfoliant. Keeps post-breakout marks from setting in.' },
+          { name: 'Hyaluronic Acid', note: 'Still needed. Oily skin is often dehydrated — this hydrates without adding oil.' },
+          { name: 'Zinc', note: 'Found in niacinamide formulas. Anti-inflammatory, helps with active breakouts.' }
+        ],
+        avoid: [
+          { name: 'Coconut Oil (on face)', note: 'Highly comedogenic. Blocks pores on oily and combination skin.' },
+          { name: 'Heavy creams / facial butters', note: 'Sit on top of oily skin and clog pores. Save for body use.' },
+          { name: 'Alcohol-based toners', note: 'Strip oil aggressively — skin rebounds by producing even more sebum.' },
+          { name: 'Fragrance', note: 'Triggers inflammation, worsens post-breakout hyperpigmentation on Black skin.' },
+          { name: 'Petroleum-based occlusives (on active breakouts)', note: 'Seals in bacteria and sebum. Fine on dry, healed areas.' }
+        ]
+      },
+      dry: {
+        seek: [
+          { name: 'Ceramides', note: 'Repair the skin barrier and lock in moisture. The single most important category for dry skin.' },
+          { name: 'Hyaluronic Acid', note: 'Apply to damp skin — draws water into cells. Applying to dry skin backfires.' },
+          { name: 'Glycerin', note: 'A humectant that pulls moisture from the air. Works in humid Nigerian climates especially well.' },
+          { name: 'Squalane', note: 'Lightweight oil that seals in moisture without greasiness. Non-comedogenic.' },
+          { name: 'Shea Butter (in body products)', note: 'Rich emollient, ideal for body and very dry facial patches.' }
+        ],
+        avoid: [
+          { name: 'Sulphate-based (SLS) cleansers', note: 'Foam hard and strip dry skin of the little oil it produces.' },
+          { name: 'Benzoyl Peroxide (daily)', note: 'Extremely drying. Only use targeted, on active breakouts.' },
+          { name: 'Fragrance', note: 'Especially irritating on compromised, dry skin barrier.' },
+          { name: 'Frequent exfoliation', note: 'Dry skin needs exfoliating — but once a week maximum. Over-exfoliation breaks the barrier.' },
+          { name: 'Matte-finish products', note: 'Your skin is already dull — anything that pulls more moisture visually ages you.' }
+        ]
+      },
+      combination: {
+        seek: [
+          { name: 'Niacinamide', note: 'Balances oil on the T-zone while improving hydration on dry patches. The one ingredient that handles both zones.' },
+          { name: 'Lightweight Gel Moisturiser', note: 'Hydrates without adding oil where you don\'t need it.' },
+          { name: 'BHA (Salicylic Acid)', note: 'Target the T-zone. Clears pores where oiliness concentrates without drying cheeks.' },
+          { name: 'Hyaluronic Acid', note: 'Adds hydration to dry patches without congesting oily areas.' },
+          { name: 'AHA (weekly)', note: 'Improves overall texture — use on the full face once a week at night.' }
+        ],
+        avoid: [
+          { name: 'Heavy creams over the entire face', note: 'They\'ll clog the T-zone. Use richer formula only on cheeks and dry areas.' },
+          { name: 'Mattifying primers all over', note: 'Over-dries cheeks. Apply targeted to T-zone only.' },
+          { name: 'Fragrance', note: 'Combination skin can be reactive — fragrance is an unnecessary trigger.' },
+          { name: 'Ignoring the dry zones', note: 'Most people over-treat oiliness and forget the cheeks are dry. Dehydration makes combination skin worse.' }
+        ]
+      },
+      sensitive: {
+        seek: [
+          { name: 'Centella Asiatica (Cica)', note: 'Calms redness, repairs the skin barrier, anti-inflammatory. The best active for sensitive skin.' },
+          { name: 'Ceramides', note: 'Restore the compromised barrier that makes skin reactive in the first place.' },
+          { name: 'Azelaic Acid 10%', note: 'The gentlest treatment for dark marks and breakouts on sensitive skin. No irritation at low concentrations.' },
+          { name: 'Zinc Oxide SPF (mineral)', note: 'Sits on top of skin instead of absorbing. Far less irritating than chemical SPF filters.' },
+          { name: 'Aloe Vera', note: 'Soothes and cools reactive skin. Works immediately on redness.' }
+        ],
+        avoid: [
+          { name: 'Fragrance / Parfum', note: 'The single biggest trigger. Check for it in every product — including "natural" ones with essential oils.' },
+          { name: 'Physical scrubs', note: 'Micro-tears worsen sensitivity and barrier damage. Chemical exfoliants only, and sparingly.' },
+          { name: 'Retinol (at full strength)', note: 'Start at 0.025% if at all. Full-strength retinol is too harsh for reactive skin until the barrier is repaired.' },
+          { name: 'Introducing multiple new products at once', note: 'You won\'t know what caused a reaction. One new product at a time, 2 weeks apart.' },
+          { name: 'Hot water on your face', note: 'Dilates capillaries, increases redness. Wash with lukewarm water only.' }
+        ]
+      },
+      normal: {
+        seek: [
+          { name: 'Vitamin C (Ascorbic Acid)', note: 'The most important addition for normal Black skin. Prevents dark spots before they form. Use in the morning.' },
+          { name: 'Retinol (0.2–0.5%)', note: 'Normal skin tolerates this well. Start at 0.2% twice a week. Best long-term investment for skin texture.' },
+          { name: 'SPF 30–50 daily', note: 'The non-negotiable step. Hyperpigmentation is still the number one concern for Black skin regardless of type.' },
+          { name: 'AHA (1–2x a week)', note: 'Glycolic or lactic acid keeps the texture smooth and glowing.' },
+          { name: 'Niacinamide', note: 'Preventative — keeps pores clear and adds an extra layer of brightening.' }
+        ],
+        avoid: [
+          { name: 'Over-complicating your routine', note: 'Normal skin is balanced. Adding too many actives disrupts that balance.' },
+          { name: 'Skipping SPF', note: 'The most common mistake. Sun damage on Black skin shows up as hyperpigmentation — prevention is the only solution.' },
+          { name: 'Fragrance (in leave-on products)', note: 'Fine in rinse-off products. Avoid in serums and moisturisers long-term.' },
+          { name: 'Using benzoyl peroxide preventatively', note: 'You don\'t have active breakouts — this is overkill and dries unnecessarily.' }
+        ]
+      }
+    };
+
+    // Per-skin-tone personalised notes
+    const TONE_NOTES = {
+      honey:    { note: 'Honey skin sits at the lighter end of the African spectrum. Your main concern is <strong>sun-induced uneven tone</strong> — honey skin shows sun damage and tanning inconsistencies clearly. SPF is essential year-round. You can often get away with lighter chemical SPF formulas without white cast. Watch for <strong>post-inflammatory hyperpigmentation</strong> (dark marks after spots or cuts) — they\'re the most visible on your tone and can take months to fade without treatment.', spfNote: 'Most SPF formulas work well on your tone — look for fluid or lightweight SPF 30–50. Tinted options can double as light coverage.' },
+      caramel:  { note: 'Caramel skin is prone to <strong>hyperpigmentation and uneven tone</strong> — any inflammation (breakouts, friction, sun) leaves a darker mark. This is your primary skincare priority. Products with niacinamide, azelaic acid, or vitamin C directly address this. You\'re in the sweet spot where most <strong>SPF formulas don\'t leave a white cast</strong> — so there\'s no excuse to skip it.', spfNote: 'Chemical SPF (avobenzone, octocrylene) works well on caramel skin without residue. Fluid formulas are ideal.' },
+      brown:    { note: 'Brown skin is the most common tone across West Africa and has a strong tendency toward <strong>hyperpigmentation</strong> — dark marks left by breakouts, friction, or sun last longer than on lighter tones. Your priority is prevention and treatment together. <strong>Chemical SPF</strong> formulas work well. Mineral SPFs (zinc oxide) can leave a slight cast — look for tinted versions specifically formulated for medium to deep skin.', spfNote: 'Chemical SPF works with no cast. If using mineral, go tinted — EltaMD UV Clear Tinted or Black Girl Sunscreen are made for this tone.' },
+      chestnut: { note: 'Chestnut skin is deep enough that some SPFs leave a visible grey or white cast. This matters — because if SPF feels wrong on your skin, you\'ll skip it, and hyperpigmentation will get worse. Find one that works and stick to it. <strong>Dark spots on chestnut skin</strong> are highly visible and slower to fade — niacinamide, kojic acid, and vitamin C are your core brightening tools. Avoid unregulated "lightening" creams — mercury and uncontrolled hydroquinone are common in the Nigerian market.', spfNote: 'Black Girl Sunscreen SPF 30, EltaMD UV Clear Tinted, or Unsun Mineral Tinted. All made for deep skin. Avoid heavily white-cast mineral formulas.' },
+      ebony:    { note: 'Ebony skin is deeply rich but faces two specific challenges: <strong>severe hyperpigmentation that fades slowly</strong>, and <strong>white-cast SPF</strong> that makes sunscreen feel unwearable. Both are solvable. Use chemical SPF or specifically tinted mineral SPF. For dark marks — niacinamide nightly, vitamin C in the morning, and patience. Ebony skin also tends to look <strong>ashy when dry</strong> — rich moisturisers and face oils are not optional, they\'re structural.', spfNote: 'Chemical SPF only, or specifically tinted mineral formulas. Superscreen Daily Moisturiser, Black Girl Sunscreen, or Bolden SPF 30 are built for deep skin.' },
+      onyx:     { note: 'Onyx skin — the deepest end of the spectrum — has the same concerns as ebony skin but amplified. <strong>Ashiness and dryness</strong> are the most visible daily issues; a strong moisturiser and face oil routine is non-negotiable. <strong>Hyperpigmentation</strong> takes longest to fade at this depth — prevention is far more effective than treatment. Most white SPFs are unwearable on onyx skin; chemical formulas or tinted minerals are essential. Avoid any unregulated bleaching products — at your depth, the contrast from patchy use is severe and takes years to correct.', spfNote: 'Chemical SPF is the safest choice. Avoid zinc oxide formulas unless tinted. Bolden SPF, Black Girl Sunscreen, or Fenty Skin Hydra Vizor.' }
+    };
+
+    // Undertone colour and metal data
+    const UNDERTONE_DATA = {
+      warm: {
+        label: 'Warm Undertone',
+        colours: [
+          { name: 'Terracotta', hex: '#C4622D', power: true },
+          { name: 'Burnt Orange', hex: '#D2691E' },
+          { name: 'Olive Green', hex: '#6B7645' },
+          { name: 'Warm Camel', hex: '#C19A6B' },
+          { name: 'Rust', hex: '#B7410E' },
+          { name: 'Deep Gold', hex: '#B8860B' },
+          { name: 'Mustard', hex: '#E1AD01' },
+          { name: 'Chocolate', hex: '#3D1C02' }
+        ],
+        avoid: 'Icy pastels, stark cool whites, and pure silver — these flatten warm skin and reduce its natural warmth.',
+        metal: 'Gold',
+        metalNote: '14k or 18k yellow gold is your metal. Heavy chains, hoops, stacked bangles — all work. Silver as a main piece creates contrast that dulls your skin.'
+      },
+      cool: {
+        label: 'Cool Undertone',
+        colours: [
+          { name: 'Cobalt Blue', hex: '#0047AB', power: true },
+          { name: 'Emerald', hex: '#046307' },
+          { name: 'Deep Purple', hex: '#4B0082' },
+          { name: 'Burgundy', hex: '#800020' },
+          { name: 'Magenta', hex: '#C2185B' },
+          { name: 'Navy', hex: '#001F5B' },
+          { name: 'Icy Lavender', hex: '#B39DDB' },
+          { name: 'Teal', hex: '#008080' }
+        ],
+        avoid: 'Warm earthy tones like terracotta, orange, and mustard — they clash with your blue-pink undertone and read muddy.',
+        metal: 'Silver',
+        metalNote: 'Sterling silver and white gold are your metals. Thin silver chains, hooped earrings, stacked silver rings. Yellow gold as your main piece reads brassy on cool skin.'
+      },
+      neutral: {
+        label: 'Neutral Undertone',
+        colours: [
+          { name: 'Cobalt Blue', hex: '#0047AB', power: true },
+          { name: 'Terracotta', hex: '#C4622D', power: true },
+          { name: 'Emerald', hex: '#046307' },
+          { name: 'Olive Green', hex: '#6B7645' },
+          { name: 'Burgundy', hex: '#800020' },
+          { name: 'Warm Camel', hex: '#C19A6B' },
+          { name: 'Deep Purple', hex: '#4B0082' },
+          { name: 'Navy', hex: '#001F5B' }
+        ],
+        avoid: 'Very little — neutral undertones are the most forgiving. Trust your eye. Neon-bright colours can overwhelm; let your skin be the statement.',
+        metal: 'Rose Gold',
+        metalNote: 'Both gold and silver sit well on neutral skin. Rose gold is the most distinctive choice — it bridges warm and cool and is the most versatile metal for African skin.'
+      }
+    };
+
+    const typeData  = INGREDIENTS[skinType] || INGREDIENTS['combination'];
+    const toneData  = TONE_NOTES[skinTone]  || TONE_NOTES['brown'];
+    const utData    = UNDERTONE_DATA[undertone] || UNDERTONE_DATA['cool'];
+    const typeLabel = { oily: 'Oily', dry: 'Dry', combination: 'Combination', sensitive: 'Sensitive', normal: 'Normal' }[skinType] || 'Your';
+
+    const buyingRules = [
+      `<strong>Check the first 5 ingredients.</strong> They make up the bulk of the formula — everything after that is present in trace amounts. If fragrance or alcohol appear in the first 5, put it down.`,
+      `<strong>Fragrance-free ≠ unscented.</strong> "Unscented" products often contain masking fragrance to cover the smell of other ingredients. Look specifically for "fragrance-free."`,
+      `<strong>For ${typeLabel.toLowerCase()} skin, look for "${skinType === 'oily' || skinType === 'combination' ? 'non-comedogenic' : skinType === 'dry' ? 'barrier repair or ceramides' : skinType === 'sensitive' ? 'hypoallergenic and fragrance-free' : 'lightweight and non-comedogenic'}"</strong> on the label before anything else.`,
+      `<strong>Avoid anything promising to "lighten" skin without knowing the formula.</strong> Mercury and unregulated hydroquinone are common in the Nigerian market. Both cause long-term damage. Niacinamide and azelaic acid are the safe, evidence-backed alternatives.`,
+      `<strong>Introduce one new product at a time.</strong> Wait 2 weeks before adding another. You can't tell what's helping or causing a reaction if you change multiple things at once.`,
+      `<strong>SPF is not optional.</strong> ${toneData.spfNote}`
+    ];
+
+    el.innerHTML = `
+      <div class="psi-section">
+        <div class="psi-header">
+          <div class="psi-header-num">Skin Intel</div>
+          <div class="psi-header-title">Personalised for ${typeLabel} Skin · ${utData.label}</div>
+        </div>
+
+        <div class="psi-two-col">
+          <div class="psi-col">
+            <div class="psi-col-title good">Ingredients to seek</div>
+            <ul class="psi-list">
+              ${typeData.seek.map(i => `<li><strong>${i.name}</strong> — ${i.note}</li>`).join('')}
+            </ul>
+          </div>
+          <div class="psi-col">
+            <div class="psi-col-title bad">Ingredients to avoid</div>
+            <ul class="psi-list avoid">
+              ${typeData.avoid.map(i => `<li><strong>${i.name}</strong> — ${i.note}</li>`).join('')}
+            </ul>
+          </div>
+        </div>
+
+        <div class="psi-tone-block">
+          <div class="psi-tone-title">Your skin tone — ${skinTone.charAt(0).toUpperCase() + skinTone.slice(1)}</div>
+          <p class="psi-tone-note">${toneData.note}</p>
+        </div>
+
+        <div class="psi-header" style="margin-top:2px;">
+          <div class="psi-header-num">Colours</div>
+          <div class="psi-header-title">Your palette — ${utData.label}</div>
+        </div>
+        <div class="psi-col-light" style="padding-bottom:28px;">
+          <div class="psi-col-title dark-label" style="color:var(--grey);">Power colours for your undertone</div>
+          <div class="psi-swatches">
+            ${utData.colours.map(c => `
+              <div class="psi-swatch">
+                <div class="psi-swatch-dot" style="background:${c.hex};${c.power ? 'box-shadow:0 0 0 2px #000,0 0 0 4px #fff;' : ''}"></div>
+                <div class="psi-swatch-name">${c.name}${c.power ? '<br>★' : ''}</div>
+              </div>`).join('')}
+          </div>
+          <p style="font-size:13px;font-weight:300;color:var(--grey);margin-top:16px;font-style:italic;border-left:2px solid var(--grey-light);padding-left:14px;line-height:1.6;">What to avoid: ${utData.avoid}</p>
+        </div>
+
+        <div class="psi-metals-grid" style="margin-top:2px;">
+          <div class="psi-metal-card">
+            <div class="psi-metal-name">Gold</div>
+            <div class="psi-metal-sub">Warm undertones</div>
+            <ul class="psi-metal-points">
+              <li class="${undertone === 'warm' ? 'yours' : ''}">14k/18k yellow gold — natural on warm skin</li>
+              <li class="${undertone === 'warm' ? 'yours' : ''}">Heavy chains, hoops, stacked bangles</li>
+              <li>Avoid as main piece if cool undertone</li>
+            </ul>
+          </div>
+          <div class="psi-metal-card">
+            <div class="psi-metal-name">Silver</div>
+            <div class="psi-metal-sub">Cool undertones</div>
+            <ul class="psi-metal-points">
+              <li class="${undertone === 'cool' ? 'yours' : ''}">Sterling silver and white gold</li>
+              <li class="${undertone === 'cool' ? 'yours' : ''}">Thin chains, hooped earrings, stacked rings</li>
+              <li>Avoid as main piece if warm undertone</li>
+            </ul>
+          </div>
+          <div class="psi-metal-card">
+            <div class="psi-metal-name">Rose Gold</div>
+            <div class="psi-metal-sub">Neutral / versatile</div>
+            <ul class="psi-metal-points">
+              <li class="${undertone === 'neutral' ? 'yours' : ''}">Bridges warm and cool — most versatile</li>
+              <li class="${undertone === 'neutral' ? 'yours' : ''}">Especially flattering on neutral skin</li>
+              <li>A safe starting point if still unsure</li>
+            </ul>
+          </div>
+        </div>
+        <div style="background:var(--black);padding:16px 32px;margin-bottom:2px;">
+          <p style="font-size:13px;font-weight:300;color:rgba(255,255,255,0.4);font-style:italic;border-left:2px solid rgba(255,255,255,0.1);padding-left:14px;line-height:1.6;">Your metal: <strong style="color:var(--white);">${utData.metal}</strong> — ${utData.metalNote}</p>
+        </div>
+
+        <div class="psi-buying-rules">
+          <div class="psi-buying-title">Before you buy a cream or product</div>
+          <ol class="psi-rules-list">
+            ${buyingRules.map(r => `<li>${r}</li>`).join('')}
+          </ol>
+        </div>
+      </div>
+    `;
+  })();
 
   // ── Premium gate: show/hide based on paid status ──
   function unlockPremium() {

@@ -70,6 +70,8 @@
         const isRetake = new URLSearchParams(window.location.search).get('retake') === '1';
         if (!isRetake && data.answers && data.quizCompletedAt) {
           window.__toraUser = user;
+          const isPaid = ADMIN_EMAILS.includes(emailLower) || data.paid === true;
+          if (isPaid) sessionStorage.setItem('tora_paid', '1');
           window.location.href = 'results.html';
           return;
         }
@@ -1703,8 +1705,13 @@
   // ── Save and redirect ──
   function saveAndRedirect() {
     localStorage.setItem('tora_quiz', JSON.stringify(answers));
-    // Save to Firestore if user is signed in
     if (window.saveQuizToFirestore) window.saveQuizToFirestore(answers);
+    // Pass paid status to results page via sessionStorage
+    if (window.__toraUser) {
+      const emailLower = (window.__toraUser.email || '').toLowerCase().trim();
+      const adminEmails = ['chizimvictory@gmail.com', 'lilnutellx@gmail.com'];
+      if (adminEmails.includes(emailLower)) sessionStorage.setItem('tora_paid', '1');
+    }
     document.getElementById(stepSequence[stepIndex]).style.opacity = '0';
     setTimeout(() => {
       window.location.href = 'results.html';

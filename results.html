@@ -2922,6 +2922,9 @@
     if (section) section.classList.add('unlocked');
   }
 
+  // Unlock immediately if quiz.html flagged this session as paid
+  if (sessionStorage.getItem('tora_paid') === '1') unlockPremium();
+
   // If payment=success in URL (Stripe redirect), wait for auth then verify
   if (window.location.search.includes('payment=success')) {
     window.addEventListener('tora:unpaid', () => {

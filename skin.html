@@ -78,6 +78,8 @@
       transition: color 0.2s;
     }
     .drawer-nav a:hover { color: var(--grey); }
+    #navSignIn a, #navSignOut a { font-size: 13px; font-weight: 500; letter-spacing: 2px; color: var(--grey); padding: 10px 0; }
+    #navSignIn a:hover, #navSignOut a:hover { color: var(--black); }
     .drawer-nav .current {
       display: flex; align-items: center; justify-content: space-between;
       padding: 14px 0; font-size: clamp(18px, 3.5vw, 28px); font-weight: 700;
@@ -392,7 +394,98 @@
       text-transform: uppercase; color: var(--white);
     }
 
-    /* ── SECTION 7 — CTA (black) ── */
+    /* ── SECTION 7 — SKIN TYPE ── */
+    .section-body-text {
+      font-size: 15px; font-weight: 300; line-height: 1.7; color: var(--grey-mid);
+      max-width: 680px; margin-top: 20px;
+    }
+    .skin-type-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2px;
+      margin: 40px 0;
+    }
+    .skin-type-card {
+      background: var(--grey-light);
+      padding: 32px 28px 36px;
+    }
+    .skin-type-name {
+      font-size: 20px; font-weight: 900; letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+    .skin-type-sign {
+      font-size: 12px; font-weight: 400; color: var(--grey);
+      line-height: 1.5; margin-bottom: 24px; font-style: italic;
+    }
+    .skin-type-section-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 2.5px;
+      text-transform: uppercase; color: var(--grey);
+      margin: 16px 0 10px;
+    }
+    .skin-type-list {
+      list-style: none; padding: 0;
+    }
+    .skin-type-list li {
+      font-size: 13px; font-weight: 300; line-height: 1.6;
+      padding: 5px 0 5px 16px; position: relative; color: var(--grey-mid);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+    .skin-type-list li::before {
+      content: '—'; position: absolute; left: 0; color: var(--grey);
+    }
+    .avoid-list li::before { content: '×'; color: #c0392b; }
+    .avoid-list li { color: #555; }
+
+    .skin-type-ingredients {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 2px; margin: 0 0 2px;
+    }
+    .sti-col {
+      background: var(--black); padding: 32px 28px;
+    }
+    .sti-title {
+      font-size: 10px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; margin-bottom: 20px;
+    }
+    .sti-title.good { color: #4caf50; }
+    .sti-title.bad  { color: #e57373; }
+    .sti-list { list-style: none; padding: 0; }
+    .sti-list li {
+      font-size: 13px; font-weight: 300; line-height: 1.6;
+      color: rgba(255,255,255,0.7); padding: 7px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .sti-list li strong { color: var(--white); font-weight: 700; }
+
+    .skin-buying-guide {
+      background: #f7f7f7; padding: 40px 36px; margin-top: 2px;
+    }
+    .sbg-title {
+      font-size: 14px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; margin-bottom: 24px;
+    }
+    .sbg-list { list-style: none; padding: 0; counter-reset: sbg; }
+    .sbg-list li {
+      font-size: 14px; font-weight: 300; line-height: 1.65;
+      color: var(--grey-mid); padding: 10px 0 10px 36px;
+      position: relative; border-bottom: 1px solid var(--grey-light);
+      counter-increment: sbg;
+    }
+    .sbg-list li::before {
+      content: counter(sbg, decimal-leading-zero);
+      position: absolute; left: 0;
+      font-size: 10px; font-weight: 700; letter-spacing: 1px;
+      color: var(--grey); top: 14px;
+    }
+    .sbg-list li strong { color: var(--black); font-weight: 700; }
+
+    @media (max-width: 768px) {
+      .skin-type-grid { grid-template-columns: 1fr; }
+      .skin-type-ingredients { grid-template-columns: 1fr; }
+      .skin-buying-guide { padding: 32px 20px; }
+    }
+
+    /* ── SECTION 8 — CTA (black) ── */
     .cta-block {
       background: var(--black); padding: 96px 36px; text-align: center;
     }
@@ -468,7 +561,7 @@
     <li><a href="scent.html">Scent <span class="d-arrow">→</span></a></li>
     <li><span class="current">Skin</span></li>
     <li><a href="quiz.html">Style Quiz <span class="d-arrow">→</span></a></li>
-    <li id="navSignIn" style="display:none;"><a href="#" onclick="window.__toraSignIn();return false;">Sign In <span class="d-arrow">→</span></a></li>
+    <li id="navSignIn" style="display:none;"><a href="quiz.html">Sign In <span class="d-arrow">→</span></a></li>
     <li id="navSignOut" style="display:none;"><a href="#" onclick="window.__toraSignOut();return false;">Sign Out <span class="d-arrow">→</span></a></li>
   </ul>
   <div class="drawer-footer">Hair · Body · Scent</div>
@@ -848,7 +941,162 @@
 </section>
 
 <!-- ══════════════════════════════
-     SECTION 7 — CTA
+     SECTION 7 — SKIN TYPE
+══════════════════════════════ -->
+<section id="skintype" data-nav="dark">
+  <div class="wrap">
+    <div class="section-intro r">
+      <p class="sec-label">Skin Type</p>
+      <h2>Dry, oily, combination, sensitive — what's yours</h2>
+      <p class="section-body-text r d1">Your skin tone tells you what colours to wear. Your skin <em>type</em> tells you what to put on your face. These are different things. Most people know their skin tone — fewer know their skin type. Get this right first and every other product decision becomes easier.</p>
+    </div>
+
+    <div class="skin-type-grid r d2">
+
+      <div class="skin-type-card">
+        <div class="skin-type-name">Oily</div>
+        <div class="skin-type-sign">Signs: shiny skin by midday, enlarged pores, frequent breakouts, makeup slides off</div>
+        <div class="skin-type-section-label">What works</div>
+        <ul class="skin-type-list">
+          <li>Gel or foam cleansers — remove excess sebum without stripping</li>
+          <li>Niacinamide (5–10%) — regulates oil production and shrinks pore appearance</li>
+          <li>Salicylic acid (BHA) — dissolves oil inside pores, reduces blackheads</li>
+          <li>Oil-free, non-comedogenic moisturiser — oily skin still needs hydration</li>
+          <li>Clay masks (kaolin or bentonite) once a week — draws out excess oil</li>
+        </ul>
+        <div class="skin-type-section-label">What to avoid</div>
+        <ul class="skin-type-list avoid-list">
+          <li>Heavy creams and oils as your main moisturiser</li>
+          <li>Alcohol-based toners — strip oil, trigger rebound overproduction</li>
+          <li>Coconut oil on the face — highly comedogenic, blocks pores</li>
+          <li>Skipping moisturiser — dehydrated oily skin overproduces sebum</li>
+        </ul>
+      </div>
+
+      <div class="skin-type-card">
+        <div class="skin-type-name">Dry</div>
+        <div class="skin-type-sign">Signs: tightness after washing, rough or flaky patches, dull texture, fine lines more visible</div>
+        <div class="skin-type-section-label">What works</div>
+        <ul class="skin-type-list">
+          <li>Cream or oil-based cleansers — don't strip the skin barrier</li>
+          <li>Hyaluronic acid — draws moisture into the skin (apply to damp skin)</li>
+          <li>Ceramides — repair and reinforce the skin barrier, lock in moisture</li>
+          <li>Glycerin — a humectant that attracts water from the air to your skin</li>
+          <li>Shea butter or squalane — rich emollients for deeper moisturising</li>
+        </ul>
+        <div class="skin-type-section-label">What to avoid</div>
+        <ul class="skin-type-list avoid-list">
+          <li>Foaming or sulphate-based cleansers — strip natural oils</li>
+          <li>Benzoyl peroxide unless treating active acne — very drying</li>
+          <li>Fragrance in skincare — irritates and dries already compromised skin</li>
+          <li>Exfoliating too frequently — once a week maximum</li>
+        </ul>
+      </div>
+
+      <div class="skin-type-card">
+        <div class="skin-type-name">Combination</div>
+        <div class="skin-type-sign">Signs: oily T-zone (forehead, nose, chin) + dry or normal cheeks. Most common skin type in West Africa</div>
+        <div class="skin-type-section-label">What works</div>
+        <ul class="skin-type-list">
+          <li>Lightweight gel moisturiser — hydrates without adding oil to the T-zone</li>
+          <li>Niacinamide — balances oil production and hydration together</li>
+          <li>Gentle foaming cleanser — removes oil from T-zone without drying cheeks</li>
+          <li>Spot-treat the T-zone with BHA, use richer cream on dry areas</li>
+        </ul>
+        <div class="skin-type-section-label">What to avoid</div>
+        <ul class="skin-type-list avoid-list">
+          <li>Heavy creams all over the face — clogs pores in the T-zone</li>
+          <li>Mattifying products over the whole face — over-dries cheeks</li>
+          <li>Ignoring the dry areas — dehydration makes combination skin worse</li>
+        </ul>
+      </div>
+
+      <div class="skin-type-card">
+        <div class="skin-type-name">Sensitive</div>
+        <div class="skin-type-sign">Signs: redness, burning, or stinging after products; reacts to new things quickly; easily irritated by heat, cold, or friction</div>
+        <div class="skin-type-section-label">What works</div>
+        <ul class="skin-type-list">
+          <li>Fragrance-free, dye-free products — every ingredient is a potential trigger</li>
+          <li>Centella asiatica (Cica) — calms redness and repairs the skin barrier</li>
+          <li>Aloe vera — reduces inflammation, soothes reactive skin</li>
+          <li>Mineral sunscreen (zinc oxide) — less irritating than chemical filters</li>
+          <li>Patch test everything — apply to the inner arm for 24 hours first</li>
+        </ul>
+        <div class="skin-type-section-label">What to avoid</div>
+        <ul class="skin-type-list avoid-list">
+          <li>Fragrance in any form — the single biggest trigger for sensitive skin</li>
+          <li>Physical exfoliants (scrubs, brushes) — micro-tears worsen sensitivity</li>
+          <li>Retinol without building up slowly — start with low concentration twice a week</li>
+          <li>Introducing multiple new products at once — you won't know what caused a reaction</li>
+        </ul>
+      </div>
+
+      <div class="skin-type-card">
+        <div class="skin-type-name">Normal</div>
+        <div class="skin-type-sign">Signs: balanced moisture, minimal breakouts, no strong oiliness or dryness, skin feels comfortable throughout the day</div>
+        <div class="skin-type-section-label">What works</div>
+        <ul class="skin-type-list">
+          <li>Any lightweight, non-comedogenic moisturiser — maintain what's already working</li>
+          <li>SPF daily — the best anti-ageing tool regardless of skin type</li>
+          <li>Gentle exfoliation (AHA) once or twice a week — maintains texture and glow</li>
+          <li>Vitamin C serum — brightens and prevents uneven tone from sun exposure</li>
+        </ul>
+        <div class="skin-type-section-label">What to avoid</div>
+        <ul class="skin-type-list avoid-list">
+          <li>Over-complicating your routine — if it's working, less is more</li>
+          <li>Skipping SPF — normal skin is still vulnerable to hyperpigmentation from the sun</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="skin-type-ingredients r d3">
+      <div class="sti-col">
+        <div class="sti-title good">Ingredients to look for</div>
+        <ul class="sti-list">
+          <li><strong>Niacinamide</strong> — brightens, controls oil, reduces hyperpigmentation. Works on all skin types.</li>
+          <li><strong>Hyaluronic acid</strong> — draws water into the skin. Works on all types but must be applied to damp skin.</li>
+          <li><strong>Ceramides</strong> — repair and strengthen the skin barrier. Essential for dry and sensitive skin.</li>
+          <li><strong>Salicylic acid (BHA)</strong> — oil-soluble exfoliant. Works inside pores. Best for oily and combination skin.</li>
+          <li><strong>Glycolic acid (AHA)</strong> — surface exfoliant. Best for dry and normal skin. Avoid on sensitive.</li>
+          <li><strong>Retinol / Retinoids</strong> — speed cell turnover, reduce hyperpigmentation and fine lines. Start slow.</li>
+          <li><strong>Vitamin C</strong> — antioxidant, brightens dark spots, boosts SPF efficacy.</li>
+          <li><strong>Centella asiatica (Cica)</strong> — calming, anti-inflammatory. Excellent for sensitive and acne-prone skin.</li>
+          <li><strong>Zinc oxide (SPF)</strong> — physical sunscreen, gentler than chemical filters. Good for sensitive skin.</li>
+        </ul>
+      </div>
+      <div class="sti-col">
+        <div class="sti-title bad">Ingredients to be cautious with</div>
+        <ul class="sti-list">
+          <li><strong>Fragrance / Parfum</strong> — the most common sensitiser in skincare. Always check the label.</li>
+          <li><strong>Denatured alcohol (alcohol denat.)</strong> — strips moisture, disrupts the skin barrier over time.</li>
+          <li><strong>Hydroquinone</strong> — lightens dark spots but banned or restricted in many countries. Use with medical supervision.</li>
+          <li><strong>Mercury (in unregulated creams)</strong> — highly toxic. Found in some bleaching products sold in Nigerian markets. Avoid entirely.</li>
+          <li><strong>Formaldehyde-releasing preservatives</strong> — DMDM hydantoin, quaternium-15. Irritants, linked to sensitisation.</li>
+          <li><strong>Coconut oil (on the face)</strong> — comedogenic. Fine on the body, clogs pores on most facial skin.</li>
+          <li><strong>High-concentration benzoyl peroxide daily</strong> — very drying. Use targeted and only for active acne.</li>
+          <li><strong>Petrolatum / Vaseline on active breakouts</strong> — seals in bacteria. Fine as a barrier on healthy skin.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="skin-buying-guide r d4">
+      <div class="sbg-title">Before you buy a soap or cream</div>
+      <ol class="sbg-list">
+        <li><strong>Check the first 5 ingredients</strong> — they make up the bulk of the formula. Everything else is present in trace amounts.</li>
+        <li><strong>Look for "fragrance-free" not "unscented"</strong> — unscented products often contain masking fragrance to cancel the smell of other ingredients.</li>
+        <li><strong>Check for "non-comedogenic"</strong> — especially for moisturisers and foundations if you have oily or combination skin.</li>
+        <li><strong>Avoid anything promising to "lighten" or "even" skin in Nigeria without knowing what's in it</strong> — mercury and hydroquinone are common in unregulated products.</li>
+        <li><strong>Don't buy based on packaging</strong> — a cream in a luxury-looking bottle can have the same formula as one in a cheap sachet. Read ingredients, not branding.</li>
+        <li><strong>Introduce one new product at a time</strong> — wait 2 weeks before adding another so you can tell what's helping or causing a reaction.</li>
+        <li><strong>pH matters for cleansers</strong> — skin is slightly acidic (pH 4.5–5.5). Harsh alkaline soaps (most traditional bar soaps) disrupt the skin barrier. Look for gentle, pH-balanced cleansers.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     SECTION 8 — CTA
 ══════════════════════════════ -->
 <div class="cta-block" data-nav="dark">
   <h2>Add your skin tone to your TÓRA profile</h2>

@@ -1142,23 +1142,39 @@
       <p class="step-sub">Climate shapes everything from fragrance choice to hair care routine.</p>
       <div class="text-options" id="climateOptionsW">
         <div class="text-option" data-value="lagos">
-          <span>Lagos</span>
+          <span>Lagos — SW Nigeria (coastal, humid)</span>
           <span class="text-option-arrow">→</span>
         </div>
         <div class="text-option" data-value="abuja">
-          <span>Abuja</span>
-          <span class="text-option-arrow">→</span>
-        </div>
-        <div class="text-option" data-value="accra">
-          <span>Accra</span>
+          <span>Abuja — North Central (hot, dry)</span>
           <span class="text-option-arrow">→</span>
         </div>
         <div class="text-option" data-value="portharcourt">
-          <span>Port Harcourt</span>
+          <span>Port Harcourt — South South (tropical)</span>
+          <span class="text-option-arrow">→</span>
+        </div>
+        <div class="text-option" data-value="ibadan">
+          <span>Ibadan / Oyo — SW inland (warm)</span>
+          <span class="text-option-arrow">→</span>
+        </div>
+        <div class="text-option" data-value="kano">
+          <span>Kano / Kaduna — North West (very hot, dry)</span>
+          <span class="text-option-arrow">→</span>
+        </div>
+        <div class="text-option" data-value="enugu">
+          <span>Enugu / Anambra — South East (humid)</span>
+          <span class="text-option-arrow">→</span>
+        </div>
+        <div class="text-option" data-value="benin">
+          <span>Benin / Edo — South South (tropical)</span>
+          <span class="text-option-arrow">→</span>
+        </div>
+        <div class="text-option" data-value="accra">
+          <span>Accra, Ghana</span>
           <span class="text-option-arrow">→</span>
         </div>
         <div class="text-option" data-value="diaspora">
-          <span>Diaspora — London / US</span>
+          <span>Diaspora — Europe / North America</span>
           <span class="text-option-arrow">→</span>
         </div>
       </div>
@@ -1173,23 +1189,39 @@
       <p class="step-sub">Climate shapes your fragrance and grooming routine.</p>
       <div class="text-options" id="climateOptionsM">
         <div class="text-option" data-value="lagos">
-          <span>Lagos</span>
+          <span>Lagos — SW Nigeria (coastal, humid)</span>
           <span class="text-option-arrow">→</span>
         </div>
         <div class="text-option" data-value="abuja">
-          <span>Abuja</span>
-          <span class="text-option-arrow">→</span>
-        </div>
-        <div class="text-option" data-value="accra">
-          <span>Accra</span>
+          <span>Abuja — North Central (hot, dry)</span>
           <span class="text-option-arrow">→</span>
         </div>
         <div class="text-option" data-value="portharcourt">
-          <span>Port Harcourt</span>
+          <span>Port Harcourt — South South (tropical)</span>
+          <span class="text-option-arrow">→</span>
+        </div>
+        <div class="text-option" data-value="ibadan">
+          <span>Ibadan / Oyo — SW inland (warm)</span>
+          <span class="text-option-arrow">→</span>
+        </div>
+        <div class="text-option" data-value="kano">
+          <span>Kano / Kaduna — North West (very hot, dry)</span>
+          <span class="text-option-arrow">→</span>
+        </div>
+        <div class="text-option" data-value="enugu">
+          <span>Enugu / Anambra — South East (humid)</span>
+          <span class="text-option-arrow">→</span>
+        </div>
+        <div class="text-option" data-value="benin">
+          <span>Benin / Edo — South South (tropical)</span>
+          <span class="text-option-arrow">→</span>
+        </div>
+        <div class="text-option" data-value="accra">
+          <span>Accra, Ghana</span>
           <span class="text-option-arrow">→</span>
         </div>
         <div class="text-option" data-value="diaspora">
-          <span>Diaspora — London / US</span>
+          <span>Diaspora — Europe / North America</span>
           <span class="text-option-arrow">→</span>
         </div>
       </div>
@@ -1305,6 +1337,38 @@
     </div>
   </div>
 
+  <!-- STEP 8: Skin Type (shared) -->
+  <div class="quiz-step light-bg" id="step-8" data-step="8">
+    <div class="step-inner">
+      <p class="step-num">Step 08</p>
+      <h2 class="step-question">What is your skin type?</h2>
+      <p class="step-sub">This shapes your skincare and product recommendations. Pick the one that feels most like you most of the time.</p>
+      <div class="text-options" id="skinTypeOptions">
+        <div class="text-option" data-value="oily">
+          <span>Oily — shiny by midday, enlarged pores</span>
+          <span class="text-option-arrow">→</span>
+        </div>
+        <div class="text-option" data-value="dry">
+          <span>Dry — tight, flaky, or rough patches</span>
+          <span class="text-option-arrow">→</span>
+        </div>
+        <div class="text-option" data-value="combination">
+          <span>Combination — oily T-zone, dry cheeks</span>
+          <span class="text-option-arrow">→</span>
+        </div>
+        <div class="text-option" data-value="sensitive">
+          <span>Sensitive — reacts easily, redness or irritation</span>
+          <span class="text-option-arrow">→</span>
+        </div>
+        <div class="text-option" data-value="normal">
+          <span>Normal — balanced, rarely breaks out</span>
+          <span class="text-option-arrow">→</span>
+        </div>
+      </div>
+      <a href="skin.html" class="skin-guide-link" style="margin-top:20px;display:inline-block;">Not sure? Read the skin type guide →</a>
+    </div>
+  </div>
+
 </div><!-- end quiz-stage -->
 
 <script>
@@ -1368,13 +1432,14 @@
     lifestyle: null,
     headShape: null,
     skinTone: null,
-    undertone: null
+    undertone: null,
+    skinType: null
   };
 
   let currentStep = 1;
   let gender = null; // 'women' | 'men'
 
-  const TOTAL_STEPS = 7; // step-1 (gender) + 5 path steps + step-7 (skin)
+  const TOTAL_STEPS = 8; // step-1 (gender) + 5 path steps + step-7 (skin tone) + step-8 (skin type)
 
   // ── DOM refs ──
   const progressFill  = document.getElementById('progressFill');
@@ -1388,9 +1453,9 @@
   // stepId = what div ID is shown. Returns array of step IDs in order.
   function getStepSequence(g) {
     if (g === 'women') {
-      return ['step-1','step-2w','step-3w','step-4w','step-5w','step-6w','step-7'];
+      return ['step-1','step-2w','step-3w','step-4w','step-5w','step-6w','step-7','step-8'];
     } else {
-      return ['step-1','step-2m','step-4m','step-5m','step-6m','step-7'];
+      return ['step-1','step-2m','step-4m','step-5m','step-6m','step-7','step-8'];
     }
   }
 
@@ -1559,6 +1624,8 @@
         answers.climate = val;
       } else if (stepId === 'step-3m') {
         answers.height = val;
+      } else if (stepId === 'step-8') {
+        answers.skinType = val;
       }
 
       showContinue();

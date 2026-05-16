@@ -99,6 +99,8 @@
       transition: color 0.2s;
     }
     .drawer-nav a:hover { color: var(--grey); }
+    #navSignIn a, #navSignOut a { font-size: 13px; font-weight: 500; letter-spacing: 2px; color: var(--grey); padding: 10px 0; }
+    #navSignIn a:hover, #navSignOut a:hover { color: var(--black); }
     .d-arrow { font-size: 18px; opacity: 0; transition: opacity 0.2s, transform 0.2s; transform: translateX(-8px); }
     .drawer-nav a:hover .d-arrow { opacity: 1; transform: translateX(0); }
     .drawer-footer {
@@ -337,6 +339,7 @@
       .wrap { padding: 0 20px; }
       .shop-section { padding: 48px 0; }
       .products-grid { grid-template-columns: 1fr; }
+      .drawer { padding: 0 24px; overflow-y: auto; justify-content: flex-start; padding-top: 80px; padding-bottom: 60px; }
     }
   </style>
 </head>
@@ -354,7 +357,7 @@
       <li><a href="results.html">My Profile <span class="d-arrow">→</span></a></li>
       <li><a href="shop.html">Shop <span class="d-arrow">→</span></a></li>
       <li><a href="quiz.html">Take the Quiz <span class="d-arrow">→</span></a></li>
-      <li id="navSignIn" style="display:none;"><a href="#" onclick="window.__toraSignIn();return false;">Sign In <span class="d-arrow">→</span></a></li>
+      <li id="navSignIn" style="display:none;"><a href="quiz.html">Sign In <span class="d-arrow">→</span></a></li>
       <li id="navSignOut" style="display:none;"><a href="#" onclick="window.__toraSignOut();return false;">Sign Out <span class="d-arrow">→</span></a></li>
     </ul>
   </nav>
@@ -381,6 +384,7 @@
     <button class="filter-btn" data-cat="scent">Scent</button>
     <button class="filter-btn" data-cat="makeup" id="filterMakeup" style="display:none;">Makeup</button>
     <button class="filter-btn" data-cat="body" id="filterBody" style="display:none;">Body &amp; Style</button>
+    <button class="filter-btn" id="filterGeneral" style="display:none;" onclick="showGeneralShop()">General Shop</button>
   </div>
 
   <!-- SECTION 01: HAIR CARE -->
@@ -505,37 +509,92 @@
 
   // Default answers for visitors without quiz data — show general best-sellers
   const defaults = { curlType: '4c', skinTone: 'brown', skinType: 'combination', undertone: 'warm', bodyType: 'hourglass', faceShape: 'oval', gender: 'women' };
-  const quizData = (A && A.curlType) ? A : defaults;
-  const isPersonalised = !!(A && A.curlType);
 
-  if (isPersonalised) {
-    document.getElementById('shopEyebrow').textContent = 'TÓRA — Personalised Shop';
-    document.getElementById('shopTitle').innerHTML = 'Your<br>Products';
-    document.getElementById('shopSubtitle').textContent = 'Every product here is matched to your specific combination. Not generic recommendations — yours.';
+  // Only personalise if there's real quiz data AND the user is signed in
+  // We determine sign-in state via Firebase auth (set after onAuthStateChanged fires)
+  // For now, we check if quiz data exists AND looks complete
+  const hasQuizData = !!(A && A.curlType && A.gender);
+
+  let isPersonalised = false;
+  let quizData = defaults;
+  let showingGeneral = false;
+
+  function initShop() {
+    isPersonalised = hasQuizData && !showingGeneral;
+    quizData = (isPersonalised) ? A : defaults;
+
+    if (isPersonalised) {
+      document.getElementById('shopEyebrow').textContent = 'TÓRA — Personalised Shop';
+      document.getElementById('shopTitle').innerHTML = 'Your<br>Products';
+      document.getElementById('shopSubtitle').textContent = 'Every product here is matched to your specific combination. Not generic recommendations — yours.';
+      document.getElementById('filterGeneral').style.display = '';
+    } else {
+      document.getElementById('shopEyebrow').textContent = showingGeneral ? 'TÓRA — General Shop' : 'TÓRA — Shop';
+      document.getElementById('shopTitle').innerHTML = showingGeneral ? 'The<br>Edit' : 'The<br>Edit';
+      document.getElementById('shopSubtitle').textContent = showingGeneral
+        ? 'The best products for Black and African hair, skin, and style — curated and sourced on Jumia.'
+        : 'The best products for Black and African hair, skin, and style — curated and sourced on Jumia.';
+      if (hasQuizData) document.getElementById('filterGeneral').style.display = '';
+    }
+
+    // Clear grids before rebuild
+    ['hairProductsGrid','skinProductsGrid','scentProductsGrid','makeupProductsGrid','bodyProductsGrid','skinVisualRow','hairIntro'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = '';
+    });
+    // Re-hide women sections
+    ['secMakeup','secBody'].forEach(id => {
+      const sec = document.getElementById(id);
+      if (sec) sec.style.display = 'none';
+    });
+    ['filterMakeup','filterBody'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = 'none';
+    });
+
+    buildShop(quizData);
+
+    if (!isPersonalised && !hasQuizData) {
+      const tags = document.getElementById('profileTags');
+      tags.innerHTML = '<a href="quiz.html" style="display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--black);border:1px solid var(--black);padding:10px 20px;text-decoration:none;">Take the quiz to personalise this shop →</a>';
+    } else if (isPersonalised) {
+      const tags = document.getElementById('profileTags');
+      // Keep profile tags generated by buildShop, just append switch link
+    }
   }
 
-  buildShop(quizData);
-
-  if (!isPersonalised) {
-    // Append CTA after buildShop has set profile tags
-    const tags = document.getElementById('profileTags');
-    tags.innerHTML = '<a href="quiz.html" style="display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--black);border:1px solid var(--black);padding:10px 20px;text-decoration:none;">Take the quiz to personalise this shop →</a>';
+  function showGeneralShop() {
+    showingGeneral = true;
+    document.getElementById('filterGeneral').textContent = 'My Personalised Shop';
+    document.getElementById('filterGeneral').onclick = showPersonalisedShop;
+    initShop();
   }
+
+  function showPersonalisedShop() {
+    showingGeneral = false;
+    document.getElementById('filterGeneral').textContent = 'General Shop';
+    document.getElementById('filterGeneral').onclick = showGeneralShop;
+    initShop();
+  }
+
+  initShop();
 
   function buildShop(A) {
-    const isWomen = A.gender === 'women';
+    const isWomen = A.gender !== 'men';
 
     // Profile tags
-    const tags = [
-      A.curlType && `${A.curlType.toUpperCase()} Curl`,
-      A.skinTone && `${cap(A.skinTone)} Skin`,
-      A.undertone && `${cap(A.undertone)} Undertone`,
-      A.bodyType && `${cap(A.bodyType)} Body`,
-      A.faceShape && `${cap(A.faceShape)} Face`,
-      A.skinType && `${cap(A.skinType)} Skin Type`,
-      isWomen ? 'Women' : 'Men'
-    ].filter(Boolean);
-    document.getElementById('profileTags').innerHTML = tags.map(t => `<div class="profile-tag">${t}</div>`).join('');
+    if (isPersonalised) {
+      const tags = [
+        A.curlType && `${A.curlType.toUpperCase()} Curl`,
+        A.skinTone && `${cap(A.skinTone)} Skin`,
+        A.undertone && `${cap(A.undertone)} Undertone`,
+        A.bodyType && `${cap(A.bodyType)} Body`,
+        A.faceShape && `${cap(A.faceShape)} Face`,
+        A.skinType && `${cap(A.skinType)} Skin Type`,
+        isWomen ? 'Women' : 'Men'
+      ].filter(Boolean);
+      document.getElementById('profileTags').innerHTML = tags.map(t => `<div class="profile-tag">${t}</div>`).join('');
+    }
 
     // Show women-only filter buttons and sections
     if (isWomen) {
@@ -563,12 +622,14 @@
     document.querySelectorAll('.r').forEach(el => observer.observe(el));
     setTimeout(() => document.querySelectorAll('.r').forEach(el => el.classList.add('in')), 300);
 
-    // Filter buttons
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
+    // Filter buttons — rebind each time
+    document.querySelectorAll('.filter-btn[data-cat]').forEach(btn => {
+      const newBtn = btn.cloneNode(true);
+      btn.parentNode.replaceChild(newBtn, btn);
+      newBtn.addEventListener('click', () => {
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const cat = btn.dataset.cat;
+        newBtn.classList.add('active');
+        const cat = newBtn.dataset.cat;
         document.querySelectorAll('.shop-section').forEach(sec => {
           const womenOnly = sec.id === 'secMakeup' || sec.id === 'secBody';
           if (!isWomen && womenOnly) { sec.style.display = 'none'; return; }

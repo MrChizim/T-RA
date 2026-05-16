@@ -56,6 +56,8 @@
     .drawer-nav li { border-bottom: 1px solid var(--grey-light); }
     .drawer-nav a { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; font-size: clamp(18px,3.5vw,28px); font-weight: 700; color: var(--black); text-decoration: none; text-transform: uppercase; letter-spacing: 1px; transition: color 0.2s; }
     .drawer-nav a:hover { color: var(--grey); }
+    #navSignIn a, #navSignOut a { font-size: 13px; font-weight: 500; letter-spacing: 2px; color: var(--grey); padding: 10px 0; }
+    #navSignIn a:hover, #navSignOut a:hover { color: var(--black); }
     .drawer-nav .drawer-sub { font-size: clamp(11px,1.5vw,13px); font-weight: 500; letter-spacing: 2px; color: var(--grey); padding: 8px 0 8px 16px; border-bottom: 1px solid var(--grey-light); display: flex; align-items: center; justify-content: space-between; text-decoration: none; text-transform: uppercase; transition: color 0.2s; }
     .drawer-nav .drawer-sub:hover { color: var(--black); }
     .d-arrow { font-size: 18px; opacity: 0; transition: opacity 0.2s, transform 0.2s; transform: translateX(-8px); }
@@ -207,7 +209,7 @@
     <li><a href="skin.html">Skin <span class="d-arrow">→</span></a></li>
     <li><a href="quiz.html">Style Quiz <span class="d-arrow">→</span></a></li>
     <li><a href="shop.html">Shop <span class="d-arrow">→</span></a></li>
-    <li id="navSignIn" style="display:none;"><a href="#" onclick="window.__toraSignIn();return false;">Sign In <span class="d-arrow">→</span></a></li>
+    <li id="navSignIn" style="display:none;"><a href="quiz.html">Sign In <span class="d-arrow">→</span></a></li>
     <li id="navSignOut" style="display:none;"><a href="#" onclick="window.__toraSignOut();return false;">Sign Out <span class="d-arrow">→</span></a></li>
   </ul>
   <div class="drawer-footer">Hair · Body · Scent · Skin</div>

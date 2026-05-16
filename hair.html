@@ -95,6 +95,8 @@
       transition: color 0.2s;
     }
     .drawer-nav a:hover { color: var(--grey); }
+    #navSignIn a, #navSignOut a { font-size: 13px; font-weight: 500; letter-spacing: 2px; color: var(--grey); padding: 10px 0; }
+    #navSignIn a:hover, #navSignOut a:hover { color: var(--black); }
     .drawer-nav .drawer-sub {
       font-size: clamp(11px, 1.5vw, 13px); font-weight: 500; letter-spacing: 2px;
       color: var(--grey); padding: 8px 0 8px 16px; border-bottom: 1px solid var(--grey-light);
@@ -202,6 +204,42 @@
     .curl-note {
       font-size: 13px; font-weight: 300; color: var(--grey); font-style: italic;
       border-left: 2px solid var(--grey-light); padding-left: 16px;
+    }
+
+    /* ── HAIR ID GUIDE ── */
+    .hair-id-guide {
+      margin-top: 56px;
+      border-top: 1px solid var(--grey-light);
+      padding-top: 48px;
+    }
+    .hair-id-title {
+      font-size: 22px; font-weight: 700; letter-spacing: -0.3px;
+      margin-bottom: 12px;
+    }
+    .hair-id-intro {
+      font-size: 14px; font-weight: 300; line-height: 1.7;
+      color: var(--grey-mid); max-width: 600px; margin-bottom: 36px;
+    }
+    .hair-id-steps { display: flex; flex-direction: column; gap: 0; }
+    .hair-id-step {
+      display: grid; grid-template-columns: 48px 1fr;
+      gap: 20px; padding: 20px 0;
+      border-bottom: 1px solid var(--grey-light);
+    }
+    .hair-id-num {
+      font-size: 10px; font-weight: 700; letter-spacing: 2px;
+      color: var(--grey); padding-top: 4px;
+    }
+    .hair-id-q {
+      font-size: 14px; font-weight: 700; margin-bottom: 8px;
+    }
+    .hair-id-a {
+      font-size: 13px; font-weight: 300; line-height: 1.65;
+      color: var(--grey-mid);
+    }
+    .hair-id-a strong { color: var(--black); font-weight: 700; }
+    @media (max-width: 600px) {
+      .hair-id-step { grid-template-columns: 36px 1fr; gap: 12px; }
     }
 
     /* ── POROSITY SECTION ── */
@@ -606,7 +644,7 @@
     <li><a href="scent.html">Scent <span class="d-arrow">→</span></a></li>
     <li><a href="skin.html">Skin <span class="d-arrow">→</span></a></li>
     <li><a href="quiz.html">Style Quiz <span class="d-arrow">→</span></a></li>
-    <li id="navSignIn" style="display:none;"><a href="#" onclick="window.__toraSignIn();return false;">Sign In <span class="d-arrow">→</span></a></li>
+    <li id="navSignIn" style="display:none;"><a href="quiz.html">Sign In <span class="d-arrow">→</span></a></li>
     <li id="navSignOut" style="display:none;"><a href="#" onclick="window.__toraSignOut();return false;">Sign Out <span class="d-arrow">→</span></a></li>
   </ul>
   <div class="drawer-footer">Hair · Body · Scent · Skin</div>
@@ -699,6 +737,51 @@
       </div>
     </div>
     <p class="curl-note r d2">Most people have more than one curl type across their head — your nape and crown are often completely different. Build your routine around the section that needs the most work, not the most cooperative one.</p>
+
+    <!-- HOW TO IDENTIFY YOUR HAIR TYPE -->
+    <div class="hair-id-guide r d3">
+      <div class="hair-id-title">How to visually identify your curl type</div>
+      <p class="hair-id-intro">You don't need a curl chart. You need to know what to look for. These are the clearest signals — check on freshly washed hair with no product, while it's wet and just air-drying.</p>
+
+      <div class="hair-id-steps">
+        <div class="hair-id-step">
+          <div class="hair-id-num">01</div>
+          <div class="hair-id-content">
+            <div class="hair-id-q">Does your hair curl at all when it dries?</div>
+            <div class="hair-id-a">If no — your hair is likely relaxed, texlaxed, or heat-damaged. The natural pattern underneath is separate from what you're seeing. If yes — continue below.</div>
+          </div>
+        </div>
+        <div class="hair-id-step">
+          <div class="hair-id-num">02</div>
+          <div class="hair-id-content">
+            <div class="hair-id-q">Can you see an S or Z shape when you gently stretch a single strand?</div>
+            <div class="hair-id-a"><strong>Clear S-curve</strong> = you're in the 3s or 4A. The S is soft and open in 3s, tight and small in 4A. <strong>Z-shape or no visible pattern</strong> = 4B. <strong>Completely shrinks flat, no visible coil</strong> = 4C.</div>
+          </div>
+        </div>
+        <div class="hair-id-step">
+          <div class="hair-id-num">03</div>
+          <div class="hair-id-content">
+            <div class="hair-id-q">What happens when your hair dries with no product?</div>
+            <div class="hair-id-a"><strong>Defined spiral you can see from a distance</strong> = 3A or 3B. <strong>Some coil definition but not perfectly spiralled</strong> = 3C or 4A. <strong>Shrinks to half its length or more, very little visible pattern</strong> = 4B or 4C.</div>
+          </div>
+        </div>
+        <div class="hair-id-step">
+          <div class="hair-id-num">04</div>
+          <div class="hair-id-content">
+            <div class="hair-id-q">How does your hair behave when wet vs. dry?</div>
+            <div class="hair-id-a"><strong>Shrinks less than 30%</strong> = likely 3A–3B. <strong>Shrinks 40–60%</strong> = 3C–4A. <strong>Shrinks 70% or more</strong> = 4B–4C. Shrinkage is normal and healthy — high shrinkage actually indicates good elasticity.</div>
+          </div>
+        </div>
+        <div class="hair-id-step">
+          <div class="hair-id-num">05</div>
+          <div class="hair-id-content">
+            <div class="hair-id-q">Between 4B and 4C — how do you tell?</div>
+            <div class="hair-id-a">Both shrink significantly and lack a visible pattern. The difference: 4B has a <strong>zigzag coil</strong> if you look very closely at a single strand (bend it gently). 4C's strand curls back on itself without a consistent directional pattern — it's the most undefined of the types. If you genuinely can't tell, treat it as 4C and use the richer moisture approach — it won't hurt 4B either.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 

@@ -44,10 +44,18 @@
 
     onAuthStateChanged(auth, async user => {
       if (!user) return; // not signed in — gate stays up
-      window.__toraUid   = user.uid;
-      window.__toraEmail = user.email;
+      window.__toraUid         = user.uid;
+      window.__toraEmail       = user.email;
+      window.__toraDisplayName = user.displayName || '';
 
-      const ADMIN_EMAILS = ['chizimvictory@gmail.com'];
+      // Personalise hero title with user's first name
+      if (user.displayName) {
+        const firstName = user.displayName.split(' ')[0];
+        const ht = document.getElementById('heroTitle');
+        if (ht) ht.innerHTML = `${firstName.toUpperCase()}'S<br>PROFILE`;
+      }
+
+      const ADMIN_EMAILS = ['chizimvictory@gmail.com', 'lilnutellx@gmail.com'];
       const snap = await getDoc(doc(db, 'users', user.uid));
       const data = snap.exists() ? snap.data() : {};
       const paid = data.paid === true || ADMIN_EMAILS.includes(user.email);
@@ -129,6 +137,8 @@
       transition: color 0.2s;
     }
     .drawer-nav a:hover { color: var(--grey); }
+    #navSignIn a, #navSignOut a { font-size: 13px; font-weight: 500; letter-spacing: 2px; color: var(--grey); padding: 10px 0; }
+    #navSignIn a:hover, #navSignOut a:hover { color: var(--black); }
     .d-arrow { font-size: 18px; opacity: 0; transition: opacity 0.2s, transform 0.2s; transform: translateX(-8px); }
     .drawer-nav a:hover .d-arrow { opacity: 1; transform: translateX(0); }
     .drawer-footer {
@@ -777,7 +787,7 @@
     /* Premium blurred preview cards */
     .premium-preview-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 2px;
       margin-bottom: 2px;
     }
@@ -1056,7 +1066,7 @@
     }
     .makeup-product-row {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 2px;
       margin-top: 2px;
     }
@@ -1455,10 +1465,12 @@
     <!-- Outfit recommendations (4 cards, filled by JS) -->
     <div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--grey);padding:24px 0 14px;">Outfit Recommendations</div>
     <div class="premium-preview-grid" id="outfitRecsGrid"></div>
+    <div style="text-align:right;padding:12px 0 4px;"><a href="shop.html" style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--cream);text-decoration:none;border-bottom:1px solid var(--cream);padding-bottom:2px;">See more outfits in the Shop →</a></div>
 
     <!-- Hairstyle recommendations (4 cards, filled by JS) -->
-    <div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--grey);padding:24px 0 14px;margin-top:2px;">Hairstyle Recommendations</div>
+    <div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--grey);padding:24px 0 14px;margin-top:8px;">Hairstyle Recommendations</div>
     <div class="premium-preview-grid" id="hairstyleRecsGrid"></div>
+    <div style="text-align:right;padding:12px 0 4px;"><a href="shop.html" style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--cream);text-decoration:none;border-bottom:1px solid var(--cream);padding-bottom:2px;">Explore more styles in the Shop →</a></div>
 
     <div class="premium-brief" style="margin-top:2px;">
       <p class="premium-brief-label">Your complete style brief</p>
@@ -1483,8 +1495,8 @@
       <h3 class="gate-title">Unlock Your Complete Profile</h3>
       <p class="gate-desc">You've seen the foundation. Your full profile goes deeper — combining all three dimensions of your identity into one personalised style brief.</p>
       <ul class="gate-list">
-        <li>Full hairstyle gallery for your curl type and face shape combination</li>
-        <li>Complete outfit lookbook — all 6 combinations for your body type</li>
+        <li>4 curated hairstyle recommendations for your curl type and face shape</li>
+        <li>4 outfit recommendations matched to your body type — plus direct shop links</li>
         <li>Face shape and body type combined style insights</li>
         <li>Personalised fragrance family ranking for your climate</li>
         <li>Your complete style brief — written for your exact combination</li>
@@ -1508,7 +1520,7 @@
       <button class="pay-modal-close" id="payModalClose" aria-label="Close">×</button>
       <p class="pay-modal-label">Full Access — One Time</p>
       <h2 class="pay-modal-title">Unlock Your Complete Profile</h2>
-      <p class="pay-modal-desc">Everything built around your exact combination — hairstyle gallery, outfit lookbook, fragrance ranking, and your full personalised style brief.</p>
+      <p class="pay-modal-desc">Everything built around your exact combination — 4 hairstyle picks, 4 outfit recommendations with shop links, fragrance ranking, and your full personalised style brief.</p>
       <div class="pay-modal-price" id="payModalPrice">₦5,000</div>
       <p class="pay-modal-price-note">One-time · No subscription · No expiry</p>
       <p class="pay-modal-error" id="payModalError"></p>
@@ -1791,6 +1803,42 @@
         { family: 'Light EDT only', note: 'No EDP or Parfum during the day. Evening: very light woods only.', tag: 'Concentration rule' }
       ]
     },
+    ibadan: {
+      city: 'Ibadan / Oyo',
+      desc: 'Warm, humid inland climate but slightly cooler than the coast. Woody and aromatic families perform better here than in Lagos or Port Harcourt. Mornings are comfortable — heavier notes can be worn in the AM.',
+      recs: [
+        { family: 'Aromatic Fougères', note: 'Lavender, herbs, and clean woods. Works morning to evening in Ibadan\'s warmth.', tag: 'All day' },
+        { family: 'Soft Woods', note: 'Cedar and sandalwood at EDT strength — not overwhelming in the moderate heat.', tag: 'Daytime' },
+        { family: 'Light Orientals', note: 'Amber-based scents in the evening. One spray is enough in humid months.', tag: 'Evening' }
+      ]
+    },
+    kano: {
+      city: 'Kano / Kaduna',
+      desc: 'Very dry, hot Sahel climate. Fragrance evaporates quickly but the dryness means heavy orientals and ouds perform exceptionally well. You have the widest fragrance latitude of any Nigerian climate — use it.',
+      recs: [
+        { family: 'Woody / Oud', note: 'The most rewarding climate for oud. Blooms without going sharp. 2 sprays work well.', tag: 'Core family' },
+        { family: 'Amber / Musk', note: 'Rich amber and animalic musks come to life in the Kano heat and dryness.', tag: 'All day' },
+        { family: 'Spicy Orientals', note: 'Cinnamon, cardamom, pepper-based scents — these thrive in dry heat. Evening wear.', tag: 'Evening' }
+      ]
+    },
+    enugu: {
+      city: 'Enugu / South East',
+      desc: 'Tropical humid climate similar to Port Harcourt but slightly less extreme. Fresh and light floral families are safest during the day. Woodsy scents in the evening when temperatures drop.',
+      recs: [
+        { family: 'Fresh / Citrus', note: 'Reliable and wearable year-round in the South East humidity.', tag: 'Daytime' },
+        { family: 'Light Florals', note: 'Rose and light jasmine in EDT. Stays fresh without projecting aggressively.', tag: 'All day' },
+        { family: 'Soft Woods', note: 'Cedar and vetiver in the evening when the humidity eases.', tag: 'Evening' }
+      ]
+    },
+    benin: {
+      city: 'Benin / Edo',
+      desc: 'South-South tropical climate — high humidity close to Port Harcourt. The forest surroundings mean earthy and green accords feel native rather than forced. Keep daytime scents light.',
+      recs: [
+        { family: 'Fresh / Green', note: 'Green tea, basil, and clean herbaceous notes. Feels natural in Benin\'s green city environment.', tag: 'Daytime' },
+        { family: 'Soft Musks', note: 'Low projection, professional, stays skin-close.', tag: 'Daily wear' },
+        { family: 'Earthy / Vetiver', note: 'Petrichor and earthy vetiver notes feel at home here in the evening.', tag: 'Evening' }
+      ]
+    },
     diaspora: {
       city: 'London / Diaspora',
       desc: 'Cooler climate means projection is naturally subdued. African diaspora often over-apply because they are calibrated to African heat where fragrance needs to work harder. In a British or US climate, less is genuinely enough — and what felt light in Lagos will be strong here.',
@@ -1896,31 +1944,6 @@
       noteEl.querySelector('h4').textContent = 'Face shape — hair note';
       listEl.innerHTML = `<li>${mod.note}</li>`;
     }
-
-    // Style recs
-    const styleRecsGrid = document.getElementById('styleRecsGrid');
-    curlData.styles.forEach((styleFile, i) => {
-      const card = document.createElement('div');
-      card.className = 'style-rec-card';
-      const styleName = curlData.styleNames[i] || styleFile;
-      // Try .PNG first (user uploads), fall back to .png, then placeholder
-      const imgEl = document.createElement('img');
-      imgEl.alt = styleName;
-      imgEl.src = `images/${styleFile}.PNG`;
-      imgEl.onerror = function() {
-        if (this.src.endsWith('.PNG')) {
-          this.src = `images/${styleFile}.png`;
-        } else {
-          this.parentElement.innerHTML = `<div class="style-rec-placeholder"><div class="style-rec-placeholder-name">${styleName}</div></div>`;
-        }
-      };
-      card.appendChild(imgEl);
-      const label = document.createElement('div');
-      label.className = 'style-rec-label';
-      label.textContent = styleName;
-      card.appendChild(label);
-      styleRecsGrid.appendChild(card);
-    });
   }
 
   // ── HAIR GROWTH TIPS ──

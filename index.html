@@ -176,6 +176,8 @@
     }
     .drawer-nav .drawer-sub:hover { color: var(--black); }
     .drawer-nav a:hover { color: var(--grey); }
+    #navSignIn a, #navSignOut a { font-size: 13px; font-weight: 500; letter-spacing: 2px; color: var(--grey); padding: 10px 0; }
+    #navSignIn a:hover, #navSignOut a:hover { color: var(--black); }
     .drawer-nav .arrow {
       font-size: 18px;
       opacity: 0;
@@ -891,7 +893,7 @@
     <li><a href="quiz.html" class="dl">Style Quiz <span class="arrow">→</span></a></li>
     <li><a href="shop.html" class="dl">Shop <span class="arrow">→</span></a></li>
     <li id="drawerProfileLink" style="display:none;"><a href="results.html" class="dl">My Profile <span class="arrow">→</span></a></li>
-    <li id="navSignIn" style="display:none;"><a href="#" onclick="window.__toraSignIn();return false;" class="dl">Sign In <span class="arrow">→</span></a></li>
+    <li id="navSignIn" style="display:none;"><a href="quiz.html" class="dl">Sign In <span class="arrow">→</span></a></li>
     <li id="navSignOut" style="display:none;"><a href="#" onclick="window.__toraSignOut();return false;" class="dl">Sign Out <span class="arrow">→</span></a></li>
   </ul>
   <div class="drawer-footer">Hair · Body · Scent · Skin</div>

@@ -1425,7 +1425,7 @@
       <div id="makeupContent" class="r d1"><!-- filled by JS --></div>
     </div>
 
-    <!-- SKINCARE ROUTINE (women only) -->
+    <!-- SKINCARE ROUTINE (all users) -->
     <div id="skincareSection" style="display:none;">
       <div class="section-header r" style="margin-top:64px;">
         <div class="section-number" style="opacity:0.08;">06</div>
@@ -2715,13 +2715,35 @@
         { step: 'SPF', brand: 'Black Girl Sunscreen', name: 'SPF 30 Moisturising Sunscreen', why: 'Mineral-based, no white cast on deep skin, fragrance-free. Made specifically for Black women. One of the few sunscreens that works without leaving a grey cast.', link: 'https://www.jumia.com.ng/catalog/?q=black+girl+sunscreen' }
       ]
     }
+    normal: {
+      label: 'Normal Skin',
+      desc: 'Balanced, rarely reacts, minimal breakouts, comfortable throughout the day. Lucky — but normal skin still ages and develops hyperpigmentation without a consistent routine. The goal is maintaining what\'s working and preventing sun damage.',
+      am: [
+        { step: '1 — Cleanser', name: 'Gentle Gel or Cream Cleanser', desc: 'A light gel or cream cleanser that removes overnight residue without stripping. Normal skin does not need a specialist cleanser — just consistency.' },
+        { step: '2 — Vitamin C Serum', name: 'Ascorbic Acid 10–20%', desc: 'The best single addition for normal Black skin. Vitamin C brightens, prevents dark spot formation from sun exposure, and boosts SPF effectiveness.' },
+        { step: '3 — Lightweight Moisturiser', name: 'Lotion with Hyaluronic Acid', desc: 'Normal skin needs light hydration to maintain balance. Avoid heavy creams that aren\'t necessary — they can push normal skin towards congestion.' },
+        { step: '4 — SPF', name: 'SPF 30–50', desc: 'The most important step regardless of skin type. SPF prevents hyperpigmentation, the number one skin concern for Black skin regardless of type. Use it daily, year-round.' }
+      ],
+      pm: [
+        { step: '1 — Cleanser', name: 'Double Cleanse if you wore SPF/makeup', desc: 'Micellar water first, then your regular cleanser. If no makeup — one cleanse is enough.' },
+        { step: '2 — Retinol (2–3x a week)', name: 'Retinol 0.2–0.5%', desc: 'Normal skin tolerates retinol well. Start at 0.2%, use 2–3x a week, build up. The most proven anti-ageing and skin-texture treatment available.' },
+        { step: '3 — AHA Exfoliant (1–2x a week)', name: 'Glycolic or Lactic Acid', desc: 'Keeps the skin texture smooth and glowing. Use on nights you are not using retinol. Not both in the same routine.' },
+        { step: '4 — Moisturiser', name: 'Regular moisturiser', desc: 'Same as AM or slightly richer. No sleeping mask needed unless skin feels dry. Normal skin thrives with minimal, consistent steps.' }
+      ],
+      products: [
+        { step: 'Vitamin C', brand: 'The Ordinary', name: 'Ascorbic Acid 8% + Alpha Arbutin 2%', why: 'Brightens and prevents hyperpigmentation — the key concern for Black skin. Apply in the morning before SPF. The most important serum for normal skin.', link: 'https://www.jumia.com.ng/catalog/?q=ordinary+ascorbic+acid' },
+        { step: 'Moisturiser', brand: 'CeraVe', name: 'PM Facial Moisturising Lotion', why: 'Lightweight, ceramide-rich, non-comedogenic. Works AM and PM for normal skin. One of the most universally recommended moisturisers.', link: 'https://www.jumia.com.ng/catalog/?q=cerave+pm+lotion' },
+        { step: 'Retinol', brand: 'The Ordinary', name: 'Retinol 0.2% in Squalane', why: 'The entry point for retinol on normal skin. Start here, use 2–3x a week, and build up over 3 months. Most important long-term skin investment.', link: 'https://www.jumia.com.ng/catalog/?q=ordinary+retinol' },
+        { step: 'SPF', brand: 'La Roche-Posay', name: 'Anthelios SPF 50+ Fluid', why: 'Lightweight, no white cast, one of the most effective SPF formulas available. The non-negotiable daily step for preventing hyperpigmentation on Black skin.', link: 'https://www.jumia.com.ng/catalog/?q=la+roche+posay+anthelios' }
+      ]
+    }
   };
 
-  // Show skincare section for women — use quiz answer if captured, else default to combination
+  // Show skincare section — use quiz skin type answer, default to combination
   const skinTypeKey = A.skinType || 'combination';
   const skincareData = SKINCARE_DATA[skinTypeKey] || SKINCARE_DATA['combination'];
 
-  if (isWomen) {
+  {
     document.getElementById('skincareSection').style.display = '';
     document.getElementById('skincareSectionTitle').textContent = skincareData.label + ' — your routine';
     const skincareContent = document.getElementById('skincareContent');

@@ -59,6 +59,10 @@
       } else {
         // Restore answers to localStorage so results page can use them
         const data = snap.data();
+        // Self-heal: ensure admin accounts always have paid:true in Firestore
+        if (ADMIN_EMAILS.includes(user.email) && !data.paid) {
+          await setDoc(ref, { paid: true, email: user.email }, { merge: true });
+        }
         if (data.answers && !localStorage.getItem('tora_quiz')) {
           localStorage.setItem('tora_quiz', JSON.stringify(data.answers));
         }

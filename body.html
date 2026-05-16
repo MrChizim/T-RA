@@ -709,9 +709,10 @@
 
 <script type="module">
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-  import { getAuth, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+  import { getAuth, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup, browserLocalPersistence, setPersistence } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
   const app = initializeApp({ apiKey:"AIzaSyD3VTLMkB7WhzOzfzGWMzqFx0OqQMOuJxM", authDomain:"tora-c492b.firebaseapp.com", projectId:"tora-c492b" });
   const auth = getAuth(app);
+  setPersistence(auth, browserLocalPersistence);
   const provider = new GoogleAuthProvider();
   onAuthStateChanged(auth, user => {
     const signInBtn = document.getElementById('navSignIn');

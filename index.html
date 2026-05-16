@@ -1362,11 +1362,12 @@
 <!-- Firebase: show profile link if user has completed quiz -->
 <script type="module">
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-  import { getAuth, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+  import { getAuth, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup, browserLocalPersistence, setPersistence } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
   import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
   const app  = initializeApp({ apiKey:"AIzaSyAhjVgu4yLMPvGWBoICffQbgJADKI0mfBw", authDomain:"tora-c492b.firebaseapp.com", projectId:"tora-c492b", storageBucket:"tora-c492b.firebasestorage.app", messagingSenderId:"355607987054", appId:"1:355607987054:web:ff070087e94a43e9a0377f" });
   const auth = getAuth(app);
+  setPersistence(auth, browserLocalPersistence);
   const db   = getFirestore(app);
   const provider = new GoogleAuthProvider();
 

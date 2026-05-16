@@ -69,6 +69,10 @@
         setDoc(userRef, { paid: true, email: userEmailLower }, { merge: true });
       }
 
+      // DEBUG
+      const dbg = document.getElementById('__dbg');
+      if (dbg) dbg.textContent = `email:${userEmailLower} paid:${paid} data.paid:${data.paid} answers:${!!data.answers} ls:${!!localStorage.getItem('tora_quiz')}`;
+
       // Restore quiz answers from Firestore if localStorage is empty
       if (!localStorage.getItem('tora_quiz') && data.answers) {
         localStorage.setItem('tora_quiz', JSON.stringify(data.answers));
@@ -3154,5 +3158,6 @@
   }, { threshold: 0.06 });
   rEls.forEach(el => obs.observe(el));
 </script>
+<div id="__dbg" style="position:fixed;bottom:0;left:0;right:0;z-index:9999;background:rgba(0,0,0,0.85);color:#0f0;font-size:10px;padding:4px 8px;font-family:monospace;">waiting for auth...</div>
 </body>
 </html>

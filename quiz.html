@@ -40,7 +40,6 @@
 
     const app    = initializeApp(firebaseConfig);
     const auth   = getAuth(app);
-    setPersistence(auth, browserLocalPersistence);
     const db     = getFirestore(app);
     const gProv  = new GoogleAuthProvider();
 
@@ -49,19 +48,20 @@
     async function recordUser(user) {
       const ref = doc(db, 'users', user.uid);
       const snap = await getDoc(ref);
+      const emailLower = (user.email || '').toLowerCase().trim();
       if (!snap.exists()) {
         await setDoc(ref, {
-          email: user.email,
+          email: emailLower,
           displayName: user.displayName || '',
           createdAt: serverTimestamp(),
-          paid: ADMIN_EMAILS.includes(user.email)
+          paid: ADMIN_EMAILS.includes(emailLower)
         });
       } else {
         // Restore answers to localStorage so results page can use them
         const data = snap.data();
         // Self-heal: ensure admin accounts always have paid:true in Firestore
-        if (ADMIN_EMAILS.includes(user.email) && !data.paid) {
-          await setDoc(ref, { paid: true, email: user.email }, { merge: true });
+        if (ADMIN_EMAILS.includes(emailLower) && !data.paid) {
+          await setDoc(ref, { paid: true, email: emailLower }, { merge: true });
         }
         if (data.answers && !localStorage.getItem('tora_quiz')) {
           localStorage.setItem('tora_quiz', JSON.stringify(data.answers));
@@ -78,15 +78,19 @@
       window.__toraUser = user;
     }
 
-    // Check auth on load — if already signed in, go straight to quiz
-    onAuthStateChanged(auth, user => {
-      if (user) {
-        recordUser(user).then(() => {
-          // Only dispatch if we didn't redirect to results
-          if (window.__toraUser) window.dispatchEvent(new Event('tora:authed'));
-        });
-      }
-    });
+    // Await persistence before attaching auth listener so session is always restored
+    (async () => {
+      await setPersistence(auth, browserLocalPersistence);
+
+      onAuthStateChanged(auth, user => {
+        if (user) {
+          recordUser(user).then(() => {
+            // Only dispatch if we didn't redirect to results
+            if (window.__toraUser) window.dispatchEvent(new Event('tora:authed'));
+          });
+        }
+      });
+    })();
 
     // Google sign-in
     window.signInWithGoogle = async () => {

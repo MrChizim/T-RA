@@ -44,6 +44,8 @@
     const db     = getFirestore(app);
     const gProv  = new GoogleAuthProvider();
 
+    const ADMIN_EMAILS = ['chizimvictory@gmail.com', 'lilnutellx@gmail.com'];
+
     async function recordUser(user) {
       const ref = doc(db, 'users', user.uid);
       const snap = await getDoc(ref);
@@ -52,7 +54,7 @@
           email: user.email,
           displayName: user.displayName || '',
           createdAt: serverTimestamp(),
-          paid: false
+          paid: ADMIN_EMAILS.includes(user.email)
         });
       } else {
         // Restore answers to localStorage so results page can use them

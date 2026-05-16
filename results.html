@@ -66,6 +66,10 @@
         setDoc(userRef, { paid: true, email: userEmailLower }, { merge: true });
       }
 
+      // DEBUG — remove after fix
+      const dbg = document.getElementById('__debugBar');
+      if (dbg) dbg.textContent = `email=${userEmailLower} | paid=${paid} | data.paid=${data.paid} | hasAnswers=${!!data.answers} | localStorage=${!!localStorage.getItem('tora_quiz')}`;
+
       // Restore quiz answers from Firestore if localStorage is empty
       if (!localStorage.getItem('tora_quiz') && data.answers) {
         localStorage.setItem('tora_quiz', JSON.stringify(data.answers));
@@ -1281,6 +1285,8 @@
   </style>
 </head>
 <body>
+
+<div id="__debugBar" style="position:fixed;top:0;left:0;right:0;z-index:9999;background:#ff0;color:#000;font-size:11px;padding:6px 12px;font-family:monospace;word-break:break-all;">loading auth...</div>
 
 <!-- NAV -->
 <a href="index.html" class="site-logo" id="siteLogo">TÓRA</a>

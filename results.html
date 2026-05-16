@@ -617,6 +617,79 @@
       padding: 4px 8px;
     }
 
+    /* ── SCENT APPLICATION GUIDE ── */
+    .scent-guide { margin-top: 40px; }
+    .scent-guide-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: rgba(255,255,255,0.25);
+      margin-bottom: 20px;
+    }
+    .scent-product-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.07);
+      margin-bottom: 2px;
+    }
+    .scent-product-card {
+      background: var(--black);
+      padding: 28px 24px;
+    }
+    .scent-product-icon {
+      font-size: 22px;
+      margin-bottom: 14px;
+      display: block;
+    }
+    .scent-product-name {
+      font-size: 15px; font-weight: 700; color: var(--white);
+      margin-bottom: 4px; letter-spacing: -0.2px;
+    }
+    .scent-product-sub {
+      font-size: 10px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: rgba(255,255,255,0.2);
+      margin-bottom: 14px;
+    }
+    .scent-product-desc {
+      font-size: 12px; font-weight: 300; line-height: 1.7;
+      color: rgba(255,255,255,0.4);
+    }
+    .scent-product-desc strong { color: rgba(255,255,255,0.75); font-weight: 600; }
+    .scent-apply-rows {
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+    .scent-apply-row {
+      display: grid; grid-template-columns: 160px 1fr;
+      gap: 24px; padding: 18px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      align-items: start;
+    }
+    .scent-apply-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; color: rgba(255,255,255,0.35);
+      padding-top: 2px;
+    }
+    .scent-apply-text {
+      font-size: 13px; font-weight: 300; line-height: 1.7;
+      color: rgba(255,255,255,0.5);
+    }
+    .scent-apply-text strong { color: var(--white); font-weight: 600; }
+    .scent-stack-note {
+      margin-top: 24px;
+      font-size: 13px; font-weight: 300; line-height: 1.7;
+      color: rgba(255,255,255,0.3);
+      font-style: italic;
+      border-left: 2px solid rgba(255,255,255,0.1);
+      padding-left: 16px;
+    }
+    @media (max-width: 800px) {
+      .scent-product-grid { grid-template-columns: repeat(2, 1fr); }
+      .scent-apply-row { grid-template-columns: 1fr; gap: 4px; }
+    }
+    @media (max-width: 480px) {
+      .scent-product-grid { grid-template-columns: 1fr 1fr; }
+    }
+
     /* ── PREMIUM GATE ── */
     .premium-section {
       padding: 96px 0 0;
@@ -1453,6 +1526,72 @@
     <div class="scent-recommendations r d2" id="scentRecsGrid">
       <!-- filled by JS -->
     </div>
+
+    <div class="scent-guide r d3">
+      <p class="scent-guide-label">How to apply — Products &amp; Technique</p>
+
+      <div class="scent-product-grid">
+
+        <div class="scent-product-card">
+          <span class="scent-product-icon">◈</span>
+          <div class="scent-product-name">Perfume / EDP</div>
+          <div class="scent-product-sub">Eau de Parfum · 15–20% oil</div>
+          <p class="scent-product-desc">The most concentrated and longest-lasting format. <strong>1–2 sprays maximum</strong> — EDP is strong and heat amplifies it significantly in Nigerian climates. Apply to pulse points: wrists, neck, behind ears. <strong>Do not rub wrists together</strong> — it crushes the top notes and shortens longevity. Let it dry on the skin.</p>
+        </div>
+
+        <div class="scent-product-card">
+          <span class="scent-product-icon">◉</span>
+          <div class="scent-product-name">Cologne / EDT</div>
+          <div class="scent-product-sub">Eau de Toilette · 5–15% oil</div>
+          <p class="scent-product-desc">Lighter concentration, shorter projection (2–4 hours in heat). The more practical daily format for Lagos, Port Harcourt, and Accra. <strong>2–3 sprays</strong> is the standard — spray at the chest and one wrist. Reapply midday rather than overshooting in the morning. In cool or dry climates, spray distance from skin matters: <strong>hold 15–20cm away.</strong></p>
+        </div>
+
+        <div class="scent-product-card">
+          <span class="scent-product-icon">◷</span>
+          <div class="scent-product-name">Body Spray</div>
+          <div class="scent-product-sub">1–3% oil · Water &amp; alcohol base</div>
+          <p class="scent-product-desc">Not a perfume substitute — a <strong>light, all-over freshness layer</strong>. Apply after showering to the whole body: chest, arms, neck. It fades within 1–2 hours and is meant to be reapplied. Works best as a base layer under a light EDT for longer wear. <strong>Not appropriate as your sole scent</strong> for evening occasions — too faint.</p>
+        </div>
+
+        <div class="scent-product-card">
+          <span class="scent-product-icon">◌</span>
+          <div class="scent-product-name">Deodorant &amp; Roll-On</div>
+          <div class="scent-product-sub">Sweat control · Not fragrance</div>
+          <p class="scent-product-desc">A different function entirely — <strong>sweat and odour control, not scent</strong>. Apply to clean, dry underarms only. Roll-ons sit directly on the skin; sprays cover a wider area. <strong>Apply at night before bed</strong> for best anti-perspirant effect — the active ingredient (aluminium) works while you sleep. In the morning, reapply a light layer. Do not spray deodorant on clothes — it stains and does not work properly.</p>
+        </div>
+
+      </div>
+
+      <div class="scent-apply-rows">
+        <div class="scent-apply-row">
+          <div class="scent-apply-label">Pulse Points</div>
+          <div class="scent-apply-text"><strong>Wrists, neck, behind the ears, inside elbows, behind the knees.</strong> These spots generate heat which activates and projects the fragrance. Focus on 2–3 points, not all of them at once — layering on every point amplifies into something overwhelming in heat.</div>
+        </div>
+        <div class="scent-apply-row">
+          <div class="scent-apply-label">Don't rub</div>
+          <div class="scent-apply-text">Rubbing wrists together after applying <strong>breaks the top note molecules</strong> and shortens how long the fragrance lasts. Spray and leave it. This is one of the most common mistakes.</div>
+        </div>
+        <div class="scent-apply-row">
+          <div class="scent-apply-label">Moisturise first</div>
+          <div class="scent-apply-text">Fragrance lasts significantly longer on <strong>moisturised skin</strong>. Apply an unscented body lotion first, then your fragrance on top. Dry skin absorbs and burns off scent faster — which is why heavily moisturised skin always seems to hold fragrance better.</div>
+        </div>
+        <div class="scent-apply-row">
+          <div class="scent-apply-label">Layering</div>
+          <div class="scent-apply-text"><strong>Body spray first as a base → deodorant on underarms → EDT or EDP on pulse points.</strong> This order builds up correctly. The body spray extends the base layer, the deodorant handles sweat, and the perfume sits on top as the final scent identity. Never spray two different perfumes on top of each other unless they are from the same line.</div>
+        </div>
+        <div class="scent-apply-row">
+          <div class="scent-apply-label">Heat &amp; climate</div>
+          <div class="scent-apply-text" id="scentClimateApplyNote">In high humidity, scent projects more aggressively — apply less than you think you need. In dry climates, fragrance evaporates faster — slightly more is appropriate.</div>
+        </div>
+        <div class="scent-apply-row">
+          <div class="scent-apply-label">On clothes</div>
+          <div class="scent-apply-text">Spraying on fabric makes fragrance last longer but <strong>can stain</strong> — especially EDP concentrations on light fabrics. Safe on the inside of collars or scarves. Never spray directly onto silk or dry-clean-only fabric.</div>
+        </div>
+      </div>
+
+      <p class="scent-stack-note">Deodorant and perfume are not competing — they are different tools. Deodorant controls sweat odour at the source. Perfume is your scent identity. Both should always be present, never mistaken for each other.</p>
+    </div>
+
   </div>
 </section>
 
@@ -2269,6 +2408,23 @@
       `;
       scentRecsGrid.appendChild(card);
     });
+
+    // Personalise the climate application note
+    const climateApplyNotes = {
+      lagos:       'Lagos humidity amplifies every fragrance. Apply <strong>half of what you think you need</strong> — 1 spray of EDP, 2 of EDT. Reapply midday rather than loading up in the morning. Never apply directly before entering a closed, air-conditioned space.',
+      abuja:       'Abuja\'s dry heat evaporates fragrance faster than coastal cities. <strong>2 sprays of EDT or 1–2 of EDP</strong> is appropriate. Orientals and woods bloom here — you have more latitude than Lagos.',
+      accra:       'Accra\'s coastal humidity behaves like Lagos. Keep it minimal — <strong>1–2 sprays of a light EDT</strong>. Avoid applying before entering crowded spaces. The sea breeze can carry fragrance further than expected.',
+      portharcourt:'Port Harcourt is the most challenging climate for fragrance. <strong>One spray of a light EDT, pulse points only.</strong> Avoid EDP entirely in daytime heat. If you must reapply, do it sparingly in the evening when humidity drops slightly.',
+      ibadan:      'Ibadan\'s inland warmth gives you slightly more freedom than the coast. <strong>2 sprays of EDT</strong> is comfortable for daily wear. Mornings are cooler — apply then for best longevity.',
+      kano:        'Kano\'s dry heat is ideal for fragrance. The lack of humidity means you can apply more generously — <strong>2–3 sprays of EDT or 1–2 of EDP.</strong> Oud and oriental fragrances genuinely bloom in this climate.',
+      enugu:       'South-East humidity is high — keep application conservative. <strong>1–2 sprays of a light EDT.</strong> Evening is when you can wear heavier notes safely as the temperature drops.',
+      benin:       'Benin\'s tropical humidity is similar to Port Harcourt. <strong>1–2 light sprays only.</strong> Fresh and green families are the most wearable. Evening applications can go slightly heavier.',
+      diaspora:    'In the UK or US, cooler air means fragrance projects less. <strong>2–3 sprays of EDT or 1–2 of EDP</strong> is appropriate. Everything you found too heavy in Nigeria works here — this is the climate for your orientals and ouds.'
+    };
+    const applyNoteEl = document.getElementById('scentClimateApplyNote');
+    if (applyNoteEl && climateApplyNotes[climateKey]) {
+      applyNoteEl.innerHTML = climateApplyNotes[climateKey];
+    }
   }
 
   // ── SKIN TONE DATA ──

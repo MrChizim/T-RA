@@ -82,6 +82,7 @@
       }
 
       if (paid) {
+        window.__toraPaid = true;
         window.dispatchEvent(new Event('tora:paid'));
       } else {
         window.dispatchEvent(new Event('tora:unpaid'));
@@ -2988,6 +2989,7 @@
   }
 
   window.addEventListener('tora:paid', unlockPremium);
+  if (window.__toraPaid === true) unlockPremium();
 
   // If payment=success in URL (Stripe redirect), wait for auth then verify
   if (window.location.search.includes('payment=success')) {

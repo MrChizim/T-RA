@@ -971,6 +971,70 @@
       .psi-buying-rules { padding: 28px 20px; }
     }
 
+    /* ── MAKEUP RECOMMENDATIONS ── */
+    .makeup-header {
+      background: var(--black); padding: 32px 48px 28px;
+      display: flex; align-items: baseline; gap: 16px;
+    }
+    .makeup-header-num {
+      font-size: 10px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: rgba(255,255,255,0.2);
+    }
+    .makeup-header-title {
+      font-size: 18px; font-weight: 700; color: var(--white); letter-spacing: -0.3px;
+    }
+    .makeup-category { margin-bottom: 2px; }
+    .makeup-category-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--grey);
+      padding: 18px 48px 12px; background: #f4f4f4;
+    }
+    .makeup-product-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 1px; background: var(--grey-light); border: 1px solid var(--grey-light);
+    }
+    .makeup-product-card {
+      background: var(--white); padding: 24px 20px;
+      display: flex; flex-direction: column;
+    }
+    .makeup-product-brand {
+      font-size: 9px; font-weight: 700; letter-spacing: 2.5px;
+      text-transform: uppercase; color: var(--grey); margin-bottom: 6px;
+    }
+    .makeup-product-name {
+      font-size: 14px; font-weight: 700; color: var(--black);
+      margin-bottom: 6px; letter-spacing: -0.2px; line-height: 1.2;
+    }
+    .makeup-product-shade {
+      font-size: 11px; font-weight: 500; color: var(--grey);
+      margin-bottom: 8px; font-style: italic;
+    }
+    .makeup-product-why {
+      font-size: 12px; font-weight: 300; color: var(--grey-mid);
+      line-height: 1.65; flex: 1; margin-bottom: 14px;
+    }
+    .makeup-product-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--black);
+      text-decoration: none; border-bottom: 1px solid var(--black);
+      padding-bottom: 2px; width: fit-content;
+      transition: opacity 0.2s;
+    }
+    .makeup-product-link:hover { opacity: 0.5; }
+    .makeup-note {
+      background: var(--black); padding: 20px 48px;
+      font-size: 13px; font-weight: 300; line-height: 1.7;
+      color: rgba(255,255,255,0.35); font-style: italic;
+      border-left: 3px solid rgba(255,255,255,0.1);
+    }
+    @media (max-width: 800px) {
+      .makeup-product-grid { grid-template-columns: 1fr 1fr; }
+      .makeup-header { padding: 24px 20px 20px; }
+      .makeup-category-label { padding: 16px 20px 10px; }
+      .makeup-note { padding: 16px 20px; }
+    }
+
     /* ── SKIN TONE SECTION ── */
     .skin-results-section { padding: 96px 0; background: var(--white); }
     .skin-undertone-card {
@@ -1682,6 +1746,9 @@
     <!-- Personalised skin intel — filled by JS -->
     <div id="premiumSkinIntel" style="margin-top:2px;"></div>
 
+    <!-- Makeup recommendations — filled by JS -->
+    <div id="premiumMakeup" style="margin-top:2px;"></div>
+
   </div>
 
   <!-- Gate overlay -->
@@ -1704,6 +1771,7 @@
         <li>Ingredients to seek and avoid — specific to your skin type</li>
         <li>Your skin tone notes — SPF, hyperpigmentation, and what actually works on your depth</li>
         <li>Your colour palette and metal (gold, silver, or rose gold) based on your undertone</li>
+        <li>Makeup recommendations — blush, foundation, lip, and highlighter for your exact skin tone</li>
         <li>Your complete style brief — written for your exact combination</li>
       </ul>
       <div class="gate-price" id="gatePrice">₦5,000</div>
@@ -3438,6 +3506,207 @@
           </ol>
         </div>
       </div>
+    `;
+  })();
+
+  // ── Premium makeup recommendations ──
+  (function buildMakeup() {
+    const el = document.getElementById('premiumMakeup');
+    if (!el) return;
+
+    const skinTone = A.skinTone || 'brown';
+
+    const MAKEUP_DATA = {
+      honey: {
+        label: 'Honey',
+        note: 'Honey skin sits at the lighter end of the African spectrum with warm golden undertones. You can wear a wide range of shades — the goal is warmth and glow, not covering up. Avoid foundations that pull pink or grey.',
+        blush: [
+          { brand: 'Rare Beauty', name: 'Soft Pinch Liquid Blush', shade: 'Joy (warm peach)', why: 'Buildable, long-lasting, and one drop goes far on lighter skin. Peach and coral shades pop beautifully on honey skin.', link: 'https://www.rarebeauty.com/products/soft-pinch-liquid-blush' },
+          { brand: 'NARS', name: 'Blush', shade: 'Orgasm (peachy gold)', why: 'The golden shimmer in Orgasm catches light perfectly on warm honey skin. One of the few blushes that was designed with golden undertones in mind.', link: 'https://www.narscosmetics.com' },
+          { brand: 'Fenty Beauty', name: 'Cheeks Out Freestyle Cream Blush', shade: 'Petal Poppin (soft coral)', why: 'Cream formula blends into warm skin naturally. Coral and peach shades on honey skin look sun-kissed rather than heavy.', link: 'https://fentybeauty.com' },
+          { brand: "Juvia's Place", name: 'The Nude Blush', shade: 'Bare (warm nude peach)', why: "Juvia's Place formulates specifically for African skin tones. Bare reads warm and natural — not pale — on honey skin.", link: 'https://juviasplace.com' }
+        ],
+        foundation: [
+          { brand: 'Fenty Beauty', name: 'Pro Filt\'r Soft Matte', shade: '120N–140W', why: 'The shade range was built specifically to include undertone variety. W (warm) shades match honey skin without pulling pink.', link: 'https://fentybeauty.com' },
+          { brand: 'MAC', name: 'Studio Fix Fluid', shade: 'NC20–NC25', why: 'NC (neutral-to-cool warm) shades match honey and caramel skin more accurately than NW. Buildable coverage with a natural finish.', link: 'https://maccosmetics.com' },
+          { brand: 'Black Opal', name: 'True Color Liquid Foundation', shade: 'Honey Amber', why: 'Formulated specifically for melanin-rich skin. Oxidation-resistant so it stays true to colour throughout the day.', link: 'https://blackopalbeauty.com' },
+          { brand: 'Maybelline', name: 'Fit Me Matte + Poreless', shade: '118–128', why: 'Accessible and widely available in Nigeria. 118–128 range matches honey skin without turning ashy or pink.', link: 'https://www.jumia.com.ng/catalog/?q=maybelline+fit+me' }
+        ],
+        lip: [
+          { brand: 'MAC', name: 'Matte Lipstick', shade: 'Velvet Teddy', why: 'The most universally flattering nude for warm medium skin. A true warm mauve-brown that works across honey to caramel tones.', link: 'https://maccosmetics.com' },
+          { brand: 'Fenty Beauty', name: 'Stunna Lip Paint', shade: 'Uncuffed (warm nude)', why: "Fenty's nudes were developed with a wide range of skin tones in mind. Uncuffed reads as a true nude on honey skin.", link: 'https://fentybeauty.com' },
+          { brand: 'NYX', name: 'Soft Matte Lip Cream', shade: 'Abu Dhabi (warm terracotta)', why: 'Affordable and widely available. The warm terracotta family flatters honey skin and adds depth without looking heavy.', link: 'https://www.jumia.com.ng/catalog/?q=nyx+lip+cream' },
+          { brand: 'Rare Beauty', name: 'Kind Words Matte Lip Liner', shade: 'Devoted (warm brown)', why: 'A warm brown liner that defines without harshness. Works as a lip colour on its own for a clean, natural look.', link: 'https://www.rarebeauty.com' }
+        ],
+        highlight: [
+          { brand: 'Fenty Beauty', name: 'Killawatt Freestyle Highlighter', shade: 'Hu$tla Baby / Mean Money', why: 'Gold and champagne tones sit naturally on warm honey skin. Hu$tla Baby gives a warm gold glow; Mean Money is a subtler champagne.', link: 'https://fentybeauty.com' },
+          { brand: 'NARS', name: 'Highlighting Powder', shade: 'Hot Sand', why: 'A warm pearl-gold that complements honey undertones. Looks natural in daylight and photographs beautifully.', link: 'https://www.narscosmetics.com' }
+        ]
+      },
+      caramel: {
+        label: 'Caramel',
+        note: 'Caramel skin has warm golden-tan undertones — the sweet spot where both warm nudes and bold colours land well. Your main challenge is finding foundations that don\'t oxidise orange or pull pink. Warm-neutral shades are your anchor.',
+        blush: [
+          { brand: 'Rare Beauty', name: 'Soft Pinch Liquid Blush', shade: 'Hope (warm terracotta)', why: 'Terracotta and brick tones look intentional and warm on caramel skin — not washed out. One small drop blends into a natural flush.', link: 'https://www.rarebeauty.com/products/soft-pinch-liquid-blush' },
+          { brand: 'Fenty Beauty', name: 'Cheeks Out Freestyle Cream Blush', shade: 'Fuego Flush (warm coral-red)', why: 'Deeper coral-reds that would overpower lighter skin look exactly right on caramel. Buildable so you control the intensity.', link: 'https://fentybeauty.com' },
+          { brand: "Juvia's Place", name: 'The Nubian Blush', shade: 'Nubian Queen (rich berry)', why: "Juvia's Place makes blushes that show up on melanin skin. Nubian Queen gives caramel skin a rich, healthy flush.", link: 'https://juviasplace.com' },
+          { brand: 'Danessa Myricks', name: 'Colorfix 24-Hour Cream Color', shade: 'Spice (warm brick)', why: 'Multi-use cream that works as blush, eyeshadow, and lip. Brick and spice tones are extremely flattering on caramel skin.', link: 'https://danessamyricksbeauty.com' }
+        ],
+        foundation: [
+          { brand: 'Fenty Beauty', name: 'Pro Filt\'r Soft Matte', shade: '230N–250W', why: 'The W (warm) and N (neutral) shades in this range were built for caramel undertones. 250W is one of the most popular shades globally for this tone.', link: 'https://fentybeauty.com' },
+          { brand: 'Black Opal', name: 'True Color Liquid Foundation', shade: 'Caramel', why: 'Made specifically for melanin-rich skin, oxidation-resistant, and the Caramel shade is formulated to match this exact tone.', link: 'https://blackopalbeauty.com' },
+          { brand: 'Maybelline', name: 'Fit Me Matte + Poreless', shade: '220–235', why: 'Accessible in Nigeria and UK. The 220–235 range covers caramel tones without pulling too yellow or too pink.', link: 'https://www.jumia.com.ng/catalog/?q=maybelline+fit+me' },
+          { brand: 'L\'Oréal', name: 'True Match Foundation', shade: 'W4–W5 Golden Natural', why: 'The W (warm) range specifically developed for warm undertones. Matches caramel skin without the orange oxidation that neutral shades cause.', link: 'https://www.jumia.com.ng/catalog/?q=loreal+true+match' }
+        ],
+        lip: [
+          { brand: 'MAC', name: 'Matte Lipstick', shade: 'Whirl (muted mauve-brown)', why: 'Whirl became iconic partly because it looks like a true nude on caramel skin — a warm, slightly dusty mauve that reads natural.', link: 'https://maccosmetics.com' },
+          { brand: 'Fenty Beauty', name: 'Stunna Lip Paint', shade: 'Underdawg (warm brick)', why: 'Warm brick-red — a colour that looks bold on lighter skin but reads as a flattering natural-bold on caramel.', link: 'https://fentybeauty.com' },
+          { brand: 'NYX', name: 'Butter Gloss', shade: 'Ginger Snap', why: 'A warm toffee gloss that adds shine without looking frosted. Very wearable everyday option at an accessible price point.', link: 'https://www.jumia.com.ng/catalog/?q=nyx+butter+gloss' },
+          { brand: 'Danessa Myricks', name: 'Blurring Lip Balm', shade: 'Mood (warm berry nude)', why: 'Hydrating and pigmented enough for daily wear. Berry nudes on caramel skin sit beautifully without the harshness of a true red.', link: 'https://danessamyricksbeauty.com' }
+        ],
+        highlight: [
+          { brand: 'Fenty Beauty', name: 'Killawatt Freestyle Highlighter', shade: 'Trophy Wife', why: 'Warm gold — the most popular highlighter on caramel skin globally. Rich pigment that glows in all lighting.', link: 'https://fentybeauty.com' },
+          { brand: 'Danessa Myricks', name: 'Vision Flush', shade: 'Bliss (gold)', why: 'A buildable liquid highlight that reads as skin from the outside. The gold tone sits perfectly on warm caramel undertones.', link: 'https://danessamyricksbeauty.com' }
+        ]
+      },
+      brown: {
+        label: 'Brown',
+        note: 'Brown skin — the most common tone across West Africa — is where most mainstream makeup brands still get it wrong. Your shade is deep enough that many "medium" foundations pull ashy or too light. Always swatch on the jawline in daylight, never on the wrist.',
+        blush: [
+          { brand: "Juvia's Place", name: 'The Nubian Blush', shade: 'Nubian Empress (deep berry)', why: "One of the few blush palettes formulated specifically to show up on medium-deep African skin. The pigmentation is deep enough to register without looking muddy.", link: 'https://juviasplace.com' },
+          { brand: 'Danessa Myricks', name: 'Colorfix 24-Hour Cream Color', shade: 'Berry (deep berry-rose)', why: 'Cream blushes show up more reliably on deeper skin than powder. Berry tones add warmth and dimension to brown skin without looking costume-like.', link: 'https://danessamyricksbeauty.com' },
+          { brand: 'Rare Beauty', name: 'Soft Pinch Liquid Blush', shade: 'Grateful (deep berry)', why: "Rare Beauty's liquid formula is one of the most pigmented available. Grateful — a deep berry — reads as a true flush on brown skin.", link: 'https://www.rarebeauty.com/products/soft-pinch-liquid-blush' },
+          { brand: 'Fenty Beauty', name: 'Cheeks Out Freestyle Cream Blush', shade: 'Hot Chocolate (deep rose)', why: 'A warm rose-brown that was designed specifically for deeper skin tones. Looks like natural warmth, not colour applied on top.', link: 'https://fentybeauty.com' }
+        ],
+        foundation: [
+          { brand: 'Fenty Beauty', name: 'Pro Filt\'r Soft Matte', shade: '350N–370W', why: 'The benchmark for medium-deep shades. 350N suits neutral brown skin; 370W for warmer undertones. Resists oxidation.', link: 'https://fentybeauty.com' },
+          { brand: 'Black Opal', name: 'True Color Liquid Foundation', shade: 'Rich Ebony', why: 'Built for melanin-rich skin, specifically tested on African skin tones. Rich Ebony matches the depth of brown skin without pulling grey.', link: 'https://blackopalbeauty.com' },
+          { brand: 'Maybelline', name: 'Fit Me Matte + Poreless', shade: '330–340', why: 'Available at most Nigerian pharmacies and beauty stores. The 330–340 range is the sweet spot for brown skin depth.', link: 'https://www.jumia.com.ng/catalog/?q=maybelline+fit+me' },
+          { brand: 'NYX', name: 'Can\'t Stop Won\'t Stop Foundation', shade: 'Walnut–Cappuccino', why: '24-hour formula with serious staying power in Nigerian humidity. Walnut and Cappuccino are the closest matches to neutral brown skin.', link: 'https://www.jumia.com.ng/catalog/?q=nyx+cant+stop' }
+        ],
+        lip: [
+          { brand: 'MAC', name: 'Matte Lipstick', shade: 'Chili (warm brick-red)', why: 'Chili is one of the most iconic lip colours on brown skin — a warm brick-red that reads bold and intentional, not costume.', link: 'https://maccosmetics.com' },
+          { brand: "Juvia's Place", name: 'I Am Magic Lip Kit', shade: 'Golden Hour (warm brown)', why: 'Liquid lip with warm brown tones made for African skin. Long-wearing without the drying formula issues of cheaper alternatives.', link: 'https://juviasplace.com' },
+          { brand: 'Fenty Beauty', name: 'Stunna Lip Paint', shade: 'Unlocked (true warm red)', why: 'True reds look spectacular on brown skin — this is the format that wears cleanly and lasts. One of the few universally flattering reds.', link: 'https://fentybeauty.com' },
+          { brand: 'NYX', name: 'Soft Matte Lip Cream', shade: 'Cannes (warm deep rose)', why: 'Deep rose-berries are a staple for brown skin. Cannes sits between nude and bold — professional and wearable daily.', link: 'https://www.jumia.com.ng/catalog/?q=nyx+soft+matte' }
+        ],
+        highlight: [
+          { brand: 'Fenty Beauty', name: 'Killawatt Freestyle Highlighter', shade: 'Ginger Binge / Moscow Mule', why: 'Deep copper and bronze tones that sit like a second skin on brown. Moscow Mule especially gives a rich, warm glow without looking frosted.', link: 'https://fentybeauty.com' },
+          { brand: 'Danessa Myricks', name: 'Illuminating Veil', shade: 'Shade 5 (copper bronze)', why: 'Made for deeper skin tones — the copper and bronze range shows up beautifully on brown skin in daylight and under flash.', link: 'https://danessamyricksbeauty.com' }
+        ]
+      },
+      chestnut: {
+        label: 'Chestnut',
+        note: 'Chestnut skin is rich and deep with warm undertones. Foundations need to be genuinely deep — anything in the "medium" range will leave you looking ashy. Bold colours are your natural territory. Don\'t shy away from deep berries, rich reds, and warm coppers.',
+        blush: [
+          { brand: "Juvia's Place", name: 'The Nubian Blush', shade: 'Nubian Princess (deep plum)', why: "Deep plums and figs are the blush family that actually shows up on chestnut skin. Juvia's Palace's pigmentation is among the deepest available.", link: 'https://juviasplace.com' },
+          { brand: 'Danessa Myricks', name: 'Colorfix 24-Hour Cream Color', shade: 'Fig (deep plum)', why: 'A deep plum cream that reads as a rich, healthy flush on chestnut skin. The 24-hour formula is essential in Lagos humidity.', link: 'https://danessamyricksbeauty.com' },
+          { brand: 'Rare Beauty', name: 'Soft Pinch Liquid Blush', shade: 'Rare (deep magenta)', why: 'Deep magentas and berries are the most reliable blush family for chestnut depth. Apply generously — the formula is forgiving.', link: 'https://www.rarebeauty.com/products/soft-pinch-liquid-blush' },
+          { brand: 'NARS', name: 'Blush', shade: 'Exhibit A (deep rose)', why: 'One of the few NARS blushes with pigmentation deep enough to register on chestnut skin. Apply with a dense brush.', link: 'https://www.narscosmetics.com' }
+        ],
+        foundation: [
+          { brand: 'Fenty Beauty', name: 'Pro Filt\'r Soft Matte', shade: '420W–440W', why: 'The W (warm) shades in the 420–440 range are built for chestnut undertones. One of the most accurate matches for this depth.', link: 'https://fentybeauty.com' },
+          { brand: 'Black Opal', name: 'True Color Liquid Foundation', shade: 'Ebony Brown', why: 'Formulated for deep melanin-rich skin specifically. Ebony Brown matches chestnut depth without the grey or orange cast that other brands produce.', link: 'https://blackopalbeauty.com' },
+          { brand: 'Danessa Myricks', name: 'Yummy Skin Blurring Balm Foundation', shade: 'Shade 18–20', why: 'A skin-like, buildable formula for deeper tones. Sits naturally on chestnut skin without the cakey finish that deep foundations often produce in heat.', link: 'https://danessamyricksbeauty.com' },
+          { brand: 'Bolden', name: 'Sheer Glow Foundation', shade: 'Deep Warm', why: 'A Black-owned brand formulated specifically for deep African skin. Oxidation-resistant, non-comedogenic, and made for humid climates.', link: 'https://boldenskin.com' }
+        ],
+        lip: [
+          { brand: 'MAC', name: 'Matte Lipstick', shade: 'Dubonnet (deep wine)', why: 'Wine and plum shades look regal on chestnut skin — deep enough to have presence without looking washed out.', link: 'https://maccosmetics.com' },
+          { brand: 'Fenty Beauty', name: 'Stunna Lip Paint', shade: 'Uncensored (true red)', why: 'True bold reds on chestnut skin are a statement. Uncensored is formulated to be universally flattering across deep skin tones.', link: 'https://fentybeauty.com' },
+          { brand: "Juvia's Place", name: 'I Am Magic Lip Kit', shade: 'Deep Like Me (warm deep brown)', why: 'A rich warm brown that reads as a sophisticated nude on chestnut skin. Long-wearing formula that survives Lagos heat.', link: 'https://juviasplace.com' },
+          { brand: 'NYX', name: 'Soft Matte Lip Cream', shade: 'Copenhagen (deep berry)', why: 'Deep berries are the most flattering everyday family for chestnut skin. Copenhagen gives a rich finish at an accessible price.', link: 'https://www.jumia.com.ng/catalog/?q=nyx+soft+matte' }
+        ],
+        highlight: [
+          { brand: 'Fenty Beauty', name: 'Killawatt Freestyle Highlighter', shade: 'Cuban Lingerie (bronze)', why: 'Deep bronze over warm copper — the warmest highlighter in the Killawatt range and the most flattering on chestnut skin.', link: 'https://fentybeauty.com' },
+          { brand: "Juvia's Place", name: 'The Glow Highlighter', shade: 'Nubian Gold', why: "Juvia's Place makes highlighters built for deep skin. Nubian Gold gives a rich, warm glow that reads as skin — not glitter.", link: 'https://juviasplace.com' }
+        ]
+      },
+      ebony: {
+        label: 'Ebony',
+        note: 'Ebony skin is deep and cool-toned. Most foundations don\'t go deep enough, and most blushes are invisible. You need highly pigmented formulas, cool or jewel-toned shades, and brands that have actually tested on your skin depth. Silver jewellery and blue-based reds are your natural territory.',
+        blush: [
+          { brand: "Juvia's Place", name: 'The Nubian Blush', shade: 'Nubian Royalty (deep magenta)', why: "One of the few brands where the deepest blush shades were actually tested on ebony skin. Nubian Royalty is pigmented enough to register.", link: 'https://juviasplace.com' },
+          { brand: 'Danessa Myricks', name: 'Colorfix 24-Hour Cream Color', shade: 'Plum (deep blue-plum)', why: 'Blue-plum reads as a cool, rich flush on ebony skin. Cream formulas are essential for deep skin — powder blush tends to look dusty.', link: 'https://danessamyricksbeauty.com' },
+          { brand: 'NARS', name: 'Blush', shade: 'Lovejoy (deep berry)', why: 'One of the few powder blushes with enough pigmentation for ebony skin. Apply heavily with a flat brush for visibility.', link: 'https://www.narscosmetics.com' },
+          { brand: 'Rare Beauty', name: 'Soft Pinch Liquid Blush', shade: 'Bliss (deep berry)', why: 'The liquid formula delivers concentrated pigment that registers on ebony skin with just a small amount. Build slowly.', link: 'https://www.rarebeauty.com/products/soft-pinch-liquid-blush' }
+        ],
+        foundation: [
+          { brand: 'Fenty Beauty', name: 'Pro Filt\'r Soft Matte', shade: '470N–490W', why: 'Fenty is still the benchmark for deep shade ranges. 490W is one of the deepest warm shades available in a mainstream brand.', link: 'https://fentybeauty.com' },
+          { brand: 'Black Opal', name: 'True Color Liquid Foundation', shade: 'True Ebony', why: 'Built specifically for the deepest melanin-rich skin tones. Resists the ashiness and oxidation that other foundations produce on ebony skin.', link: 'https://blackopalbeauty.com' },
+          { brand: 'Danessa Myricks', name: 'Yummy Skin Blurring Balm Foundation', shade: 'Shade 21–23', why: 'A skin-like formula that moves with your skin. Designed and tested on deep skin tones — the deepest shades don\'t pull grey.', link: 'https://danessamyricksbeauty.com' },
+          { brand: 'Bolden', name: 'Sheer Glow Foundation', shade: 'Deep Cool', why: 'Specifically formulated for deep cool-toned African skin. One of the few brands where "deep" actually means deep enough for ebony.', link: 'https://boldenskin.com' }
+        ],
+        lip: [
+          { brand: 'MAC', name: 'Matte Lipstick', shade: 'D For Danger (deep blue-red)', why: 'Blue-based reds look extraordinary on cool ebony skin — the cool undertone in the lip matches the undertone in the skin. D For Danger is the MAC standard for this.', link: 'https://maccosmetics.com' },
+          { brand: 'Fenty Beauty', name: 'Stunna Lip Paint', shade: 'Uninvited (blackened berry)', why: 'Deep, dark, and cool-toned. Uninvited was designed for the deepest skin tones and reads as a rich, sophisticated colour rather than heavy.', link: 'https://fentybeauty.com' },
+          { brand: "Juvia's Place", name: 'I Am Magic Lip Kit', shade: 'Ebony (deep cool brown)', why: 'A cool-toned deep brown that reads as a striking nude on ebony skin. Long-wearing and specifically developed for this depth.', link: 'https://juviasplace.com' },
+          { brand: 'NYX', name: 'Soft Matte Lip Cream', shade: 'Stockholm (deep berry)', why: 'Deep berries and cool wines are the most flattering everyday family for ebony skin. Stockholm has the depth to show up without looking dark against the skin.', link: 'https://www.jumia.com.ng/catalog/?q=nyx+soft+matte' }
+        ],
+        highlight: [
+          { brand: 'Fenty Beauty', name: 'Killawatt Freestyle Highlighter', shade: 'Black Perl / Blood Moon', why: 'Dark, rich highlighters that show up on ebony skin as a deep metallic glow rather than a white frosted sheen. Black Perl is the most distinctive highlighter for this depth.', link: 'https://fentybeauty.com' },
+          { brand: 'Danessa Myricks', name: 'Illuminating Veil', shade: 'Shade 7 (deep bronze-plum)', why: 'A cool bronze-plum that sits on ebony skin like a rich glow. Looks like healthy skin in good light, not like product applied on top.', link: 'https://danessamyricksbeauty.com' }
+        ]
+      },
+      onyx: {
+        label: 'Onyx',
+        note: 'Onyx skin — the deepest end of the spectrum — requires brands that have genuinely tested their deepest shades on this tone. Most "deep" shades in mainstream brands are not deep enough. Shimmer and gloss show up spectacularly. Bold is the default, not the exception.',
+        blush: [
+          { brand: 'Danessa Myricks', name: 'Colorfix 24-Hour Cream Color', shade: 'Blackberry (deep blackened plum)', why: 'The darkest cream colour that works as blush. Blackberry on onyx skin reads as a rich, deep flush — visible and intentional.', link: 'https://danessamyricksbeauty.com' },
+          { brand: "Juvia's Place", name: 'The Nubian Blush', shade: 'Nubian Warrior (deep plum-black)', why: 'The deepest shade in the Nubian Blush range. Specifically tested on the deepest African skin tones. Dense brush application essential.', link: 'https://juviasplace.com' },
+          { brand: 'NARS', name: 'Blush', shade: 'Sin (deep berry)', why: 'Sin is NARS\'s most pigmented blush — one of the few that shows up on onyx skin when applied with a dense flat brush.', link: 'https://www.narscosmetics.com' },
+          { brand: 'Rare Beauty', name: 'Soft Pinch Liquid Blush', shade: 'Fearless (deep magenta)', why: 'Apply directly with fingertip and build — this liquid formula concentrates colour enough to show up on onyx skin with layering.', link: 'https://www.rarebeauty.com/products/soft-pinch-liquid-blush' }
+        ],
+        foundation: [
+          { brand: 'Fenty Beauty', name: 'Pro Filt\'r Soft Matte', shade: '495N–498', why: 'The absolute deepest shades in the Fenty range. 495N and 498 were created specifically for onyx skin tones after direct feedback from customers who couldn\'t find their shade.', link: 'https://fentybeauty.com' },
+          { brand: 'Black Opal', name: 'True Color Liquid Foundation', shade: 'Black Walnut', why: 'The deepest shade in the Black Opal range. Designed for the deepest African skin — resists oxidation and ashiness at this depth.', link: 'https://blackopalbeauty.com' },
+          { brand: 'Danessa Myricks', name: 'Yummy Skin Blurring Balm Foundation', shade: 'Shade 24–26', why: 'The Yummy Skin range was developed with onyx skin in mind. The deepest shades are tested on actual onyx skin tones, not just darkened from existing formulas.', link: 'https://danessamyricksbeauty.com' },
+          { brand: 'Bolden', name: 'Sheer Glow Foundation', shade: 'Deepest Cool', why: 'A Black-owned brand built for the deepest African skin tones. The Deepest Cool shade was developed specifically for onyx skin with cool undertones.', link: 'https://boldenskin.com' }
+        ],
+        lip: [
+          { brand: 'MAC', name: 'Matte Lipstick', shade: 'Rebel (deep purple-burgundy)', why: 'Rebel is a deep purple-burgundy that looks like a sophisticated statement colour on onyx skin — the contrast between deep lip and deep skin is striking rather than overwhelming.', link: 'https://maccosmetics.com' },
+          { brand: 'Fenty Beauty', name: 'Stunna Lip Paint', shade: 'Midnight Wassi (blackened plum)', why: 'The darkest shade in the Stunna range, formulated for the deepest skin tones. A long-wearing blackened plum that reads as editorial and intentional.', link: 'https://fentybeauty.com' },
+          { brand: "Juvia's Place", name: 'I Am Magic Lip Kit', shade: 'Midnight (deep cool black-brown)', why: "One of the few lip products that reads as a true nude on onyx skin. Juvia's Palace formulated specifically for this — 'nude' on onyx means something different than on lighter skin.", link: 'https://juviasplace.com' },
+          { brand: 'NYX', name: 'Soft Matte Lip Cream', shade: 'Transylvania (deep vampire red)', why: 'Deep, blue-based reds and wines are the most universally flattering on onyx skin. Transylvania is bold enough to create contrast and presence.', link: 'https://www.jumia.com.ng/catalog/?q=nyx+soft+matte' }
+        ],
+        highlight: [
+          { brand: 'Fenty Beauty', name: 'Killawatt Freestyle Highlighter', shade: 'Black Perl', why: 'Black Perl — a deep bronze with a dark base — was created for the deepest skin tones. It glows rather than frosts, showing up as rich dimension on onyx skin.', link: 'https://fentybeauty.com' },
+          { brand: "Juvia's Place", name: 'The Glow Highlighter', shade: 'African Bronze', why: "The deepest, most richly pigmented highlighter shade in Juvia's range. African Bronze was built for onyx and ebony skin — it reads as a stunning metallic glow.", link: 'https://juviasplace.com' }
+        ]
+      }
+    };
+
+    const data = MAKEUP_DATA[skinTone] || MAKEUP_DATA['brown'];
+    const categories = [
+      { key: 'blush',      label: 'Blush' },
+      { key: 'foundation', label: 'Foundation' },
+      { key: 'lip',        label: 'Lip' },
+      { key: 'highlight',  label: 'Highlighter' }
+    ];
+
+    const arrow = `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
+
+    el.innerHTML = `
+      <div class="makeup-header">
+        <div class="makeup-header-num">Makeup</div>
+        <div class="makeup-header-title">For ${data.label} Skin — Products That Actually Show Up</div>
+      </div>
+      <div class="makeup-note">${data.note}</div>
+      ${categories.map(cat => `
+        <div class="makeup-category">
+          <div class="makeup-category-label">${cat.label}</div>
+          <div class="makeup-product-grid">
+            ${data[cat.key].map(p => `
+              <div class="makeup-product-card">
+                <div class="makeup-product-brand">${p.brand}</div>
+                <div class="makeup-product-name">${p.name}</div>
+                ${p.shade ? `<div class="makeup-product-shade">${p.shade}</div>` : ''}
+                <p class="makeup-product-why">${p.why}</p>
+                <a href="${p.link}" target="_blank" rel="noopener noreferrer" class="makeup-product-link">Shop ${arrow}</a>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `).join('')}
     `;
   })();
 

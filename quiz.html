@@ -43,6 +43,8 @@
     const db     = getFirestore(app);
     const gProv  = new GoogleAuthProvider();
 
+    const ADMIN_EMAILS = ['chizimvictory@gmail.com', 'lilnutellx@gmail.com'];
+
     async function recordUser(user) {
       const ref = doc(db, 'users', user.uid);
       const snap = await getDoc(ref);
@@ -52,11 +54,14 @@
           email: emailLower,
           displayName: user.displayName || '',
           createdAt: serverTimestamp(),
-          paid: false
+          paid: ADMIN_EMAILS.includes(emailLower)
         });
       } else {
         // Restore answers to localStorage so results page can use them
         const data = snap.data();
+        if (ADMIN_EMAILS.includes(emailLower) && !data.paid) {
+          await setDoc(ref, { paid: true, email: emailLower }, { merge: true });
+        }
         if (data.answers && !localStorage.getItem('tora_quiz')) {
           localStorage.setItem('tora_quiz', JSON.stringify(data.answers));
         }

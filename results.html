@@ -40,54 +40,51 @@
 
     const app  = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    setPersistence(auth, browserLocalPersistence);
     const db   = getFirestore(app);
 
-    (async () => {
-      await setPersistence(auth, browserLocalPersistence);
+    onAuthStateChanged(auth, async user => {
+      if (!user) return; // not signed in — gate stays up
+      window.__toraUid         = user.uid;
+      window.__toraEmail       = user.email;
+      window.__toraDisplayName = user.displayName || '';
 
-      onAuthStateChanged(auth, async user => {
-        if (!user) return; // not signed in — gate stays up
-        window.__toraUid         = user.uid;
-        window.__toraEmail       = user.email;
-        window.__toraDisplayName = user.displayName || '';
+      // Personalise hero title with user's first name
+      if (user.displayName) {
+        const firstName = user.displayName.split(' ')[0];
+        const ht = document.getElementById('heroTitle');
+        if (ht) ht.innerHTML = `${firstName.toUpperCase()}'S<br>PROFILE`;
+      }
 
-        // Personalise hero title with user's first name
-        if (user.displayName) {
-          const firstName = user.displayName.split(' ')[0];
-          const ht = document.getElementById('heroTitle');
-          if (ht) ht.innerHTML = `${firstName.toUpperCase()}'S<br>PROFILE`;
-        }
+      const ADMIN_EMAILS = ['chizimvictory@gmail.com', 'lilnutellx@gmail.com'];
+      const userRef = doc(db, 'users', user.uid);
+      const snap = await getDoc(userRef);
+      const data = snap.exists() ? snap.data() : {};
+      const userEmailLower = (user.email || '').toLowerCase().trim();
+      const paid = ADMIN_EMAILS.includes(userEmailLower) || data.paid === true;
+      if (ADMIN_EMAILS.includes(userEmailLower) && !data.paid) {
+        setDoc(userRef, { paid: true, email: userEmailLower }, { merge: true });
+      }
 
-        const ADMIN_EMAILS = ['chizimvictory@gmail.com', 'lilnutellx@gmail.com'];
-        const userRef = doc(db, 'users', user.uid);
-        const snap = await getDoc(userRef);
-        const data = snap.exists() ? snap.data() : {};
-        const userEmailLower = (user.email || '').toLowerCase().trim();
-        const paid = ADMIN_EMAILS.includes(userEmailLower) || data.paid === true;
-        if (ADMIN_EMAILS.includes(userEmailLower) && !data.paid) {
-          setDoc(userRef, { paid: true, email: userEmailLower }, { merge: true });
-        }
+      // Restore quiz answers from Firestore if localStorage is empty
+      if (!localStorage.getItem('tora_quiz') && data.answers) {
+        localStorage.setItem('tora_quiz', JSON.stringify(data.answers));
+        // Reload so main script picks up the restored answers
+        window.location.reload();
+        return;
+      }
 
-        // Restore quiz answers from Firestore if localStorage is empty
-        if (!localStorage.getItem('tora_quiz') && data.answers) {
-          localStorage.setItem('tora_quiz', JSON.stringify(data.answers));
-          // Reload so main script picks up the restored answers
-          window.location.reload();
-          return;
-        }
+      if (paid) {
+        window.__toraPaid = true;
+        window.dispatchEvent(new Event('tora:paid'));
+      } else {
+        window.__toraPaid = false;
+        window.dispatchEvent(new Event('tora:unpaid'));
+      }
 
-        if (paid) {
-          window.__toraPaid = true;
-          window.dispatchEvent(new Event('tora:paid'));
-        } else {
-          window.__toraPaid = false;
-          window.dispatchEvent(new Event('tora:unpaid'));
-        }
-
-        const signOutBtn = document.getElementById('navSignOut');
-        if (signOutBtn) signOutBtn.style.display = '';
-      });
-    })();
+      const signOutBtn = document.getElementById('navSignOut');
+      if (signOutBtn) signOutBtn.style.display = '';
+    });
 
     window.__toraSignOut = () => {
       signOut(auth).then(() => { window.location.href = 'index.html'; }).catch(err => console.error(err));

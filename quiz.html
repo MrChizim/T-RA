@@ -40,6 +40,7 @@
 
     const app    = initializeApp(firebaseConfig);
     const auth   = getAuth(app);
+    setPersistence(auth, browserLocalPersistence);
     const db     = getFirestore(app);
     const gProv  = new GoogleAuthProvider();
 
@@ -77,19 +78,14 @@
       window.__toraUser = user;
     }
 
-    // Await persistence before attaching auth listener so session is always restored
-    (async () => {
-      await setPersistence(auth, browserLocalPersistence);
-
-      onAuthStateChanged(auth, user => {
-        if (user) {
-          recordUser(user).then(() => {
-            // Only dispatch if we didn't redirect to results
-            if (window.__toraUser) window.dispatchEvent(new Event('tora:authed'));
-          });
-        }
-      });
-    })();
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        recordUser(user).then(() => {
+          // Only dispatch if we didn't redirect to results
+          if (window.__toraUser) window.dispatchEvent(new Event('tora:authed'));
+        });
+      }
+    });
 
     // Google sign-in
     window.signInWithGoogle = async () => {

@@ -61,14 +61,13 @@
       const snap = await getDoc(userRef);
       const data = snap.exists() ? snap.data() : {};
       const userEmailLower = (user.email || '').toLowerCase().trim();
-      const paid = ADMIN_EMAILS.includes(userEmailLower) || data.paid === true;
+      const isAdmin = ADMIN_EMAILS.includes(userEmailLower) || data.paid === true;
+      const paid = isAdmin;
+
+      // Self-heal: write paid:true to Firestore for admin accounts so it's consistent
       if (ADMIN_EMAILS.includes(userEmailLower) && !data.paid) {
         setDoc(userRef, { paid: true, email: userEmailLower }, { merge: true });
       }
-
-      // DEBUG — remove after fix
-      const dbg = document.getElementById('__debugBar');
-      if (dbg) dbg.textContent = `email=${userEmailLower} | paid=${paid} | data.paid=${data.paid} | hasAnswers=${!!data.answers} | localStorage=${!!localStorage.getItem('tora_quiz')}`;
 
       // Restore quiz answers from Firestore if localStorage is empty
       if (!localStorage.getItem('tora_quiz') && data.answers) {
@@ -79,10 +78,8 @@
       }
 
       if (paid) {
-        window.__toraPaid = true;
         window.dispatchEvent(new Event('tora:paid'));
       } else {
-        window.__toraPaid = false;
         window.dispatchEvent(new Event('tora:unpaid'));
       }
 
@@ -1285,8 +1282,6 @@
   </style>
 </head>
 <body>
-
-<div id="__debugBar" style="position:fixed;top:0;left:0;right:0;z-index:9999;background:#ff0;color:#000;font-size:11px;padding:6px 12px;font-family:monospace;word-break:break-all;">loading auth...</div>
 
 <!-- NAV -->
 <a href="index.html" class="site-logo" id="siteLogo">TÓRA</a>
@@ -2989,7 +2984,6 @@
   }
 
   window.addEventListener('tora:paid', unlockPremium);
-  if (window.__toraPaid === true) unlockPremium();
 
   // If payment=success in URL (Stripe redirect), wait for auth then verify
   if (window.location.search.includes('payment=success')) {

@@ -144,6 +144,51 @@
     .dn-list li { font-size: 14px; font-weight: 300; color: rgba(255,255,255,0.45); padding-left: 14px; position: relative; line-height: 1.5; }
     .dn-list li::before { content: '—'; position: absolute; left: 0; color: rgba(255,255,255,0.15); }
 
+    /* ── APPLICATION GUIDE ── */
+    #application { padding: 96px 0; background: var(--white); }
+    .app-header { margin-bottom: 56px; }
+    .app-header h2 { font-size: clamp(28px,4vw,44px); font-weight: 700; color: var(--black); line-height: 1.1; margin-bottom: 12px; letter-spacing: -0.5px; }
+    .app-header p { font-size: 16px; font-weight: 300; line-height: 1.8; color: var(--grey-mid); max-width: 560px; }
+
+    .app-product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--grey-light); border: 1px solid var(--grey-light); margin-bottom: 2px; }
+    .app-product-card { background: var(--white); padding: 32px 24px; }
+    .app-product-icon { font-size: 28px; margin-bottom: 16px; display: block; }
+    .app-product-name { font-size: 16px; font-weight: 700; color: var(--black); margin-bottom: 4px; letter-spacing: -0.2px; }
+    .app-product-sub { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--grey); margin-bottom: 14px; }
+    .app-product-desc { font-size: 13px; font-weight: 300; line-height: 1.75; color: var(--grey-mid); }
+    .app-product-desc strong { color: var(--black); font-weight: 700; }
+
+    .app-deodorant-note { background: var(--black); padding: 32px 36px; margin-bottom: 40px; }
+    .app-deodorant-note h3 { font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 10px; }
+    .app-deodorant-note p { font-size: 14px; font-weight: 300; line-height: 1.8; color: rgba(255,255,255,0.45); max-width: 680px; }
+
+    .app-technique-label { font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--grey); margin-bottom: 20px; }
+    .app-technique-list { border-top: 1px solid var(--grey-light); margin-bottom: 36px; }
+    .app-technique-row { display: grid; grid-template-columns: 180px 1fr; gap: 24px; padding: 18px 0; border-bottom: 1px solid var(--grey-light); align-items: start; }
+    .app-technique-label-col { font-size: 12px; font-weight: 700; color: var(--black); padding-top: 2px; }
+    .app-technique-text { font-size: 14px; font-weight: 300; line-height: 1.75; color: var(--grey-mid); }
+    .app-technique-text strong { color: var(--black); font-weight: 700; }
+
+    .app-layering-block { background: var(--grey-light); padding: 36px; }
+    .app-layering-title { font-size: 14px; font-weight: 700; color: var(--black); margin-bottom: 16px; letter-spacing: -0.2px; }
+    .app-layering-steps { display: flex; flex-direction: column; gap: 0; counter-reset: layer; }
+    .app-layering-step { display: grid; grid-template-columns: 32px 1fr; gap: 16px; padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.08); align-items: start; counter-increment: layer; }
+    .app-layering-step:last-child { border-bottom: none; }
+    .app-layering-num { font-size: 10px; font-weight: 700; letter-spacing: 1px; color: var(--grey); padding-top: 3px; }
+    .app-layering-num::before { content: '0' counter(layer); }
+    .app-layering-body {}
+    .app-layering-name { font-size: 14px; font-weight: 700; color: var(--black); margin-bottom: 3px; }
+    .app-layering-note { font-size: 13px; font-weight: 300; color: var(--grey-mid); line-height: 1.5; }
+
+    @media (max-width: 800px) {
+      .app-product-grid { grid-template-columns: 1fr 1fr; }
+      .app-technique-row { grid-template-columns: 1fr; gap: 4px; }
+      #application { padding: 72px 0; }
+    }
+    @media (max-width: 480px) {
+      .app-product-grid { grid-template-columns: 1fr 1fr; }
+    }
+
     /* ── CTA ── */
     .cta-block { background: var(--white); padding: 80px 36px; text-align: center; border-top: 1px solid var(--grey-light); }
     .cta-block h2 { font-size: clamp(26px,4vw,44px); font-weight: 700; color: var(--black); margin-bottom: 14px; letter-spacing: -0.5px; }
@@ -167,7 +212,7 @@
       .gen-cols { grid-template-columns: 1fr; }
       .conc-grid { grid-template-columns: 1fr; }
       .dn-grid { grid-template-columns: 1fr; }
-      #climate, #families, #gendered, #concentration, #daynight { padding: 72px 0; }
+      #climate, #families, #gendered, #concentration, #daynight, #application { padding: 72px 0; }
       .city-row { grid-template-columns: 110px 1fr; }
       .site-logo { left: 20px; } .hamburger { right: 20px; top: 20px; }
     }
@@ -453,6 +498,129 @@
         </ul>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- HOW TO APPLY -->
+<section id="application">
+  <div class="wrap">
+    <div class="app-header r">
+      <p class="sec-label">Application</p>
+      <h2>How to apply — and what each product actually does</h2>
+      <p>Body spray, deodorant, roll-on, EDT, EDP — most people use at least two of these daily without knowing the difference. They are not interchangeable. Each one has a specific job, a specific way to apply it, and a specific place in your routine.</p>
+    </div>
+
+    <!-- Four product types -->
+    <div class="app-product-grid r d1">
+
+      <div class="app-product-card">
+        <span class="app-product-icon">◈</span>
+        <div class="app-product-name">Perfume / EDP</div>
+        <div class="app-product-sub">Eau de Parfum · 15–20% oil</div>
+        <p class="app-product-desc">The most concentrated format. <strong>1–2 sprays maximum</strong> — EDP is strong and African heat amplifies it significantly. Apply to pulse points: wrists, neck, behind the ears. <strong>Do not rub wrists together</strong> — it crushes the top notes and shortens longevity. Spray and leave it.</p>
+      </div>
+
+      <div class="app-product-card">
+        <span class="app-product-icon">◉</span>
+        <div class="app-product-name">Cologne / EDT</div>
+        <div class="app-product-sub">Eau de Toilette · 5–15% oil</div>
+        <p class="app-product-desc">Lighter concentration, shorter projection (2–4 hours in heat). The more practical daily format for humid climates. <strong>2–3 sprays</strong> is the standard. Spray to the chest and one wrist. <strong>Reapply midday</strong> rather than over-applying in the morning. Hold the bottle 15–20cm from the skin.</p>
+      </div>
+
+      <div class="app-product-card">
+        <span class="app-product-icon">◷</span>
+        <div class="app-product-name">Body Spray</div>
+        <div class="app-product-sub">1–3% oil · Water &amp; alcohol base</div>
+        <p class="app-product-desc">Not a perfume substitute — a <strong>light all-over freshness layer</strong>. Apply after showering to the whole body: chest, arms, neck. Fades within 1–2 hours and is meant to be reapplied. Works best as a base layer under a light EDT. <strong>Not appropriate as your sole scent</strong> for evening occasions — too faint.</p>
+      </div>
+
+      <div class="app-product-card">
+        <span class="app-product-icon">◌</span>
+        <div class="app-product-name">Deodorant &amp; Roll-On</div>
+        <div class="app-product-sub">Sweat control · Not fragrance</div>
+        <p class="app-product-desc">A completely different function — <strong>sweat and odour control, not scent</strong>. Apply to clean, dry underarms only. <strong>Apply at night before bed</strong> for best anti-perspirant effect — the active ingredient works while your sweat glands are least active. In the morning, reapply a light layer. Never spray deodorant on clothes — it stains.</p>
+      </div>
+
+    </div>
+
+    <div class="app-deodorant-note r d2">
+      <h3>Deodorant is not perfume. Perfume is not deodorant.</h3>
+      <p>These are different tools with different jobs. Deodorant controls sweat odour at the source — it works on underarms only. Perfume is your scent identity — it works on pulse points. Both should be present in your routine every day. Using one to replace the other is one of the most common grooming mistakes. A person who skips deodorant but wears heavy EDP is masking, not managing — and people close to them will know the difference.</p>
+    </div>
+
+    <!-- Technique -->
+    <div class="r d2">
+      <p class="app-technique-label">Application technique</p>
+      <div class="app-technique-list">
+        <div class="app-technique-row">
+          <div class="app-technique-label-col">Pulse points</div>
+          <div class="app-technique-text"><strong>Wrists, neck, behind the ears, inside the elbows, behind the knees.</strong> These areas generate heat which activates and projects the fragrance. Focus on 2–3 points — not all of them at once. In African heat, layering on every pulse point simultaneously becomes overwhelming.</div>
+        </div>
+        <div class="app-technique-row">
+          <div class="app-technique-label-col">Don't rub</div>
+          <div class="app-technique-text">Rubbing wrists together after applying <strong>breaks the top note molecules</strong> and shortens how long the fragrance lasts and how it smells. Spray and leave it — this one rule makes a visible difference to performance.</div>
+        </div>
+        <div class="app-technique-row">
+          <div class="app-technique-label-col">Moisturise first</div>
+          <div class="app-technique-text">Fragrance lasts significantly longer on <strong>moisturised skin</strong>. Apply an unscented body lotion before your fragrance. Dry skin absorbs and burns off scent faster — which is why well-moisturised skin always seems to hold a fragrance longer. This matters more in dry Harmattan months.</div>
+        </div>
+        <div class="app-technique-row">
+          <div class="app-technique-label-col">On clothes</div>
+          <div class="app-technique-text">Spraying onto fabric makes fragrance last longer but <strong>can stain</strong> — especially EDP concentrations on light fabrics. Safe on the inside of a collar or scarf. Never spray directly onto silk or dry-clean-only fabric.</div>
+        </div>
+        <div class="app-technique-row">
+          <div class="app-technique-label-col">Heat &amp; climate</div>
+          <div class="app-technique-text">In high humidity (Lagos, Port Harcourt, Accra), <strong>apply half of what you think you need.</strong> In dry climates (Kano, Abuja harmattan season), slightly more is appropriate. In the diaspora — UK, US — everything you found too strong in Nigeria now works properly. This is the single most important adjustment most people never make.</div>
+        </div>
+        <div class="app-technique-row">
+          <div class="app-technique-label-col">Storage</div>
+          <div class="app-technique-text">Keep fragrances <strong>away from heat, light, and humidity</strong> — exactly the conditions most Nigerian bathrooms create. Heat degrades fragrance molecules over time. Store bottles in a drawer or wardrobe, not on a windowsill or next to a shower.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Layering order -->
+    <div class="app-layering-block r d3">
+      <div class="app-layering-title">The correct order — building your scent from the skin up</div>
+      <div class="app-layering-steps">
+        <div class="app-layering-step">
+          <div class="app-layering-num"></div>
+          <div class="app-layering-body">
+            <div class="app-layering-name">Shower</div>
+            <div class="app-layering-note">Clean skin is the foundation. Fragrance on top of sweat or yesterday's product produces something unintended.</div>
+          </div>
+        </div>
+        <div class="app-layering-step">
+          <div class="app-layering-num"></div>
+          <div class="app-layering-body">
+            <div class="app-layering-name">Body lotion — unscented</div>
+            <div class="app-layering-note">Apply to the whole body while skin is still slightly damp. This is the base that holds the fragrance. Scented lotions from the same range as your perfume can extend wear — but unscented is always safe.</div>
+          </div>
+        </div>
+        <div class="app-layering-step">
+          <div class="app-layering-num"></div>
+          <div class="app-layering-body">
+            <div class="app-layering-name">Deodorant or roll-on — underarms only</div>
+            <div class="app-layering-note">Apply to clean, dry underarms. For best anti-perspirant effect apply the night before — the aluminium compound needs time to work. A light top-up in the morning is fine.</div>
+          </div>
+        </div>
+        <div class="app-layering-step">
+          <div class="app-layering-num"></div>
+          <div class="app-layering-body">
+            <div class="app-layering-name">Body spray — all over (optional)</div>
+            <div class="app-layering-note">A light layer over the body before dressing. This is the base scent layer, not the main one. Skip this step if your main fragrance is an EDP — adding a body spray underneath makes it too much in heat.</div>
+          </div>
+        </div>
+        <div class="app-layering-step">
+          <div class="app-layering-num"></div>
+          <div class="app-layering-body">
+            <div class="app-layering-name">EDT or EDP — pulse points</div>
+            <div class="app-layering-note">The final and most important step. Apply to 2–3 pulse points only. This is your scent identity. In humid climates, apply after you've dressed and are about to leave — not right after showering when body heat is still high.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 

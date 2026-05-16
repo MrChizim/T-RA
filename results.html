@@ -23,79 +23,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;0,9..40,900;1,9..40,300&display=swap" rel="stylesheet" />
   <script src="https://js.paystack.co/v1/inline.js"></script>
 
-  <!-- Firebase: check paid status + expose uid for payment -->
-  <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-    import { getAuth, onAuthStateChanged, signOut, browserLocalPersistence, setPersistence } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-    import { getFirestore, doc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyAhjVgu4yLMPvGWBoICffQbgJADKI0mfBw",
-      authDomain: "tora-c492b.firebaseapp.com",
-      projectId: "tora-c492b",
-      storageBucket: "tora-c492b.firebasestorage.app",
-      messagingSenderId: "355607987054",
-      appId: "1:355607987054:web:ff070087e94a43e9a0377f"
-    };
-
-    const app  = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    setPersistence(auth, browserLocalPersistence);
-    const db   = getFirestore(app);
-
-    onAuthStateChanged(auth, async user => {
-      if (!user) return; // not signed in — gate stays up
-      window.__toraUid         = user.uid;
-      window.__toraEmail       = user.email;
-      window.__toraDisplayName = user.displayName || '';
-
-      // Personalise hero title with user's first name
-      if (user.displayName) {
-        const firstName = user.displayName.split(' ')[0];
-        const ht = document.getElementById('heroTitle');
-        if (ht) ht.innerHTML = `${firstName.toUpperCase()}'S<br>PROFILE`;
-      }
-
-      const ADMIN_EMAILS = ['chizimvictory@gmail.com', 'lilnutellx@gmail.com'];
-      const userRef = doc(db, 'users', user.uid);
-      const snap = await getDoc(userRef);
-      const data = snap.exists() ? snap.data() : {};
-      const userEmailLower = (user.email || '').toLowerCase().trim();
-      const isAdmin = ADMIN_EMAILS.includes(userEmailLower) || data.paid === true;
-      const paid = isAdmin;
-
-      // Self-heal: write paid:true to Firestore for admin accounts so it's consistent
-      if (ADMIN_EMAILS.includes(userEmailLower) && !data.paid) {
-        setDoc(userRef, { paid: true, email: userEmailLower }, { merge: true });
-      }
-
-      // DEBUG
-      const dbg = document.getElementById('__dbg');
-      if (dbg) dbg.textContent = `email:${userEmailLower} paid:${paid} data.paid:${data.paid} answers:${!!data.answers} ls:${!!localStorage.getItem('tora_quiz')}`;
-
-      // Restore quiz answers from Firestore if localStorage is empty
-      if (!localStorage.getItem('tora_quiz') && data.answers) {
-        localStorage.setItem('tora_quiz', JSON.stringify(data.answers));
-        // Reload so main script picks up the restored answers
-        window.location.reload();
-        return;
-      }
-
-      if (paid) {
-        window.__toraPaid = true;
-        window.dispatchEvent(new Event('tora:paid'));
-      } else {
-        window.dispatchEvent(new Event('tora:unpaid'));
-      }
-
-      const signOutBtn = document.getElementById('navSignOut');
-      if (signOutBtn) signOutBtn.style.display = '';
-    });
-
-    window.__toraSignOut = () => {
-      signOut(auth).then(() => { window.location.href = 'index.html'; }).catch(err => console.error(err));
-    };
-  </script>
+  <!-- Firebase loaded at bottom of body in main script -->
 
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -2991,19 +2919,8 @@
   // ── Premium gate: show/hide based on paid status ──
   function unlockPremium() {
     const section = document.getElementById('premiumSection');
-    const overlay = document.getElementById('premiumGateOverlay');
-    const blurred = document.getElementById('premiumBlurred');
-    if (overlay) { overlay.style.display = 'none'; overlay.style.visibility = 'hidden'; }
-    if (blurred) { blurred.style.cssText = 'filter:none!important;pointer-events:auto!important;user-select:auto!important;padding:0 36px 96px;max-width:1080px;margin:0 auto;'; }
     if (section) section.classList.add('unlocked');
   }
-
-  window.addEventListener('tora:paid', unlockPremium);
-  if (window.__toraPaid === true) unlockPremium();
-  // DEBUG: confirm listener registered and try immediate unlock
-  const dbg2 = document.getElementById('__dbg');
-  if (dbg2) dbg2.textContent += ' | listenerOK:true | toraPaid=' + window.__toraPaid;
-  unlockPremium(); // force attempt regardless
 
   // If payment=success in URL (Stripe redirect), wait for auth then verify
   if (window.location.search.includes('payment=success')) {
@@ -3173,7 +3090,78 @@
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
   }, { threshold: 0.06 });
   rEls.forEach(el => obs.observe(el));
+
+  // ── Firebase auth + paid check ──
+  // Runs here (end of plain script) so unlockPremium is already defined above
+  const FIREBASE_CONFIG = {
+    apiKey: "AIzaSyAhjVgu4yLMPvGWBoICffQbgJADKI0mfBw",
+    authDomain: "tora-c492b.firebaseapp.com",
+    projectId: "tora-c492b",
+    storageBucket: "tora-c492b.firebasestorage.app",
+    messagingSenderId: "355607987054",
+    appId: "1:355607987054:web:ff070087e94a43e9a0377f"
+  };
+  const ADMIN_EMAILS = ['chizimvictory@gmail.com', 'lilnutellx@gmail.com'];
+
+  Promise.all([
+    import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js'),
+    import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js'),
+    import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js')
+  ]).then(([{ initializeApp }, { getAuth, onAuthStateChanged, signOut, browserLocalPersistence, setPersistence }, { getFirestore, doc, getDoc, setDoc }]) => {
+    const app  = initializeApp(FIREBASE_CONFIG);
+    const auth = getAuth(app);
+    setPersistence(auth, browserLocalPersistence);
+    const db   = getFirestore(app);
+
+    window.__toraSignOut = () => {
+      signOut(auth).then(() => { window.location.href = 'index.html'; });
+    };
+
+    onAuthStateChanged(auth, async user => {
+      if (!user) return;
+
+      window.__toraUid         = user.uid;
+      window.__toraEmail       = user.email;
+      window.__toraDisplayName = user.displayName || '';
+
+      // Personalise hero title
+      if (user.displayName) {
+        const firstName = user.displayName.split(' ')[0];
+        const ht = document.getElementById('heroTitle');
+        if (ht) ht.innerHTML = `${firstName.toUpperCase()}'S<br>PROFILE`;
+      }
+
+      // Show sign out button
+      const signOutBtn = document.getElementById('navSignOut');
+      if (signOutBtn) signOutBtn.style.display = '';
+
+      // Check Firestore for paid status
+      const userEmailLower = (user.email || '').toLowerCase().trim();
+      const userRef = doc(db, 'users', user.uid);
+      const snap = await getDoc(userRef);
+      const data = snap.exists() ? snap.data() : {};
+
+      // Admin self-heal
+      const isAdmin = ADMIN_EMAILS.includes(userEmailLower);
+      if (isAdmin && !data.paid) {
+        setDoc(userRef, { paid: true, email: userEmailLower }, { merge: true });
+      }
+
+      const paid = isAdmin || data.paid === true;
+
+      // Restore quiz answers from Firestore if localStorage is empty
+      if (!localStorage.getItem('tora_quiz') && data.answers) {
+        localStorage.setItem('tora_quiz', JSON.stringify(data.answers));
+        window.location.reload();
+        return;
+      }
+
+      // Unlock or keep gate
+      if (paid) {
+        unlockPremium();
+      }
+    });
+  });
 </script>
-<div id="__dbg" style="position:fixed;bottom:0;left:0;right:0;z-index:9999;background:rgba(0,0,0,0.85);color:#0f0;font-size:10px;padding:4px 8px;font-family:monospace;">waiting for auth...</div>
 </body>
 </html>

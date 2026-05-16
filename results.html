@@ -64,6 +64,9 @@
       const isAdmin = ADMIN_EMAILS.includes(userEmailLower);
       const paid = data.paid === true || isAdmin;
       console.log('[TÓRA] uid:', user.uid, '| email:', user.email, '| isAdmin:', isAdmin, '| paid:', paid);
+      // Temporary debug banner — remove after confirming admin access works
+      const debugEl = document.getElementById('__toraDebug');
+      if (debugEl) debugEl.textContent = `Signed in as: ${user.email} | admin: ${isAdmin} | paid: ${paid}`;
 
       // Self-heal: write paid:true to Firestore for admin accounts so it's consistent
       if (isAdmin && !data.paid) {
@@ -1283,6 +1286,7 @@
   </style>
 </head>
 <body>
+<div id="__toraDebug" style="position:fixed;bottom:0;left:0;right:0;background:#000;color:#fff;font-size:11px;padding:8px 12px;z-index:9999;font-family:monospace;word-break:break-all;"></div>
 
 <!-- NAV -->
 <a href="index.html" class="site-logo" id="siteLogo">TÓRA</a>

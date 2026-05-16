@@ -27,7 +27,7 @@
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
     import { getAuth, onAuthStateChanged, signOut, browserLocalPersistence, setPersistence } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-    import { getFirestore, doc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+    import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
     const firebaseConfig = {
       apiKey: "AIzaSyAhjVgu4yLMPvGWBoICffQbgJADKI0mfBw",
@@ -58,19 +58,10 @@
           if (ht) ht.innerHTML = `${firstName.toUpperCase()}'S<br>PROFILE`;
         }
 
-        const ADMIN_EMAILS = ['chizimvictory@gmail.com', 'lilnutellx@gmail.com'];
-        const ADMIN_UIDS   = ['xookhNHIZFZJ9ZpomQnL5PV5psf1'];
         const userRef = doc(db, 'users', user.uid);
         const snap = await getDoc(userRef);
         const data = snap.exists() ? snap.data() : {};
-        const userEmailLower = (user.email || '').toLowerCase().trim();
-        const isAdmin = ADMIN_EMAILS.includes(userEmailLower) || ADMIN_UIDS.includes(user.uid) || data.paid === true;
-        const paid = isAdmin;
-
-        // Self-heal: write paid:true to Firestore for admin accounts so it's consistent
-        if ((ADMIN_EMAILS.includes(userEmailLower) || ADMIN_UIDS.includes(user.uid)) && !data.paid) {
-          setDoc(userRef, { paid: true, email: userEmailLower }, { merge: true });
-        }
+        const paid = data.paid === true;
 
         // Restore quiz answers from Firestore if localStorage is empty
         if (!localStorage.getItem('tora_quiz') && data.answers) {

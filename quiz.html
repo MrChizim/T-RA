@@ -155,7 +155,7 @@
         'auth/network-request-failed': 'Network error — check your connection.',
         'auth/too-many-requests': 'Too many attempts. Please wait a moment and try again.',
       };
-      return map[code] || 'Something went wrong. Please try again.';
+      return map[code] || `Something went wrong (${code || 'unknown'}). Please try again.`;
     }
 
     // Expose helpers so main script can reset loading state on validation errors
